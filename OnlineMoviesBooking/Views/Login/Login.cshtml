@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+<div class="row justify-content-center" >
+    <div style="width:30rem">
+        <div class="shadow border-0 rounded" style="margin-top:10rem;background-color:indigo;opacity:0.75">
+            <div style="width:100%;font-size:2rem;padding:1rem;color:aliceblue;text-align:center">Login</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputEmailAddress" style="color:aliceblue;font-size:24px">Email</label>
+                        <input class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address" />
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputPassword" style="color:aliceblue;font-size:24px">Password</label>
+                        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" />
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                            <label class="custom-control-label" style="color:aliceblue;" for="rememberPasswordCheck">Remember password</label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a style="font-weight:500;" href="password.html">Forgot Password?</a>
+                        <a class="btn btn-primary" href="/DashBoard/DashBoard">Login</a>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <div ><a href="#"style="font-weight:500;">Need an account? Sign up!</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+

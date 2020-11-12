@@ -1,8 +1,46 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    Layout = "_LayoutLogin";
 }
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+</head>
+<body class="sb-nav-fixed">
+    <div style="opacity:0.5;background-color:blueviolet;height:8rem;position:absolute;z-index:3;width:40rem">
+        
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    </div>
+    <div style="background-color:none;height:10rem;position:absolute;z-index:3;width:35rem">
+        <a style="display:initial;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin: 2rem;
+        font-size: 1.2rem;
+        white-space: nowrap;
+        text-decoration: none;
+        color: whitesmoke;
+        float: right;" href="/Login/Login">
+            <img src="~/assets/img/account_plus_icon_138989.png" alt="Add user" style="width:50px" />
+            Đăng ký
+        </a>
+        <a style="display: initial;
+        padding-top: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        margin:2rem;
+        font-size: 1.2rem;
+        white-space: nowrap;text-decoration:none;color:whitesmoke;float:right" href="/Login/Login">
+            <img src="~/assets/img/user-account-box_icon-icons.com_72491.png" alt="login user" style="width:50px" />
+            Đăng nhập
+        </a>
+    </div>
+
+</body>
+</html>
