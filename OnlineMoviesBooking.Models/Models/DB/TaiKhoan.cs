@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnlineMoviesBooking.Models.DB
+namespace OnlineMoviesBooking.Models.Models.DB
 {
     public partial class TaiKhoan
     {
         public TaiKhoan()
         {
+            Aq = new HashSet<Aq>();
             Ve = new HashSet<Ve>();
         }
 
@@ -19,12 +20,12 @@ namespace OnlineMoviesBooking.Models.DB
         public string Email { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public int? IdLoaiTk { get; set; }
+        public int? UsertypeId { get; set; }
         public int? IdKhuyenMai { get; set; }
 
         public virtual KhuyenMai IdKhuyenMaiNavigation { get; set; }
-        public virtual LoaiTaiKhoan IdLoaiTkNavigation { get; set; }
-        public virtual ThanhVien ThanhVien { get; set; }
+        public virtual TypeUser Usertype { get; set; }
+        public virtual ICollection<Aq> Aq { get; set; }
         public virtual ICollection<Ve> Ve { get; set; }
     }
 }

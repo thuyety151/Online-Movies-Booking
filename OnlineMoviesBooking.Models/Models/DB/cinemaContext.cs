@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace OnlineMoviesBooking.Models.DB
+namespace OnlineMoviesBooking.Models.Models.DB
 {
     public partial class cinemaContext : DbContext
     {
@@ -13,34 +13,68 @@ namespace OnlineMoviesBooking.Models.DB
         public cinemaContext(DbContextOptions<cinemaContext> options)
             : base(options)
         {
+           
         }
 
+        public virtual DbSet<Aq> Aq { get; set; }
         public virtual DbSet<Ghe> Ghe { get; set; }
         public virtual DbSet<KhuyenMai> KhuyenMai { get; set; }
         public virtual DbSet<LichChieu> LichChieu { get; set; }
-        public virtual DbSet<LoaiTaiKhoan> LoaiTaiKhoan { get; set; }
         public virtual DbSet<LoaiVe> LoaiVe { get; set; }
         public virtual DbSet<Phim> Phim { get; set; }
         public virtual DbSet<PhongChieu> PhongChieu { get; set; }
+        public virtual DbSet<Quyen> Quyen { get; set; }
         public virtual DbSet<Rap> Rap { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
-        public virtual DbSet<ThanhVien> ThanhVien { get; set; }
+        public virtual DbSet<TypeUser> TypeUser { get; set; }
+        public virtual DbSet<UsertypeQuyen> UsertypeQuyen { get; set; }
         public virtual DbSet<Ve> Ve { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+
                 optionsBuilder.UseSqlServer("Server=THANHTON;Database=cinema;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Aq>(entity =>
+            {
+                entity.HasKey(e => new { e.IdTaikhoan, e.Aqtime });
+
+                entity.ToTable("AQ");
+
+                entity.Property(e => e.IdTaikhoan).HasColumnName("id_taikhoan");
+
+                entity.Property(e => e.Aqtime)
+                    .HasColumnName("AQtime")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Noidung)
+                    .HasColumnName("noidung")
+                    .HasMaxLength(1000);
+
+                entity.HasOne(d => d.IdTaikhoanNavigation)
+                    .WithMany(p => p.Aq)
+                    .HasForeignKey(d => d.IdTaikhoan)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AQ__id_taikhoan__33D4B598");
+            });
+
             modelBuilder.Entity<Ghe>(entity =>
             {
                 entity.HasKey(e => e.IdGhe);
+
+                entity.HasIndex(e => e.TenGhe)
+                    .HasName("UQ__Ghe__32A386F1A6D35A83")
+                    .IsUnique();
 
                 entity.Property(e => e.IdGhe).ValueGeneratedNever();
 
@@ -51,7 +85,7 @@ namespace OnlineMoviesBooking.Models.DB
                 entity.HasOne(d => d.IdPhongNavigation)
                     .WithMany(p => p.Ghe)
                     .HasForeignKey(d => d.IdPhong)
-                    .HasConstraintName("FK__Ghe__IdPhong__5070F446");
+                    .HasConstraintName("FK__Ghe__IdPhong__2A4B4B5E");
             });
 
             modelBuilder.Entity<KhuyenMai>(entity =>
@@ -84,26 +118,12 @@ namespace OnlineMoviesBooking.Models.DB
                 entity.HasOne(d => d.IdPhimNavigation)
                     .WithMany(p => p.LichChieu)
                     .HasForeignKey(d => d.IdPhim)
-                    .HasConstraintName("FK__LichChieu__IdPhi__571DF1D5");
+                    .HasConstraintName("FK__LichChieu__IdPhi__31EC6D26");
 
                 entity.HasOne(d => d.IdRapNavigation)
                     .WithMany(p => p.LichChieu)
                     .HasForeignKey(d => d.IdRap)
-                    .HasConstraintName("FK__LichChieu__IdRap__5812160E");
-            });
-
-            modelBuilder.Entity<LoaiTaiKhoan>(entity =>
-            {
-                entity.HasKey(e => e.IdLoaiTk)
-                    .HasName("PK_LoaiTK");
-
-                entity.Property(e => e.IdLoaiTk)
-                    .HasColumnName("IdLoaiTK")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.TenLoaiTk)
-                    .HasColumnName("TenLoaiTK")
-                    .HasMaxLength(10);
+                    .HasConstraintName("FK__LichChieu__IdRap__32E0915F");
             });
 
             modelBuilder.Entity<LoaiVe>(entity =>
@@ -156,7 +176,18 @@ namespace OnlineMoviesBooking.Models.DB
                 entity.HasOne(d => d.IdrapNavigation)
                     .WithMany(p => p.PhongChieu)
                     .HasForeignKey(d => d.Idrap)
-                    .HasConstraintName("FK__PhongChie__IDRap__4F7CD00D");
+                    .HasConstraintName("FK__PhongChie__IDRap__29572725");
+            });
+
+            modelBuilder.Entity<Quyen>(entity =>
+            {
+                entity.Property(e => e.QuyenId)
+                    .HasColumnName("quyen_id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Tenquyen)
+                    .HasColumnName("tenquyen")
+                    .HasMaxLength(255);
             });
 
             modelBuilder.Entity<Rap>(entity =>
@@ -179,6 +210,10 @@ namespace OnlineMoviesBooking.Models.DB
                 entity.HasKey(e => e.IdTaiKhoan)
                     .HasName("PK_TK");
 
+                entity.HasIndex(e => new { e.Email, e.UserName })
+                    .HasName("UNIQUE_TK")
+                    .IsUnique();
+
                 entity.Property(e => e.IdTaiKhoan)
                     .HasColumnName("Id_TaiKhoan")
                     .ValueGeneratedNever();
@@ -190,8 +225,6 @@ namespace OnlineMoviesBooking.Models.DB
                     .IsUnicode(false);
 
                 entity.Property(e => e.IdKhuyenMai).HasColumnName("Id_KhuyenMai");
-
-                entity.Property(e => e.IdLoaiTk).HasColumnName("Id_LoaiTK");
 
                 entity.Property(e => e.NgaySinh).HasColumnType("datetime");
 
@@ -210,28 +243,57 @@ namespace OnlineMoviesBooking.Models.DB
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.UsertypeId).HasColumnName("usertype_id");
+
                 entity.HasOne(d => d.IdKhuyenMaiNavigation)
                     .WithMany(p => p.TaiKhoan)
                     .HasForeignKey(d => d.IdKhuyenMai)
-                    .HasConstraintName("FK__TaiKhoan__Id_Khu__52593CB8");
+                    .HasConstraintName("FK__TaiKhoan__Id_Khu__2B3F6F97");
 
-                entity.HasOne(d => d.IdLoaiTkNavigation)
+                entity.HasOne(d => d.Usertype)
                     .WithMany(p => p.TaiKhoan)
-                    .HasForeignKey(d => d.IdLoaiTk)
-                    .HasConstraintName("FK__TaiKhoan__Id_Loa__5165187F");
+                    .HasForeignKey(d => d.UsertypeId)
+                    .HasConstraintName("FK__TaiKhoan__userty__2C3393D0");
             });
 
-            modelBuilder.Entity<ThanhVien>(entity =>
+            modelBuilder.Entity<TypeUser>(entity =>
             {
-                entity.HasKey(e => e.IdThanhVien);
+                entity.HasKey(e => e.UsertypeId)
+                    .HasName("PK_usertype");
 
-                entity.Property(e => e.IdThanhVien).ValueGeneratedNever();
+                entity.Property(e => e.UsertypeId)
+                    .HasColumnName("usertype_id")
+                    .ValueGeneratedNever();
 
-                entity.HasOne(d => d.IdThanhVienNavigation)
-                    .WithOne(p => p.ThanhVien)
-                    .HasForeignKey<ThanhVien>(d => d.IdThanhVien)
+                entity.Property(e => e.UsertypeName)
+                    .HasColumnName("usertype_name")
+                    .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<UsertypeQuyen>(entity =>
+            {
+                entity.HasKey(e => new { e.UsertypeId, e.QuyenId })
+                    .HasName("PK_userquyen");
+
+                entity.ToTable("Usertype_quyen");
+
+                entity.Property(e => e.UsertypeId).HasColumnName("usertype_id");
+
+                entity.Property(e => e.QuyenId).HasColumnName("quyen_id");
+
+                entity.Property(e => e.GhiChu).HasMaxLength(255);
+
+                entity.HasOne(d => d.Quyen)
+                    .WithMany(p => p.UsertypeQuyen)
+                    .HasForeignKey(d => d.QuyenId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ThanhVien__IdTha__5629CD9C");
+                    .HasConstraintName("FK__Usertype___quyen__2E1BDC42");
+
+                entity.HasOne(d => d.Usertype)
+                    .WithMany(p => p.UsertypeQuyen)
+                    .HasForeignKey(d => d.UsertypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Usertype___usert__2D27B809");
             });
 
             modelBuilder.Entity<Ve>(entity =>
@@ -249,17 +311,17 @@ namespace OnlineMoviesBooking.Models.DB
                 entity.HasOne(d => d.IdLichChieuNavigation)
                     .WithMany(p => p.Ve)
                     .HasForeignKey(d => d.IdLichChieu)
-                    .HasConstraintName("FK__Ve__Id_LichChieu__534D60F1");
+                    .HasConstraintName("FK__Ve__Id_LichChieu__2F10007B");
 
                 entity.HasOne(d => d.IdLoaiVeNavigation)
                     .WithMany(p => p.Ve)
                     .HasForeignKey(d => d.IdLoaiVe)
-                    .HasConstraintName("FK__Ve__IdLoaiVe__5535A963");
+                    .HasConstraintName("FK__Ve__IdLoaiVe__30F848ED");
 
                 entity.HasOne(d => d.IdTaiKhoanNavigation)
                     .WithMany(p => p.Ve)
                     .HasForeignKey(d => d.IdTaiKhoan)
-                    .HasConstraintName("FK__Ve__IdTaiKhoan__5441852A");
+                    .HasConstraintName("FK__Ve__IdTaiKhoan__300424B4");
             });
 
             OnModelCreatingPartial(modelBuilder);

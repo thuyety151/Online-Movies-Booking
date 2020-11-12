@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnlineMoviesBooking.Models.DB
+namespace OnlineMoviesBooking.Models.Models.DB
 {
     public partial class KhuyenMai
     {
