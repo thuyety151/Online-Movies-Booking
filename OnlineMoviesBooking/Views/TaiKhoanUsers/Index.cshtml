@@ -14,77 +14,106 @@
     <meta name="author" content="" />
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/scripts.js"></script>
 </head>
 <body class="sb-nav-fixed">
-    <div style="margin:2rem">
-        <h1>Index</h1>
-        <p>
-            <a data-toggle="modal" href="#Create">Create New</a>
-        </p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TenKhachHang)
+    <div>
+        <h1>Danh sách tài khoảng</h1>
+        
+        <div style="width:100%">
+            <div class="form-inline" >
+                <label>Tìm kiếm</label>
+                <input type="text" name="txtSearch"  class="form-control" />
+            </div>
+        </div>
+        <br />
+        <table class="table"style="font-size:small">
+            <thead class="bg-light">
+                <tr style="text-align:center">
+                    <th style="width:3rem">
+                        STT
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.NgaySinh)
+                        Tên
+                        @*@Html.DisplayNameFor(model => model.TenKhachHang)*@
+                    </th>
+                    <th style="width:8rem">
+                        Ngày sinh
+                        @*@Html.DisplayNameFor(model => model.NgaySinh)*@
+                    </th >
+                    <th style="width:5rem">
+                        Giới tính
+                        @*@Html.DisplayNameFor(model => model.GioiTinh)*@
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.GioiTinh)
+                        Địa chỉ
+                        @*@Html.DisplayNameFor(model => model.DiaChi)*@
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DiaChi)
+                        SĐT
+                        @*@Html.DisplayNameFor(model => model.Sdt)*@
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Sdt)
-                    </th>
-                    <th>
+                    <th style="width:8rem">
                         @Html.DisplayNameFor(model => model.Email)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Usertype)
+                    <th style="width:8rem">
+                        Loại TK
+                        @*@Html.DisplayNameFor(model => model.Usertype)*@
                     </th>
-                    <th>
-
+                    <th style="width:14rem" >
+                        <a data-toggle="modal" href="#Create" class="btn btn-primary" style="text-align:right">Tạo tài khoản</a>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TenKhachHang)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NgaySinh)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GioiTinh)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DiaChi)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Sdt)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Usertype.UsertypeId)
-                        </td>
-                        <td>
-                            <a asp-route-id="@item.IdTaiKhoan">Edit</a> |
-                            <a asp-route-id="@item.IdTaiKhoan">Details</a> |
-                            <a asp-route-id="@item.IdTaiKhoan">Delete</a>
-                        </td>
-                    </tr>
+                @{int i = 0;
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @{i++;} @i</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TenKhachHang)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NgaySinh)
+                            </td>
+                            @{if (item.GioiTinh == true)
+                                {
+                                    <td>Nam</td>
+                                }
+                                else if (item.GioiTinh == false)
+                                {
+                                    <td>Nữ</td>
+                                }
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiaChi)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sdt)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usertype.UsertypeId)
+                            </td>
+                            <td style="text-align:right;">
+                                <a asp-action="Edit" asp-route-id="@item.IdTaiKhoan" class="btn btn-success" style="font-size:small">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.IdTaiKhoan" class="btn btn-info" style="font-size:small">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.IdTaiKhoan" class="btn btn-danger" style="font-size:small">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-        <div class="modal fade" id="Create">
+
+        @*showInPopup('@Url.Action("Create", "TaiKhoanUsers", null, Context.Request.Scheme)','new acount')*@
+
+
+        @*---------------------------------create-----------------------------------------*@
+        <div class="modal fade" id="Create" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -92,7 +121,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
                     </div>
-                    <form method="post" action="/TaiKhoanUsers/Create" id="frm-create">
+                    <form method="post" asp-action="Create" id="frm-create">
                         <div class="modal-body">
                             <div id="err_login"></div>
                             <div class="form-group">
@@ -107,8 +136,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Giới tính : </label>
-                                <input type="text" class="form-control" name="GioiTinh" id="GioiTinh" />
-
+                                @*<input hidden type="text" class="form-control" name="GioiTinh" id="GioiTinh" />*@
+                                <select name="GioiTinh">
+                                    <option value="true">Nam</option>
+                                    <option value="false">Nữ</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>Địa chỉ : </label>
@@ -208,7 +240,17 @@
                 $("#waiting").hide();
             });
         </script>
+       
 
-        </div>
+        
+
+
+
+
+    </div>
+
+    
+    
+
 </body>
 </html>

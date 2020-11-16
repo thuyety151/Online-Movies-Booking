@@ -25,7 +25,7 @@ namespace OnlineMoviesBooking.Controllers
             return View(await cinemaContext.ToListAsync());
         }
 
-        // GET: TaiKhoanUsers/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,6 +45,7 @@ namespace OnlineMoviesBooking.Controllers
             return View(taiKhoan);
         }
 
+
         // GET: TaiKhoanUsers/Create
         public IActionResult Create()
         {
@@ -58,12 +59,22 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTaiKhoan,TenKhachHang,NgaySinh,GioiTinh,DiaChi,Sdt,Email,UserName,Password,UsertypeId,IdKhuyenMai")] TaiKhoan taiKhoan)
+        public async Task<IActionResult> Create(string GioiTinh, TaiKhoan taiKhoan)
         {
+            int a = _context.TaiKhoan.Count();
+            
             if (ModelState.IsValid)
             {
+                taiKhoan.IdTaiKhoan = a + 1;
                 _context.Add(taiKhoan);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch
+                {
+                    return RedirectToAction(nameof(Index));
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdKhuyenMai"] = new SelectList(_context.KhuyenMai, "IdKhuyenMai", "IdKhuyenMai", taiKhoan.IdKhuyenMai);
@@ -161,5 +172,6 @@ namespace OnlineMoviesBooking.Controllers
         {
             return _context.TaiKhoan.Any(e => e.IdTaiKhoan == id);
         }
+
     }
 }

@@ -10,68 +10,68 @@
 <div>
     <h4>TaiKhoan</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenKhachHang)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenKhachHang)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NgaySinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NgaySinh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GioiTinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GioiTinh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DiaChi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiaChi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sdt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sdt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdKhuyenMaiNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdKhuyenMaiNavigation.IdKhuyenMai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usertype)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usertype.UsertypeId)
-        </dd>
-    </dl>
+        <dl class="row container-fluid">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TenKhachHang)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TenKhachHang)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NgaySinh)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NgaySinh)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.GioiTinh)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.GioiTinh)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DiaChi)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DiaChi)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Sdt)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Sdt)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Password)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Password)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IdKhuyenMaiNavigation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IdKhuyenMaiNavigation.IdKhuyenMai)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Usertype)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Usertype.UsertypeId)
+            </dd>
+        </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.IdTaiKhoan">Edit</a> |

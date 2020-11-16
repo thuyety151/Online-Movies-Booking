@@ -1,0 +1,267 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.DB.TaiKhoan>
+@{
+    ViewData["Title"] = "SearchBox";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/scripts.js"></script>
+</head>
+<body class="sb-nav-fixed">
+    <div>
+        <h1>Danh sách tài khoảng</h1>
+
+        <div style="width:100%">
+            <div>
+                <select name="TypeSearch" class="form-control" style="width:15rem">
+                    <option value="">Thuộc tính tìm kiếm</option>
+                    <option value="Email">Email</option>
+                    <option value="SĐT">Số điện thoại</option>
+                    <option value="GioiTinh">Giới tính</option>
+                    <option value="NgaySinh">Ngày sinh</option>
+                    <option value="">Tên</option>
+                </select>
+            </div>
+            <br />
+            <form asp-action="searchBox" asp-controller="TaiKhoanUsers">
+                <input type="text" name="searchBox" value="Nhập nội dung" />
+                <input type="submit" value="Tìm kiếm" />
+            </form>
+        </div>
+        <br />
+        <table class="table" style="font-size:small">
+            <thead class="bg-light">
+                <tr style="text-align:center">
+                    <th style="width:3rem">
+                        STT
+                    </th>
+                    <th>
+                        Tên
+                        @*@Html.DisplayNameFor(model => model.TenKhachHang)*@
+                    </th>
+                    <th style="width:8rem">
+                        Ngày sinh
+                        @*@Html.DisplayNameFor(model => model.NgaySinh)*@
+                    </th>
+                    <th style="width:5rem">
+                        Giới tính
+                        @*@Html.DisplayNameFor(model => model.GioiTinh)*@
+                    </th>
+                    <th>
+                        Địa chỉ
+                        @*@Html.DisplayNameFor(model => model.DiaChi)*@
+                    </th>
+                    <th>
+                        SĐT
+                        @*@Html.DisplayNameFor(model => model.Sdt)*@
+                    </th>
+                    <th style="width:8rem">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th style="width:8rem">
+                        Loại TK
+                        @*@Html.DisplayNameFor(model => model.Usertype)*@
+                    </th>
+                    <th style="width:14rem">
+                        <a data-toggle="modal" href="#Create" class="btn btn-primary" style="text-align:right">Tạo tài khoản</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int i = 0;
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @{i++;} @i</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TenKhachHang)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NgaySinh)
+                            </td>
+                            @{if (item.GioiTinh == true)
+                                {
+                                    <td>Nam</td>
+                                }
+                                else if (item.GioiTinh == false)
+                                {
+                                    <td>Nữ</td>
+                                }
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiaChi)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sdt)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usertype.UsertypeId)
+                            </td>
+                            <td style="text-align:right;">
+                                <a asp-action="Edit" asp-route-id="@item.IdTaiKhoan" class="btn btn-success" style="font-size:small">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.IdTaiKhoan" class="btn btn-info" style="font-size:small">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.IdTaiKhoan" class="btn btn-danger" style="font-size:small">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        @*showInPopup('@Url.Action("Create", "TaiKhoanUsers", null, Context.Request.Scheme)','new acount')*@
+
+
+        @*---------------------------------create-----------------------------------------*@
+        <div class="modal fade" id="Create" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Tạo tài khoản</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                    </div>
+                    <form method="post" asp-action="Create" id="frm-create">
+                        <div class="modal-body">
+                            <div id="err_login"></div>
+                            <div class="form-group">
+                                <label>Tên : </label>
+                                <input type="text" class="form-control" name="TenKhachHang" id="TenKhachHang" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày sinh : </label>
+                                <input type="text" class="form-control" name="NgaySinh" id="NgaySinh" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính : </label>
+                                @*<input hidden type="text" class="form-control" name="GioiTinh" id="GioiTinh" />*@
+                                <select name="GioiTinh">
+                                    <option value="true">Nam</option>
+                                    <option value="false">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Địa chỉ : </label>
+                                <input type="text" class="form-control" name="DiaChi" id="DiaChi" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Số ddienj thoại : </label>
+                                <input type="text" class="form-control" name="Sdt" id="Sdt" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Email : </label>
+                                <input type="text" class="form-control" name="Email" id="Email" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Username : </label>
+                                <input type="text" class="form-control" name="UserName" id="UserName" />
+
+                            </div>
+                            <div class="form-group">
+                                <label>Password : </label>
+                                <input type="text" class="form-control" name="Password" id="Password" />
+
+                            </div>
+                            <div id="waiting" style="display: none;">
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="login_btn">Tạo tài khoản</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <script>
+            $(document).ready(function () {
+                $("#frm-create").submit(function (e) {
+                    if ($("#UserName").val() == '') {
+                        $('#err_login').html('<div class="alert alert-danger">Username chưa nhập</div>');
+                        $("#UserName").focus();
+                        return false;
+                    }
+                    else if ($("#Password").val() == '') {
+                        $('#err_login').html('<div class="alert alert-danger">Password chưa nhập</div>');
+                        $("#Password").focus();
+                        return false;
+                    }
+                    else {
+                        var form_data_login = {
+                            username: $("#UserName").val(),
+                            password: $("#Password").val()
+                        };
+                        $.ajax({
+                            url: '#',
+                            type: 'POST',
+                            async: true,
+                            data: form_data_login,
+                            success: function (msg_login) {
+                                //alert(msg);
+                                if (msg_login == 'false') {
+                                    $('#err_login').html('<div class="alert alert-danger">Tên hoặc mật khẩu không chính xác</div>');
+                                    $("#password").val("");
+                                    $("#password").focus();
+                                    return false;
+                                }
+                                else if (msg_login == 'er_block') {
+                                    $('#err_login').html('<div class="alert alert-danger">Tài khoản đang bị khóa</div>');
+                                }
+                                else {
+                                    $("#login_here").hide();
+                                    $(".modal-footer").hide();
+
+                                    $('#err_login').html('<div class="alert alert-success"><strong>Đăng nhập thành công</strong><span> Hệ thống tự chuyển sau vài giây ...</span></div>');
+                                    setTimeout(
+                                        //chuyển đến địa chỉ msg_login của controler gửi qua
+                                        function () {
+                                            window.location.href = '' + msg_login + '';
+                                        }, 2000);
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                });
+            })
+            //Load wating bar
+            $(document).ajaxStart(function () {
+                $("#waiting").show();
+            }).ajaxStop(function () {
+                $("#waiting").hide();
+            });
+        </script>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+</body>
+</html>
