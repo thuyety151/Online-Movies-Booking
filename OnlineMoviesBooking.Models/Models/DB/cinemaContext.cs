@@ -13,7 +13,6 @@ namespace OnlineMoviesBooking.Models.Models.DB
         public cinemaContext(DbContextOptions<cinemaContext> options)
             : base(options)
         {
-           
         }
 
         public virtual DbSet<Aq> Aq { get; set; }
@@ -34,8 +33,7 @@ namespace OnlineMoviesBooking.Models.Models.DB
         {
             if (!optionsBuilder.IsConfigured)
             {
-
-                optionsBuilder.UseSqlServer("Server=THANHTON;Database=cinema;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Name=DefaultConnection");
             }
         }
 

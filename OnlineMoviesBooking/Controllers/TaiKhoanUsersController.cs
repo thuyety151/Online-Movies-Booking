@@ -25,7 +25,6 @@ namespace OnlineMoviesBooking.Controllers
             return View(await cinemaContext.ToListAsync());
         }
 
-        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -97,7 +96,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             ViewData["IdKhuyenMai"] = new SelectList(_context.KhuyenMai, "IdKhuyenMai", "IdKhuyenMai", taiKhoan.IdKhuyenMai);
             ViewData["UsertypeId"] = new SelectList(_context.TypeUser, "UsertypeId", "UsertypeId", taiKhoan.UsertypeId);
-            return View(taiKhoan);
+            return Json(taiKhoan);
         }
 
         // POST: TaiKhoanUsers/Edit/5
@@ -105,13 +104,9 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdTaiKhoan,TenKhachHang,NgaySinh,GioiTinh,DiaChi,Sdt,Email,UserName,Password,UsertypeId,IdKhuyenMai")] TaiKhoan taiKhoan)
+        public async Task<IActionResult> Edit(TaiKhoan taiKhoan)
         {
-            if (id != taiKhoan.IdTaiKhoan)
-            {
-                return NotFound();
-            }
-
+           
             if (ModelState.IsValid)
             {
                 try
@@ -134,7 +129,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             ViewData["IdKhuyenMai"] = new SelectList(_context.KhuyenMai, "IdKhuyenMai", "IdKhuyenMai", taiKhoan.IdKhuyenMai);
             ViewData["UsertypeId"] = new SelectList(_context.TypeUser, "UsertypeId", "UsertypeId", taiKhoan.UsertypeId);
-            return View(taiKhoan);
+            return RedirectToAction("Index");
         }
 
         // GET: TaiKhoanUsers/Delete/5
@@ -173,5 +168,23 @@ namespace OnlineMoviesBooking.Controllers
             return _context.TaiKhoan.Any(e => e.IdTaiKhoan == id);
         }
 
+        public ActionResult GetAllUserData()
+        {
+            return View(_context.TaiKhoan.Include(t => t.IdKhuyenMaiNavigation).Include(t => t.Usertype));
+
+        }
+
+        //public PartialViewResult SearchUsers(string searchText)
+        //{
+        //    List<TaiKhoan> taiKhoans = GetUsers();
+        //    var result = taiKhoans.Where(a => a.TenKhachHang.ToLower().Contains(searchText) || a.Email.ToLower().Contains(searchText));
+        //    return PartialView("Search", result);
+        //}
+        //public List<TaiKhoan> GetUsers()
+        //{
+        //    List<TaiKhoan> taiKhoans = new List<TaiKhoan>();
+        //    taiKhoans = _context.TaiKhoan.Include(t => t.IdKhuyenMaiNavigation).Include(t => t.Usertype).ToList();
+        //    return taiKhoans;
+        //}
     }
 }

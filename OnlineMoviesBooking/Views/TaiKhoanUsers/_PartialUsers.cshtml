@@ -1,0 +1,72 @@
+﻿@model OnlineMoviesBooking.Models.Models.DB.TaiKhoan
+
+<div class="modal fade" id="modal_edit" role="dialog">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdTaiKhoan" id="idtaikhoan" />
+                <div class="form-group">
+                    <label for="TenKhachHang" class="control-label"></label>
+                    <input asp-for="TenKhachHang" id="tenkhachhang" class="form-control" />
+                    <span asp-validation-for="TenKhachHang" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="NgaySinh" class="control-label"></label>
+                    <input asp-for="NgaySinh" id="ngaysinh" class="form-control" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="GioiTinh" class="control-label"></label>
+                    <select asp-for="GioiTinh" id="gioitinh" class="form-control">
+                        <option class="form-control" value=true>Nam</option>
+                        <option class="form-control" value=false>Nữ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="DiaChi" class="control-label"></label>
+                    <input asp-for="DiaChi" id="diachi" class="form-control" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Sdt" class="control-label"></label>
+                    <input asp-for="Sdt" id="sdt" class="form-control" />
+                    <span asp-validation-for="Sdt" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Email" class="control-label"></label>
+                    <input asp-for="Email" id="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" id="username" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Password" class="control-label"></label>
+                    <input asp-for="Password" id="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="UsertypeId" class="control-label"></label>
+                    <select asp-for="UsertypeId" id="usertype" class="form-control" asp-items="ViewBag.UsertypeId"></select>
+                    <span asp-validation-for="UsertypeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="IdKhuyenMai" class="control-label"></label>
+                    <select asp-for="IdKhuyenMai" id="khuyenmai" class="form-control" asp-items="ViewBag.IdKhuyenMai"></select>
+                    <span asp-validation-for="IdKhuyenMai" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
