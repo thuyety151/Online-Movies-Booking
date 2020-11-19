@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineMoviesBooking.Models\OnlineMoviesBooking.Models.csproj" />
-    <ProjectReference Include="..\OnlineMoviesBooking.Utility\OnlineMoviesBooking.Utility.csproj" />
   </ItemGroup>
 
 </Project>

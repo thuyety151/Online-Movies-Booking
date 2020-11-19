@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OnlineMoviesBooking.DataAccess": {
+      "commandName": "Project"
+    },
+    "OnlineMoviesBooking": {
+      "commandName": "Project"
+    }
+  }
+}

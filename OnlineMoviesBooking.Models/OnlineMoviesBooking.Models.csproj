@@ -14,4 +14,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="D:\YYYYYYYYYYY\2020\HK1\Web\Online-Movies-Booking\OnlineMoviesBooking\OnlineMoviesBooking.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
