@@ -1,3 +1,5 @@
+
+(function($) {
 /*!
     * Start Bootstrap - SB Admin v6.0.2 (https://startbootstrap.com/template/sb-admin)
     * Copyright 2013-2020 Start Bootstrap

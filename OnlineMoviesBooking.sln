@@ -3,11 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineMoviesBooking", "OnlineMoviesBooking\OnlineMoviesBooking.csproj", "{849E79BC-35A2-4E33-B13A-668A788D94CF}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineMoviesBooking.DataAccess", "OnlineMoviesBooking.DataAccess\OnlineMoviesBooking.DataAccess.csproj", "{76883851-D567-46F4-898D-95BCDB817CF8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineMoviesBooking.Models", "OnlineMoviesBooking.Models\OnlineMoviesBooking.Models.csproj", "{023B3B4B-73B7-4653-8099-1A6EAA41D25A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineMoviesBooking", "D:\YYYYYYYYYYY\2020\HK1\Web\Online-Movies-Booking\OnlineMoviesBooking\OnlineMoviesBooking.csproj", "{F8D2B49B-C83C-49E8-A507-3999D72857F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +24,6 @@ Global
 		{023B3B4B-73B7-4653-8099-1A6EAA41D25A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{023B3B4B-73B7-4653-8099-1A6EAA41D25A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{023B3B4B-73B7-4653-8099-1A6EAA41D25A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8D2B49B-C83C-49E8-A507-3999D72857F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8D2B49B-C83C-49E8-A507-3999D72857F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8D2B49B-C83C-49E8-A507-3999D72857F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8D2B49B-C83C-49E8-A507-3999D72857F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

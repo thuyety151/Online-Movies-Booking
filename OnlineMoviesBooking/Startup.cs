@@ -12,8 +12,8 @@ using OnlineMoviesBooking.DataAccess;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OnlineMoviesBooking.DataAccess.Data;
-using OnlineMoviesBooking.Models.Models.DB;
+using OnlineMoviesBooking.Models.Models;
+
 
 namespace OnlineMoviesBooking
 {
@@ -32,6 +32,9 @@ namespace OnlineMoviesBooking
             
             services.AddDbContext<cinemaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CinemaContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
