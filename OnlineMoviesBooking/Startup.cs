@@ -30,7 +30,7 @@ namespace OnlineMoviesBooking
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<cinemaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CinemaContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
