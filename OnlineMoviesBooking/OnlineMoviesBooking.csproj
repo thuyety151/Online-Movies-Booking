@@ -24,4 +24,8 @@
     <ProjectReference Include="..\OnlineMoviesBooking.Models\OnlineMoviesBooking.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\jquery\" />
+  </ItemGroup>
+
 </Project>
