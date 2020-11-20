@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @charset "UTF-8";
+=======
+﻿@charset "UTF-8";
+>>>>>>> 1e115e4937bf28349691f83fa208647b3476c09d
 /*!
 * Start Bootstrap - SB Admin v6.0.2 (https://startbootstrap.com/template/sb-admin)
 * Copyright 2013-2020 Start Bootstrap
@@ -10220,6 +10224,10 @@ body {
 }
 
 .sb-sidenav-light {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 1e115e4937bf28349691f83fa208647b3476c09d
   background-color: #f8f9fa;
   color: #212529;
 }
@@ -10246,4 +10254,12 @@ body {
 }
 .sb-sidenav-light .sb-sidenav-footer {
   background-color: #e9ecef;
+<<<<<<< HEAD
+=======
+}
+
+
+.view {
+    background-image: url("../assets/Img_aventure/tải xuống (3).jfif")
+>>>>>>> 1e115e4937bf28349691f83fa208647b3476c09d
 }
