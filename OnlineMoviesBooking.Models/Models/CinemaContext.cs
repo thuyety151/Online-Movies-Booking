@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.SqlServer;
 
+
 namespace OnlineMoviesBooking.Models.Models
 {
     public partial class CinemaContext : DbContext
