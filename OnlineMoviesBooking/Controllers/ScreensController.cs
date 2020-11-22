@@ -100,12 +100,13 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            var screen = await _context.Screen.FindAsync(id);
+            var screen = Exec.ExecuteGetDetailScreen_Theater(id);
+            
             if (screen == null)
             {
                 return NotFound();
             }
-            ViewData["IdTheater"] = new SelectList(_context.Theater, "Id", "Id", screen.IdTheater);
+            ViewBag.Theater = new SelectList(Exec.ExecuteTheaterGetAll(), "Id", "Name");
             return View(screen);
         }
 
@@ -120,28 +121,24 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(screen);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ScreenExists(screen.Id))
+                    if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
                     {
-                        return NotFound();
+                        ModelState.AddModelError("Name", "Tên đã tồn tại");
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    Exec.ExecuteUpdateScreen(screen);
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTheater"] = new SelectList(_context.Theater, "Id", "Id", screen.IdTheater);
+            catch
+            {
+
+            }
+            ViewBag.Theater = new SelectList(Exec.ExecuteTheaterGetAll(), "Id", "Name");
             return View(screen);
         }
 

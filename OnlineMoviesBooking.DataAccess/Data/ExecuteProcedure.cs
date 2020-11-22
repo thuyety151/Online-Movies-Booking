@@ -164,6 +164,41 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var obj = _context.Screen.FromSqlRaw("EXEC USP_CheckSreenName @Name , @Id", sqlParam).ToList();
             return obj.Count();
         }
-        
+        public Screen ExecuteGetDetailScreen_Theater(string id)
+        {
+            /// Id, Name, Name Theater
+            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
+            List<Screen> lst = new List<Screen>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailScreenwithTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    lst.Add(new Screen
+                    {
+                        Id = (rdr["Id"]).ToString(),
+                        Name = rdr["Name"].ToString(),
+                        IdTheater = rdr["Id_Theater"].ToString()
+                    });
+                }
+                return lst[0];
+            }
+        }
+        public void ExecuteUpdateScreen(Screen screen)
+        {
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",screen.Id),
+                new SqlParameter("@Name",screen.Name),
+                new SqlParameter("@Id_Theater",screen.IdTheater)
+            };
+            _context.Database.ExecuteSqlCommand("EXEC USP_UpdateScreen @Id ,@Name ,@Id_Theater", sqlParam);
+        }
     }
 }
