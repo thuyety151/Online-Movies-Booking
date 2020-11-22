@@ -1,21 +1,19 @@
-﻿using System;
+﻿using OnlineMoviesBooking.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace OnlineMoviesBooking.Models.Models
+namespace OnlineMoviesBooking.Models.ViewModels
 {
-    public partial class Movie
+    public class MovieViewModel
     {
-        public Movie()
-        {
-            Show = new HashSet<Show>();
-        }
 
         public string Id { get; set; }
-        [Display(Name = "Tên phim")]
+        [Display(Name="Tên phim")]
         [Required]
         public string Name { get; set; }
-        [Display(Name = "Thể loại")]
+        [Display(Name ="Thể loại")]
         [Required]
         public string Genre { get; set; }
         [Display(Name = "Đạo diễn")]
@@ -25,7 +23,7 @@ namespace OnlineMoviesBooking.Models.Models
         [Required]
         public string Casts { get; set; }
         [Display(Name = "Qui định")]
-
+        [Required]
         public string Rated { get; set; }
         [Display(Name = "Mô tả")]
         [Required]
