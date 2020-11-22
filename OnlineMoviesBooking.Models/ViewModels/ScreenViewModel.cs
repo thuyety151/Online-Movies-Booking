@@ -12,7 +12,8 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Display(Name="Tên phòng chiếu")]
         [Required]
         public string Name { get; set; }
-
+        [Display(Name = "Rạp chiếu")]
+        [Required]
         public string IdTheater { get; set; }
 
         public virtual Theater IdTheaterNavigation { get; set; }

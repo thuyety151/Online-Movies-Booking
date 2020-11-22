@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
+using OnlineMoviesBooking.Models.ViewModels;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -20,10 +21,11 @@ namespace OnlineMoviesBooking.Controllers
             _context = context;
             Exec = new ExecuteProcedure(_context);
         }
-        //public IActionResult GetAll()
-        //{
-        //    //var screen = Exec.
-        //}
+        public IActionResult GetAll()
+        {
+            var obj=Exec.ExecuteScreenGetAllwithTheater();
+            return Json(new {data=obj});
+        }
         // GET: Screens
         public async Task<IActionResult> Index()
         {
@@ -54,7 +56,9 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Screens/Create
         public IActionResult Create()
         {
-            ViewData["IdTheater"] = new SelectList(_context.Theater, "Id", "Id");
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theater = new SelectList(theater, "Id", "Name");
+          
             return View();
         }
 
@@ -67,11 +71,13 @@ namespace OnlineMoviesBooking.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(screen);
-                await _context.SaveChangesAsync();
+                screen.Id = Guid.NewGuid().ToString();
+                Exec.ExecuteInsertScreen(screen);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTheater"] = new SelectList(_context.Theater, "Id", "Id", screen.IdTheater);
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theater = new SelectList(theater, "Id", "Name");
             return View(screen);
         }
 

@@ -7,6 +7,8 @@ using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using System.Data;
+using OnlineMoviesBooking.Models.ViewModels;
+using Microsoft.IdentityModel.Protocols;
 
 namespace OnlineMoviesBooking.DataAccess.Data
 {
@@ -115,10 +117,43 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return _context.Database.ExecuteSqlCommand("USP_DeleteThreater @Id", sqlParam);
         }
         //-----------------------Screen
-        public void ExecuteScreenGetAllwithTheater()
+        public List<Screen_Theater> ExecuteScreenGetAllwithTheater()
         {
             /// Id, Name, Name Theater
-             _context.Database.ExecuteSqlRaw("EXEC USP_GetAllScreenwithTheater");
+            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
+            List<Screen_Theater> lst = new List<Screen_Theater>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllScreenwithTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    lst.Add(new Screen_Theater
+                    {
+                        Id = (rdr["Id"]).ToString(),
+                        Name = rdr["Name"].ToString(),
+                        IdTheater=rdr["Id_Theater"].ToString(),
+                        NameTheater = rdr["Theater"].ToString()
+                    }) ;
+                }
+                return lst;
+            }
+
         }
+        public void ExecuteInsertScreen(Screen screen)
+        {
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",screen.Id),
+                new SqlParameter("@Name",screen.Name),
+                new SqlParameter("@IdTheater",screen.IdTheater)
+            };
+            _context.Database.ExecuteSqlRaw("EXEC USP_InsertScreen @Id, @Name , @IdTheater ", sqlParam);
+        }
+        
     }
 }

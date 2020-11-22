@@ -28,7 +28,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
         public DataTable ExcuteQuery(string query, object[] parameter = null)  // chỉ đưa null ở cuối cùng
         {
-
+            string connectionSTR = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
             // sử dụng using để giải phóng bộ nhớ
             DataTable data = new DataTable();
 
