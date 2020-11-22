@@ -69,12 +69,23 @@ namespace OnlineMoviesBooking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,IdTheater")] Screen screen)
         {
-            if (ModelState.IsValid)
+            try
             {
-                screen.Id = Guid.NewGuid().ToString();
-                Exec.ExecuteInsertScreen(screen);
+                if (ModelState.IsValid)
+                {
+                    screen.Id = Guid.NewGuid().ToString();
+                    if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
+                    {
+                        ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    }
+                    Exec.ExecuteInsertScreen(screen);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+
             }
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theater = new SelectList(theater, "Id", "Name");

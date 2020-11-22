@@ -154,6 +154,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
             };
             _context.Database.ExecuteSqlRaw("EXEC USP_InsertScreen @Id, @Name , @IdTheater ", sqlParam);
         }
+        public int CheckNameScreen(string name, string id)
+        {
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Name",name),
+                new SqlParameter("@Id",id)
+            };
+            var obj = _context.Screen.FromSqlRaw("EXEC USP_CheckSreenName @Name , @Id", sqlParam).ToList();
+            return obj.Count();
+        }
         
     }
 }
