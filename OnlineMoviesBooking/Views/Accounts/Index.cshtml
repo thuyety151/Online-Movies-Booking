@@ -13,11 +13,14 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table" id="dataTable">
+<table class="table" id="AccountTable">
     <thead class="bg-secondary text-light">
         <tr>
             <th>
                 Tên
+            </th>
+            <th>
+                Chức vụ
             </th>
             <th>
                 SDT
@@ -43,14 +46,29 @@
             @{
                 if (item.IdTypesOfUser == "1")
                 {
-                    <td style="color:red">
+                    <td >
                         @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Quản trị viên
+                    </td>
+                }
+                else if (item.IdTypesOfUser == "0")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Thành viên
                     </td>
                 }
                 else
                 {
-                    <td>
+                    <td >
                         @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td style="color:darkgrey">
+                        Không có
                     </td>
                 }
             }
@@ -73,7 +91,7 @@
 
             <td style="width:15rem;text-align:right">
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
-                <a href="#" data-toggle="modal" data-target="#DetailModal" data-id="@item.Id" class="btn btn-secondary">Details</a> |
+                <a href="#" data-toggle="modal" data-target="#DetailAccountModal" data-id="@item.Id" class="btn btn-secondary">Details</a> |
                 <a onclick=DeleteAccount("/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
             </td>
         </tr>
@@ -85,7 +103,7 @@
 @*Modal của detail Account*@
 
 
-<div class="modal fade" id="DetailModal" tabindex="-1" role="dialog" >
+<div class="modal fade" id="DetailAccountModal" tabindex="-1" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -22,6 +22,7 @@ namespace OnlineMoviesBooking.Controllers
         public async Task<IActionResult> Index()
         {
             //var cinemaContext = _context.Account.Include(a => a.IdTypesOfUserNavigation);
+            
             var list = _context.Account.FromSqlRaw("EXEC dbo.USP_SelectAllAccount").ToList();
             return View( list);
         }
@@ -83,6 +84,15 @@ namespace OnlineMoviesBooking.Controllers
             catch
             {
                var modelstateKey =  ModelState.Keys;
+                var list = _context.Account.FromSqlRaw($"EXEC dbo.USP_CheckEmail '{account.Email}' ").ToList();
+                if(list.Count() == 1)
+                {
+                    ModelState.AddModelError("Email", "Email đã tồn tại");
+                }    
+                //else if (check_db == 1)
+                //{
+                //    ModelState.AddModelError("Sdt", "Sdt đã tồn tại");
+                //}
                 return View();
             }
                 

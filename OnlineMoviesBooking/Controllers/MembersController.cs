@@ -21,8 +21,8 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var cinemaContext = _context.Account.Include(a => a.IdTypesOfUserNavigation);
-            return View(await cinemaContext.ToListAsync());
+            var list = _context.Account.FromSqlRaw("EXEC dbo.USP_SelectAllMember").ToList();
+            return View(list);
         }
 
         // GET: Members/Details/5
@@ -58,11 +58,29 @@ namespace OnlineMoviesBooking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,Image")] Account account)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(account);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    account.Id = Guid.NewGuid().ToString();
+                    account.IdTypesOfUser = "2";
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@image={account.Image},@action ={"Insert"} ");
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+                var modelstateKey = ModelState.Keys;
+                var list = _context.Account.FromSqlRaw($"EXEC dbo.USP_CheckEmail '{account.Email}' ").ToList();
+                if (list.Count() == 1)
+                {
+                    ModelState.AddModelError("Email", "Email đã tồn tại");
+                }
+                //else if (check_db == 1)
+                //{
+                //    ModelState.AddModelError("Sdt", "Sdt đã tồn tại");
+                //}
+                return View();
             }
             ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
@@ -101,8 +119,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 try
                 {
-                    _context.Update(account);
-                    await _context.SaveChangesAsync();
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@image={account.Image},@action ={"Update"} ");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,31 +141,17 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Members/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteMember @id = {id}");
+                return Json(new { success = true, message = "Xóa mục thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
             }
 
-            var account = await _context.Account
-                .Include(a => a.IdTypesOfUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
 
-            return View(account);
-        }
-
-        // POST: Members/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var account = await _context.Account.FindAsync(id);
-            _context.Account.Remove(account);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool AccountExists(string id)

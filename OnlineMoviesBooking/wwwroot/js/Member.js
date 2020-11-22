@@ -1,8 +1,9 @@
 ﻿$(document).ready(function () {
-    $('#AccountTable').DataTable();
+    $('#MemberTable').DataTable();
 });
 
-$('#DetailAccountModal').on('show.bs.modal', function (event) {
+//--chi tiết thành viên
+$('#DetailMemberModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var idaccount = button.data('id') // Extract info from data-* attributes
     console.log(idaccount)
@@ -27,8 +28,7 @@ $('#DetailAccountModal').on('show.bs.modal', function (event) {
     })
 })
 
-
-
+//xóa thành viên
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -36,48 +36,7 @@ const swalWithBootstrapButtons = Swal.mixin({
     },
     buttonsStyling: false
 })
-function DeleteAccount(url) {
-    //Swal.fire({
-    //    title: 'Are you sure?',
-    //    text: "You won't be able to revert this!",
-    //    icon: 'warning',
-    //    showCancelButton: true,
-    //    confirmButtonColor: '#3085d6',
-    //    cancelButtonColor: '#d33',
-    //    confirmButtonText: 'Yes, delete it!'
-    //}).then((result) => {
-    //    if (result.isConfirmed) {
-    //        $.ajax({
-    //            type: "DELETE",
-    //            url: url,
-    //            success: function (data) {
-    //                if (data.success) {
-    //                    swalWithBootstrapButtons.fire(
-    //                        'Deleted!',
-    //                        data.message,
-    //                        'success'
-    //                    );
-    //                    $('#dataTable').DataTable().ajax.reload();
-    //                }
-    //                else {
-    //                    swalWithBootstrapButtons.fire(
-    //                        'Error',
-    //                        data.message,
-    //                        'error'
-    //                    )
-    //                }
-    //            }
-
-    //        })
-    //    }
-    //    else if (result.dismiss === Swal.DismissReason.cancel) {
-    //        swalWithBootstrapButtons.fire(
-    //            'Cancelled',
-    //            'Your record is safe :)',
-    //            'error'
-    //        )
-    //    }
-    //})
+function DeleteMember(url) {
     swalWithBootstrapButtons.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -98,7 +57,7 @@ function DeleteAccount(url) {
                             data.message,
                             'success'
                         );
-                        $('#dataTable').DataTable().ajax.reload();
+                        //$('#MemberTable').DataTable().ajax.reload(null, true);
                     }
                     else {
                         swalWithBootstrapButtons.fire(

@@ -1,90 +1,134 @@
-﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Account>
+﻿@model List<OnlineMoviesBooking.Models.Models.Account>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Danh sách thành viên</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table" id="MemberTable">
+    <thead class="bg-secondary text-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Tên
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Birthdate)
+                SDT
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                Email
+            <th>
+                Mật khẩu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                Điểm
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sdt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Point)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdTypesOfUserNavigation)
+                Hình ảnh
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Birthdate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Point)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdTypesOfUserNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sdt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Point)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image)
+                </td>
+
+                <td style="width:15rem;text-align:right">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
+                    <a href="#" data-toggle="modal" data-target="#DetailMemberModal" data-id="@item.Id" class="btn btn-secondary">Details</a> |
+                    <a onclick=DeleteMember("/Members/Delete/@item.Id") class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@*Modal của detail Member*@
+
+
+<div class="modal fade" id="DetailMemberModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết tài khoản thành viên</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="table_detail">
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <input class=" form-control" type="text" id="name_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input class=" form-control " type="text" id="birthdate_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <input class=" form-control " type="text" id="gender_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input class=" form-control" type="text" id="address_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input class=" form-control" type="text" id="sdt_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class=" form-control" type="text" id="email_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input class=" form-control" type="text" id="password_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Điểm</label>
+                        <input class=" form-control" type="text" id="point_detail_member" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Hình ảnh</label>
+                        <input class=" form-control" type="text" id="image_detail_member" readonly />
+                    </div>
+                    <div>
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/Member.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+}
