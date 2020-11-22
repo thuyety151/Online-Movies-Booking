@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     $('#dataTable').DataTable({
         "ajax": {
             "url": '/movies/getall'
@@ -14,7 +15,14 @@
             { "data": "releaseDate" },
             { "data": "expirationDate" },
             { "data": "runningtime" },
-            { "data": "poster" },
+            {
+                "data": "poster",
+                "render": function (data) {
+                    return `
+                            <img src="${data}" style="width: 150px;"/>
+                        `;
+                }
+            },
             {
                 "data": "id",
                 "render": function (data) {

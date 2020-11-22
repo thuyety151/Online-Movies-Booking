@@ -31,7 +31,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public Movie ExecuteMovieDetail(string id)
         {
-            var obj = _context.Movie.FromSqlRaw("EXEC USP_GetDetailMovie @Id= "+ id).ToList();
+            var sqlParam = new SqlParameter("@Id", id);
+            var obj = _context.Movie.FromSqlRaw("EXEC USP_GetDetailMovie @Id",sqlParam).ToList();
             return obj[0];
         }
         public int CheckNameMovie(string name)
@@ -116,6 +117,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
         //-----------------------Screen
         public void ExecuteScreenGetAllwithTheater()
         {
+            /// Id, Name, Name Theater
              _context.Database.ExecuteSqlRaw("EXEC USP_GetAllScreenwithTheater");
         }
     }

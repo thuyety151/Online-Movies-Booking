@@ -87,29 +87,31 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
-            
+            ViewBag.FileName = "";
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MovieViewModel movie, IFormFile file)
+        public async Task<IActionResult> Create(MovieViewModel movie)
         {
             
             if (ModelState.IsValid)
             {
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
-                string fileName = Path.GetFileNameWithoutExtension(movie.ImageFile.FileName);
+                //string fileName = Path.GetFileNameWithoutExtension(movie.ImageFile.FileName);
+                string fileName =Path.Combine( movie.ImageFile.FileName);
                 string extension = Path.GetExtension(movie.ImageFile.FileName);
 
                 string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+                
                 using(var fileStream = new FileStream(path, FileMode.Create))
                 {
                     await movie.ImageFile.CopyToAsync(fileStream);
-                    movie.Poster = "~/Images/"+fileName;
+                    movie.Poster = "/Images/"+fileName;
                 }
-
+                ViewBag.FileName = movie.ImageFile.FileName;
 
                 movie.Id = Guid.NewGuid().ToString();
                 if(movie.Rated==null)
@@ -130,6 +132,7 @@ namespace OnlineMoviesBooking.Controllers
                     var m = new Movie(movie);
                     
                     var i = Exec.ExecuteInsertMovie(m);
+                    
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -151,9 +154,11 @@ namespace OnlineMoviesBooking.Controllers
             var movie = Exec.ExecuteMovieDetail(id);
             if (movie == null)
             {
+
                 return NotFound();
             }
-            return View(movie);
+            MovieViewModel m = new MovieViewModel(movie);
+            return View(m);
         }
 
         // POST: Movies/Edit/5

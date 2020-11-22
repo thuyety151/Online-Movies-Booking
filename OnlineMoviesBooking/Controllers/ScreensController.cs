@@ -27,8 +27,9 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Screens
         public async Task<IActionResult> Index()
         {
-            var cinemaContext = _context.Screen.Include(s => s.IdTheaterNavigation);
-            return View(await cinemaContext.ToListAsync());
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theater= new SelectList(theater, "Id", "Name");
+            return View();
         }
 
         // GET: Screens/Details/5

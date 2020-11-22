@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.Models.Movie
+﻿@model OnlineMoviesBooking.Models.ViewModels.MovieViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,9 +8,8 @@
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -18,27 +17,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
+                <textarea asp-for="Genre" class="form-control"></textarea>
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Director" class="control-label"></label>
-                <input asp-for="Director" class="form-control" />
+                <textarea asp-for="Director" class="form-control"></textarea>
                 <span asp-validation-for="Director" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Casts" class="control-label"></label>
-                <input asp-for="Casts" class="form-control" />
+                <textarea asp-for="Casts" class="form-control"></textarea>
                 <span asp-validation-for="Casts" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Rated" class="control-label"></label>
-                <input asp-for="Rated" class="form-control" />
-                <span asp-validation-for="Rated" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,6 +41,13 @@
                 <input asp-for="Trailer" class="form-control" />
                 <span asp-validation-for="Trailer" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Poster" class="control-label"></label>
+                <input asp-for="ImageFile" accept="image/*" type="file" id="image" class="form-control-file" />
+                <label asp-for="ImageFile.FileName" class="form-control" ></label>
+                <span asp-validation-for="Poster" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" type="date" />
@@ -61,13 +63,14 @@
                 <input asp-for="RunningTime" class="form-control" />
                 <span asp-validation-for="RunningTime" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" class="form-control" />
-                <span asp-validation-for="Poster" class="text-danger"></span>
+                <label asp-for="Rated" class="control-label"></label>
+                <input asp-for="Rated" class="form-control" />
+                <span asp-validation-for="Rated" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="submit" value="Tạo" class="btn btn-primary" />
             </div>
         </form>
     </div>
