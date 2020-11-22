@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using OnlineMoviesBooking.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,6 +11,21 @@ namespace OnlineMoviesBooking.Models.Models
         public Movie()
         {
             Show = new HashSet<Show>();
+        }
+        public Movie(MovieViewModel movie)
+        {
+            this.Id = movie.Id;
+            this.Name = movie.Name;
+            this.Genre = movie.Genre;
+            this.Director = movie.Director;
+            this.Casts = movie.Casts;
+            this.Rated = movie.Rated;
+            this.Description = movie.Description;
+            this.Trailer = movie.Trailer;
+            this.ReleaseDate = movie.ReleaseDate;
+            this.ExpirationDate = movie.ExpirationDate;
+            this.RunningTime = movie.RunningTime;
+            this.Poster = movie.Poster;
         }
 
         public string Id { get; set; }
@@ -45,6 +62,9 @@ namespace OnlineMoviesBooking.Models.Models
         [Display(Name = "Poster")]
         [Required]
         public string Poster { get; set; }
+
+
+        
 
         public virtual ICollection<Show> Show { get; set; }
     }

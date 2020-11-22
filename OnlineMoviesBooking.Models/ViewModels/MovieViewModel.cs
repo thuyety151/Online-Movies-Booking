@@ -1,4 +1,5 @@
-﻿using OnlineMoviesBooking.Models.Models;
+﻿using Microsoft.AspNetCore.Http;
+using OnlineMoviesBooking.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +24,6 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Required]
         public string Casts { get; set; }
         [Display(Name = "Qui định")]
-        [Required]
         public string Rated { get; set; }
         [Display(Name = "Mô tả")]
         [Required]
@@ -41,9 +41,10 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Required]
         public int RunningTime { get; set; }
         [Display(Name = "Poster")]
-        [Required]
         public string Poster { get; set; }
 
+        // property tren code
+        public IFormFile ImageFile { get; set; }
         public virtual ICollection<Show> Show { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.Models.Movie
+﻿@model OnlineMoviesBooking.Models.ViewModels.MovieViewModel
 
 <h1 class="row justify-content-center">Thêm phim</h1>
 <hr />
@@ -39,14 +39,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" class="form-control" />
+                <input asp-for="ImageFile" accept="image/*" type="file" id="image" class="form-control-file"  />
                 <span asp-validation-for="Poster" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input name="image" type="file" class="form-control-file"
+            @*<div class="form-group">
+                <label for="exampleInputFile">Poster</label>
+                <input name="image"  asp-for="Poster" accept="image/*" type="file" class="form-control-file"
                        id="exampleInputFile" aria-describedby="fileHelp">
-            </div>
+            </div>*@
             
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>

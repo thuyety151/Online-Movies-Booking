@@ -10,6 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
+using System.Web;
+using System.IO;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using OnlineMoviesBooking.Models.ViewModels;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -17,11 +23,12 @@ namespace OnlineMoviesBooking.Controllers
     {
         private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
-
-        public MoviesController(CinemaContext context)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public MoviesController(CinemaContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             Exec = new ExecuteProcedure(context);
+            this._hostEnvironment = hostEnvironment;
         }
 
         public IActionResult GetAll()
@@ -86,11 +93,24 @@ namespace OnlineMoviesBooking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Movie movie )
+        public async Task<IActionResult> Create(MovieViewModel movie, IFormFile file)
         {
             
             if (ModelState.IsValid)
             {
+                // save image to wwwroot/image
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(movie.ImageFile.FileName);
+                string extension = Path.GetExtension(movie.ImageFile.FileName);
+
+                string path = Path.Combine(wwwRootPath + "/Images/", fileName);
+                using(var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await movie.ImageFile.CopyToAsync(fileStream);
+                    movie.Poster = "~/Images/"+fileName;
+                }
+
+
                 movie.Id = Guid.NewGuid().ToString();
                 if(movie.Rated==null)
                 {
@@ -106,8 +126,10 @@ namespace OnlineMoviesBooking.Controllers
                     if(movie.ReleaseDate>movie.ExpirationDate)
                     {
                         ModelState.AddModelError("ExpirationDate", "Ngày không hợp lệ");
-                    }    
-                    var i = Exec.ExecuteInsertMovie(movie);
+                    }
+                    var m = new Movie(movie);
+                    
+                    var i = Exec.ExecuteInsertMovie(m);
                     return RedirectToAction(nameof(Index));
                 }
                 catch

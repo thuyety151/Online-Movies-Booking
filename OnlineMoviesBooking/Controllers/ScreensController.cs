@@ -20,10 +20,10 @@ namespace OnlineMoviesBooking.Controllers
             _context = context;
             Exec = new ExecuteProcedure(_context);
         }
-        public IActionResult GetAll()
-        {
-            var screen = Exec.
-        }
+        //public IActionResult GetAll()
+        //{
+        //    //var screen = Exec.
+        //}
         // GET: Screens
         public async Task<IActionResult> Index()
         {

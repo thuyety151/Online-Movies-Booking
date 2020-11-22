@@ -114,6 +114,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return _context.Database.ExecuteSqlCommand("USP_DeleteThreater @Id", sqlParam);
         }
         //-----------------------Screen
-        
+        public void ExecuteScreenGetAllwithTheater()
+        {
+             _context.Database.ExecuteSqlRaw("EXEC USP_GetAllScreenwithTheater");
+        }
     }
 }
