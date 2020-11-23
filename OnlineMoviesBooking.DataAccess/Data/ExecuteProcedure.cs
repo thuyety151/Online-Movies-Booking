@@ -218,9 +218,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_GetDetailScreenwithTheater", con);
+                SqlCommand com = new SqlCommand("USP_FindScreenwithTheater", con);
                 com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@Id", id);
+                com.Parameters.AddWithValue("@IdThreater", id);
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())
                 {
