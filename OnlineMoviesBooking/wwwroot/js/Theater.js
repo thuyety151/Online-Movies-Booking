@@ -16,7 +16,7 @@ $(document).ready(function () {
                                 <a href="/Theaters/Create/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                <a href="#" data-target="#Detail" data-toggle="modal" data-id="${data}" 
+                                <a href="/Theaters/Details/${data}" 
                                 class="btn btn-success" style="font-size:small">Details</a> 
 
                                 <a onClick=Delete("/Theaters/Delete/${data}") class="btn btn-danger text-white"

@@ -100,6 +100,11 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var x = _context.Theater.FromSqlRaw("EXEC USP_GetAllTheater").ToList();
             return x;
         }
+        public Theater ExecuteDetailTheater(string id)
+        {
+            var obj= _context.Theater.FromSqlRaw("EXEC USP_GetDetailTheater @Id", new SqlParameter("@Id", id)).ToList();
+            return obj[0];
+        }
         public int ExecuteInsertTheater(string id, string name, string address, string hotline)
         {
             var sqlParam = new SqlParameter[]

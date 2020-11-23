@@ -5,16 +5,15 @@
 }
 
 
-
 <p>
     <a asp-action="Create">Thêm phòng chiếu</a>
 </p>
-
+<partial name="_ModalScreenDetail" model="new OnlineMoviesBooking.Models.Models.Screen()" />
 <div class="jumbotron" style="padding: 1rem;">
     <h4>Rạp</h4>
     <hr />
     <div style="display: flex;">
-        <select id="select"class="form-control col-md-6" asp-items="ViewBag.Theater">
+        <select id="select" class="form-control col-md-6" asp-items="ViewBag.Theater">
             <option value="">Tất cả</option>
         </select>
 
@@ -46,7 +45,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>

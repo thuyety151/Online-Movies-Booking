@@ -40,17 +40,25 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Theaters/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
+            // chi tiết rạp chiếu gồm: danh sách các phòng chiếu
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var screen= Exec.SearchScreenwithTheater(id);
+            var view = "";
+            foreach (var item in screen)
+            {
+                view += item.Name + "\n";
+            }
+            ViewBag.Screen = view;
+            var theater = Exec.ExecuteDetailTheater(id);
+            if (theater == null)
+            {
+                return NotFound();
+            }
 
-            //if (theater == null)
-            //{
-            //    return NotFound();
-            //}
-
-            return View();
+            return View(theater);
         }
 
         // GET: Theaters/Create

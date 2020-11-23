@@ -35,21 +35,20 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Screens/Details/5
-        public async Task<IActionResult> Details(string id)
+        [HttpGet]
+        public IActionResult Details(string id)
         {
             if (id == null)
-            {
+            { 
                 return NotFound();
             }
 
-            var screen = await _context.Screen
-                .Include(s => s.IdTheaterNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var screen = Exec.ExecuteGetDetailScreen_Theater(id);
             if (screen == null)
             {
                 return NotFound();
             }
-
+            
             return View(screen);
         }
 
@@ -152,6 +151,11 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult Search(string id)
         {
+            if(id==null)
+            {
+                var obja = Exec.ExecuteScreenGetAllwithTheater();
+                return Json(new { data = obja });
+            }    
             // tìm cáp phòng chiếu theo rạp
             var obj = Exec.SearchScreenwithTheater(id);
             return Json(new { data = obj });

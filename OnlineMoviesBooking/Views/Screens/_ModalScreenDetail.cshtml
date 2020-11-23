@@ -1,0 +1,31 @@
+﻿@model OnlineMoviesBooking.Models.Models.Screen
+
+<div id="Detail" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                Chi tiết phòng chiếu
+            </div>
+            <div class="modal-body">
+                <form>
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            Tên phòng chiếu
+                        </dt>
+                        <dd class="col-sm-10">
+                            <input asp-for="Name" id="Name" class="form-group"/>
+                        </dd>
+                    </dl>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
