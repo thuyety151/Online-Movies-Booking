@@ -200,5 +200,35 @@ namespace OnlineMoviesBooking.DataAccess.Data
             };
             _context.Database.ExecuteSqlCommand("EXEC USP_UpdateScreen @Id ,@Name ,@Id_Theater", sqlParam);
         }
+        public void ExecuteDeleteScreen(string id)
+        {
+            _context.Database.ExecuteSqlCommand("EXEC USP_DeleteScreen @Id", new SqlParameter("@Id", id));
+        }
+        public List<Screen_Theater> SearchScreenwithTheater(string id)
+        {
+            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
+            List<Screen_Theater> lst = new List<Screen_Theater>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailScreenwithTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    lst.Add(new Screen_Theater
+                    {
+                        Id = (rdr["Id"]).ToString(),
+                        Name = rdr["Name"].ToString(),
+                        IdTheater = rdr["Id_Theater"].ToString(),
+                        NameTheater = rdr["Theater"].ToString()
+                    });
+                }
+                return lst;
+            }
+        }
     }
 }

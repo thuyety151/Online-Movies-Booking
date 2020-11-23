@@ -142,36 +142,20 @@ namespace OnlineMoviesBooking.Controllers
             return View(screen);
         }
 
-        // GET: Screens/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var screen = await _context.Screen
-                .Include(s => s.IdTheaterNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (screen == null)
-            {
-                return NotFound();
-            }
-
-            return View(screen);
-        }
-
+       
         // POST: Screens/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        [HttpDelete]
+        public IActionResult Delete(string id)
         {
-            var screen = await _context.Screen.FindAsync(id);
-            _context.Screen.Remove(screen);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            Exec.ExecuteDeleteScreen(id);
+            return Json(new { success = true });
         }
-
+        public IActionResult Search(string id)
+        {
+            // tìm cáp phòng chiếu theo rạp
+            var obj = Exec.SearchScreenwithTheater(id);
+            return Json(new { data = obj });
+        }
         private bool ScreenExists(string id)
         {
             return _context.Screen.Any(e => e.Id == id);

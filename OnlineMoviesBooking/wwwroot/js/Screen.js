@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
 
     $('#dataTable').DataTable({
         "ajax": {
@@ -28,6 +29,23 @@
             }
         ]
     });
+});
+$('#Search').click(function () {
+    const value = $('#select').val();
+    console.log(value);
+    var table = $('#dataTable').DataTable();
+    //ajax.load(url,data,callback)
+    $.ajax({
+        method: 'GET',
+        url: '/Screens/Search/' + value,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            table.clear().draw();
+            table.rows.add(data);       // add new data
+            table.columns.adjust().draw();  // redraw
+        }
+    })
 });
 //$('#Detail').on('show.bs.modal', function (event) {
 //    var button = $(event.relatedTarget) // Button that triggered the modal
@@ -63,7 +81,7 @@ $('#Detail').on('show.bs.modal', function (event) {
     var modal = $(this)
     $.ajax({
         method: 'GET',
-        url: '/Movies/Detail/' + idDiscount,
+        url: '/Screens/Detail/' + idDiscount,
         success: function (data) {
             console.log(data);
             modal.find('#Id').val(data.Id);
