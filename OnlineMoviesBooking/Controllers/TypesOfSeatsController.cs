@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 
 namespace OnlineMoviesBooking.Controllers
@@ -12,12 +13,19 @@ namespace OnlineMoviesBooking.Controllers
     public class TypesOfSeatsController : Controller
     {
         private readonly CinemaContext _context;
+        private ExecuteProcedure Exec;
 
         public TypesOfSeatsController(CinemaContext context)
         {
             _context = context;
+            Exec = new ExecuteProcedure(_context);
         }
 
+        public IActionResult GetAll()
+        {
+            var obj = Exec.GetAllTypesOfSeat();
+            return Json(new { data = obj });
+        }
         // GET: TypesOfSeats
         public async Task<IActionResult> Index()
         {

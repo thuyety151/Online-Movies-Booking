@@ -235,5 +235,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return lst;
             }
         }
+        //--------------------TypesOfSeat
+        public List<TypesOfSeat> GetAllTypesOfSeat()
+        {
+            return _context.TypesOfSeat.FromSqlRaw("EXEC USP_GetAllTypesOfSeat").ToList();
+        }
     }
 }
