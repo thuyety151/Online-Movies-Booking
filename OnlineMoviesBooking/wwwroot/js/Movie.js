@@ -151,5 +151,13 @@ function Delete(url) {
         }
     })
 }
-
+function validateInput() {
+    console.log("A");
+    if (document.getElementById("uploadBox").value = "") {
+        console.log("A");
+        swal("Error", "Chọn hình ảnh", "error");
+        return false;
+    }
+    return true;
+}
 

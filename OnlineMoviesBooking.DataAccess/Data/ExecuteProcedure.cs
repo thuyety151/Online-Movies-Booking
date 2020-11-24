@@ -44,7 +44,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var i = _context.Movie.FromSqlRaw("EXEC USP_CheckNameMovie @Name ", sqlParam).ToList();
             return i.Count();
         }
-        public int ExecuteInsertMovie(Movie movie)
+        public void ExecuteInsertMovie(Movie movie)
         {
             var sqlParam = new SqlParameter[]
              {
@@ -62,10 +62,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@Poster",movie.Poster)
              };
 
-            var i=_context.Database.ExecuteSqlCommand("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
+            _context.Database.ExecuteSqlCommand("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
                 " @Casts , @Rated , @Description , @Trailer , @ReleaseDate , @ExpirationDate ," +
                 "@RunningTime , @Poster", sqlParam);
-            return i;
+           
         }
         public int ExecuteDeleteMovie(string id)
         {
@@ -239,6 +239,26 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public List<TypesOfSeat> GetAllTypesOfSeat()
         {
             return _context.TypesOfSeat.FromSqlRaw("EXEC USP_GetAllTypesOfSeat").ToList();
+        }
+        public void ExecuteUpdateTypesOfSeat(TypesOfSeat s)
+        {
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",s.Id),
+                new SqlParameter("@Name",s.Name),
+                new SqlParameter("@Cost",s.Cost)
+            };
+            _context.Database.ExecuteSqlRaw("EXEC USP_UpdateTypesOfSeat @Id, @Name, @Cost ", sqlParam);
+        }
+        public int CheckToSeatName(string id, string name)
+        {
+            var sqlParam = new SqlParameter[]
+           {
+                new SqlParameter("@Id",id),
+                new SqlParameter("@Name",name)
+           };
+            var ls = _context.TypesOfSeat.FromSqlRaw("EXEC USP_CheckToSeatName @Id , @Name ", sqlParam).ToList();
+            return ls.Count();
         }
     }
 }

@@ -1,11 +1,18 @@
-﻿@model OnlineMoviesBooking.Models.ViewModels.MovieViewModel
+﻿@model OnlineMoviesBooking.Models.Models.Movie
 
-<h1 class="row justify-content-center">Thêm phim</h1>
+@if (ViewBag.Id != "")
+{
+    <h1 class="row justify-content-center">Chỉnh sửa phim</h1>
+}
+else
+{
+    <h1 class="row justify-content-center">Thêm phim</h1>
+}
 <hr />
 
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <form asp-action="Upsert" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -40,17 +47,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-
-                <input asp-for="ImageFile" accept="image/*" type="file" class="form-control-file" />
-                <input asp-for="ImageFile.FileName" class="form-control" />
+                <input type="file" name="files" id="uploadBox" multiple class="form-control" />
                 <span asp-validation-for="Poster" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                    <label for="exampleInputFile">Poster</label>
-                    <input name="image"  asp-for="Poster" accept="image/*" type="file" class="form-control-file"
-                           id="exampleInputFile" aria-describedby="fileHelp">
-                </div>*@
-
+            <label for="exampleInputFile">Poster</label>
+            <input name="image"  asp-for="Poster" accept="image/*" type="file" class="form-control-file"
+                   id="exampleInputFile" aria-describedby="fileHelp">
+            </div>*@
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input name="image" type="file" class="form-control-file"
+                       id="exampleInputFile" aria-describedby="fileHelp">
+            </div>
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" type="date" />
@@ -73,7 +82,7 @@
                 <span asp-validation-for="Rated" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Tạo" class="btn btn-primary" />
+                <button type="submit" onclick="validateInput()" class="btn btn-primary">Tạo</button>
             </div>
         </form>
     </div>
@@ -85,4 +94,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        
+    </script>
 }

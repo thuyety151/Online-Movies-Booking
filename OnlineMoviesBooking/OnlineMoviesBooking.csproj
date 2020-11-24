@@ -27,8 +27,8 @@
 
   <ItemGroup>
     <Folder Include="UploadFiles\" />
+    <Folder Include="wwwroot\images\movies\" />
     <Folder Include="wwwroot\jquery\" />
-    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
 </Project>

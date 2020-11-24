@@ -85,60 +85,111 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Movies/Create
-        public IActionResult Create()
+        public IActionResult Upsert(string? id)
         {
-            ViewBag.FileName = "";
+            if (id != null)
+            {
+                // Edit
+                try
+                {
+
+                    var movie=Exec.ExecuteMovieDetail(id);
+                    ViewBag.Id = movie.Id;
+                    return View(movie);
+                }
+                catch
+                {
+                    return NotFound();
+                }
+            }
+            ViewBag.Id = "";
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MovieViewModel movie)
+        public async Task<IActionResult> Upsert(Movie movie, IFormFile files)
         {
             
             if (ModelState.IsValid)
             {
+
+
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
-                //string fileName = Path.GetFileNameWithoutExtension(movie.ImageFile.FileName);
-                string fileName =Path.Combine( movie.ImageFile.FileName);
-                string extension = Path.GetExtension(movie.ImageFile.FileName);
+                //var filess = HttpContext.Request.Form.Files;
 
-                string path = Path.Combine(wwwRootPath + "/Images/", fileName);
-                
-                using(var fileStream = new FileStream(path, FileMode.Create))
+                if(files!=null)
                 {
-                    await movie.ImageFile.CopyToAsync(fileStream);
-                    movie.Poster = "/Images/"+fileName;
-                }
-                ViewBag.FileName = movie.ImageFile.FileName;
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"images\movies\");
+                    var extension = Path.GetExtension(files.FileName); 
 
-                movie.Id = Guid.NewGuid().ToString();
+                    if(movie.Poster!=null)
+                    {
+                        // edit 
+                        var imagePath = Path.Combine(wwwRootPath, movie.Poster.TrimStart('\\'));
+                        if(System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+
+                    }
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        files.CopyTo(filesStreams);
+                    }
+                    movie.Poster = @"\images\movies\" + fileName + extension;
+
+                }
+                else
+                {
+                    // update 
+                    //if(movie.Id!=0)
+                    //{
+                        
+                    //}
+                }
+
+               // ViewBag.FileName = movie.ImageFile.FileName;
+
                 if(movie.Rated==null)
                 {
                     movie.Rated = "";
                 }
+                // check validation
+                if (Exec.CheckNameMovie(movie.Name) > 0)
+                {
+                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                }
+                if (movie.ReleaseDate > movie.ExpirationDate)
+                {
+                    ModelState.AddModelError("ExpirationDate", "Ngày không hợp lệ");
+                }
 
                 try
                 {
-                    if(Exec.CheckNameMovie(movie.Name)>0)
+                    if (movie.Id == null)
                     {
-                        ModelState.AddModelError("Name", "Tên đã tồn tại");
+                        //Theem movie
+                        movie.Id = Guid.NewGuid().ToString();
+                        Exec.ExecuteInsertMovie(movie);
+
+                        return RedirectToAction(nameof(Index));
                     }
-                    if(movie.ReleaseDate>movie.ExpirationDate)
+                    else
                     {
-                        ModelState.AddModelError("ExpirationDate", "Ngày không hợp lệ");
+                        // 
+                        Exec.ExecuteUpdateMovie(movie);
+
+                        return RedirectToAction(nameof(Index));
                     }
-                    var m = new Movie(movie);
-                    
-                    var i = Exec.ExecuteInsertMovie(m);
-                    
-                    return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
                     return View(movie);
                 }
+               
             }
             return View(movie);
         }
@@ -200,7 +251,20 @@ namespace OnlineMoviesBooking.Controllers
       
         public async Task<IActionResult> Delete(string id)
         {
+            var movie = Exec.ExecuteMovieDetail(id);
+            if(movie==null)
+            {
+                return Json(new { success = false });
+            }
+            string webRootPath = _hostEnvironment.WebRootPath;
+            var imagePath = Path.Combine(webRootPath, movie.Poster.TrimStart('\\'));
+            if(System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
             Exec.ExecuteDeleteMovie(id);
+
             return Json(new { success = true });
         }
 

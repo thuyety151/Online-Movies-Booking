@@ -21,11 +21,7 @@ namespace OnlineMoviesBooking.Controllers
             Exec = new ExecuteProcedure(_context);
         }
 
-        public IActionResult GetAll()
-        {
-            var obj = Exec.GetAllTypesOfSeat();
-            return Json(new { data = obj });
-        }
+
         // GET: TypesOfSeats
         public async Task<IActionResult> Index()
         {
@@ -50,29 +46,7 @@ namespace OnlineMoviesBooking.Controllers
             return View(typesOfSeat);
         }
 
-        // GET: TypesOfSeats/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TypesOfSeats/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Cost")] TypesOfSeat typesOfSeat)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(typesOfSeat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(typesOfSeat);
-        }
-
-        // GET: TypesOfSeats/Edit/5
+        
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -99,59 +73,19 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
-                try
+                if (Exec.CheckToSeatName(typesOfSeat.Id, typesOfSeat.Name) > 0)
                 {
-                    _context.Update(typesOfSeat);
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    return View(typesOfSeat);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TypesOfSeatExists(typesOfSeat.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Exec.ExecuteUpdateTypesOfSeat(typesOfSeat);
                 return RedirectToAction(nameof(Index));
             }
             return View(typesOfSeat);
         }
-
-        // GET: TypesOfSeats/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var typesOfSeat = await _context.TypesOfSeat
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (typesOfSeat == null)
-            {
-                return NotFound();
-            }
-
-            return View(typesOfSeat);
-        }
-
-        // POST: TypesOfSeats/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var typesOfSeat = await _context.TypesOfSeat.FindAsync(id);
-            _context.TypesOfSeat.Remove(typesOfSeat);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         private bool TypesOfSeatExists(string id)
         {
             return _context.TypesOfSeat.Any(e => e.Id == id);
