@@ -176,7 +176,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsRequired()
                     .HasMaxLength(500);
 
-                entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
+                //entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Genre)
                     .IsRequired()

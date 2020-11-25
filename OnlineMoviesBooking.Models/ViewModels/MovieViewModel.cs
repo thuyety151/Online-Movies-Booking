@@ -20,7 +20,6 @@ namespace OnlineMoviesBooking.Models.ViewModels
             this.Description = movie.Description;
             this.Trailer = movie.Trailer;
             this.ReleaseDate = movie.ReleaseDate;
-            this.ExpirationDate = movie.ExpirationDate;
             this.RunningTime = movie.RunningTime;
             this.Poster = movie.Poster;
         }
@@ -48,9 +47,7 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Display(Name = "Ngày khởi chiếu")]
         [Required]
         public DateTime ReleaseDate { get; set; }
-        [Display(Name = "Ngày kết thúc")]
-        [Required]
-        public DateTime ExpirationDate { get; set; }
+
         [Display(Name = "Thời lượng")]
         [Required]
         public int RunningTime { get; set; }

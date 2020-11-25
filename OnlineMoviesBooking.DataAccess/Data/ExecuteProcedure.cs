@@ -57,13 +57,12 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@Description",movie.Description),
                 new SqlParameter("@Trailer",movie.Trailer),
                 new SqlParameter("@ReleaseDate",movie.ReleaseDate),
-                new SqlParameter("@ExpirationDate",movie.ExpirationDate),
                 new SqlParameter("@RunningTime",movie.RunningTime),
                 new SqlParameter("@Poster",movie.Poster)
              };
 
             _context.Database.ExecuteSqlCommand("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
-                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate , @ExpirationDate ," +
+                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
                 "@RunningTime , @Poster", sqlParam);
            
         }
@@ -85,14 +84,35 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@Description",movie.Description),
                 new SqlParameter("@Trailer",movie.Trailer),
                 new SqlParameter("@ReleaseDate",movie.ReleaseDate),
-                new SqlParameter("@ExpirationDate",movie.ExpirationDate),
                 new SqlParameter("@RunningTime",movie.RunningTime),
                 new SqlParameter("@Poster",movie.Poster)
             };
             var i = _context.Database.ExecuteSqlCommand("EXEC USP_UpdateMovie @Id, @Name, @Genre, @Director," +
-                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate , @ExpirationDate ," +
+                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
                 "@RunningTime , @Poster", sqlParam);
             return i;
+        }
+        public string ExecuteGetImageMovie(string id)
+        {
+            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+               "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
+            string pos = "";
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetImageMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                
+                while (rdr.Read())
+                {
+                    pos = (rdr["Poster"]).ToString();
+
+                }
+                return pos;
+            }
         }
         //----------------------THEATER
         public List<Theater> ExecuteTheaterGetAll()

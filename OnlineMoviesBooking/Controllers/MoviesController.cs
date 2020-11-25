@@ -38,27 +38,20 @@ namespace OnlineMoviesBooking.Controllers
             {
                 id = x.Id,
                 name = x.Name,
-                genre = x.Genre,
-                director = x.Director,
-                casts = x.Casts,
-                rated = x.Rated,
-                description = x.Description,
-                trailer = x.Trailer,
                 releaseDate = x.ReleaseDate.ToShortDateString(),
-                expirationDate = x.ExpirationDate.ToShortDateString(),
                 runningtime = x.RunningTime.ToString(),
                 poster = x.Poster
             });
             return Json(new { data = movie });
         }
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public IActionResult Detail(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
@@ -66,25 +59,26 @@ namespace OnlineMoviesBooking.Controllers
             }
             
             var movie = Exec.ExecuteMovieDetail(id);
-            var obj = new
-            {
-                id = movie.Id,
-                name = movie.Name,
-                genre = movie.Genre,
-                director = movie.Director,
-                casts = movie.Casts,
-                rated = movie.Rated,
-                description = movie.Description,
-                trailer = movie.Trailer,
-                releaseDate = movie.ReleaseDate.ToShortDateString(),
-                expirationDate = movie.ExpirationDate.ToShortDateString(),
-                runningtime = movie.RunningTime.ToString(),
-                poster = movie.Poster
-            };
-            return Json(new { data = obj});
+            //var obj = new
+            //{
+            //    id = movie.Id,
+            //    name = movie.Name,
+            //    genre = movie.Genre,
+            //    director = movie.Director,
+            //    casts = movie.Casts,
+            //    rated = movie.Rated,
+            //    description = movie.Description,
+            //    trailer = movie.Trailer,
+            //    releaseDate = movie.ReleaseDate.ToShortDateString(),
+            //    runningtime = movie.RunningTime.ToString(),
+            //    poster = movie.Poster
+            //};
+            //return Json(new { data = obj});
+            return View(movie);
         }
 
         // GET: Movies/Create
+        [HttpGet]
         public IActionResult Upsert(string? id)
         {
             if (id != null)
@@ -92,7 +86,6 @@ namespace OnlineMoviesBooking.Controllers
                 // Edit
                 try
                 {
-
                     var movie=Exec.ExecuteMovieDetail(id);
                     ViewBag.Id = movie.Id;
                     return View(movie);
@@ -113,8 +106,6 @@ namespace OnlineMoviesBooking.Controllers
             
             if (ModelState.IsValid)
             {
-
-
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 //var filess = HttpContext.Request.Form.Files;
@@ -144,108 +135,40 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 else
                 {
-                    // update 
-                    //if(movie.Id!=0)
-                    //{
-                        
-                    //}
+                    // update when do not change the image
+                    if (movie.Id != null)
+                    {
+                        movie.Poster = Exec.ExecuteGetImageMovie(movie.Id);
+                    }
                 }
 
-               // ViewBag.FileName = movie.ImageFile.FileName;
 
                 if(movie.Rated==null)
                 {
                     movie.Rated = "";
                 }
-                // check validation
-                if (Exec.CheckNameMovie(movie.Name) > 0)
+
+                if (movie.Id == null)
                 {
-                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    //Theem movie
+                    movie.Id = Guid.NewGuid().ToString();
+                    Exec.ExecuteInsertMovie(movie);
+
+                    return RedirectToAction(nameof(Index));
                 }
-                if (movie.ReleaseDate > movie.ExpirationDate)
+                else
                 {
-                    ModelState.AddModelError("ExpirationDate", "Ngày không hợp lệ");
+                    // 
+                    Exec.ExecuteUpdateMovie(movie);
+
+                    return RedirectToAction(nameof(Index));
                 }
 
-                try
-                {
-                    if (movie.Id == null)
-                    {
-                        //Theem movie
-                        movie.Id = Guid.NewGuid().ToString();
-                        Exec.ExecuteInsertMovie(movie);
-
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else
-                    {
-                        // 
-                        Exec.ExecuteUpdateMovie(movie);
-
-                        return RedirectToAction(nameof(Index));
-                    }
-                }
-                catch
-                {
-                    return View(movie);
-                }
-               
             }
             return View(movie);
         }
 
-        // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movie = Exec.ExecuteMovieDetail(id);
-            if (movie == null)
-            {
-
-                return NotFound();
-            }
-            MovieViewModel m = new MovieViewModel(movie);
-            return View(m);
-        }
-
-        // POST: Movies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Genre,Director,Casts,Rated,Description,Trailer,ReleaseDate,ExpirationDate,RunningTime,Poster")] Movie movie)
-        {
-            if (id != movie.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var i = Exec.ExecuteUpdateMovie(movie);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(movie);
-        }
-
+ 
         // POST: Movies/Delete/5
         [HttpDelete]
       
@@ -268,9 +191,5 @@ namespace OnlineMoviesBooking.Controllers
             return Json(new { success = true });
         }
 
-        private bool MovieExists(string id)
-        {
-            return _context.Movie.Any(e => e.Id == id);
-        }
     }
 }

@@ -6,14 +6,7 @@
         },
         "columns": [
             { "data": "name" },
-            { "data": "genre" },
-            { "data": "director" },
-            { "data": "casts" },
-            { "data": "rated" },
-            { "data": "description" },
-            { "data": "trailer" },
             { "data": "releaseDate" },
-            { "data": "expirationDate" },
             { "data": "runningtime" },
             {
                 "data": "poster",
@@ -28,10 +21,10 @@
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Movies/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Movies/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                 <a href="#" data-target="#Detail" data-toggle="modal" data-id="${data}" 
+                                 <a href="/Movies/Details/${data}"
                                     class="btn btn-success" style="font-size:small">Details</a> |
 
                                 </a>
@@ -91,7 +84,6 @@ $('#Detail').on('show.bs.modal', function (event) {
             modal.find('#Description').val(data.Description);
             modal.find('#Trailer').val(data.Trailer);
             modal.find('#ReleaseDate').val(data.ReleaseDate);
-            modal.find('#ExpirationDate').val(data.ExpirationDate);
             modal.find('#RunningTime').val(data.RunningTime);
             modal.find('#Poster').val(data.Poster);
         }
