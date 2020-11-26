@@ -3,7 +3,6 @@
 });
 
 
-
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -11,8 +10,8 @@ const swalWithBootstrapButtons = Swal.mixin({
     },
     buttonsStyling: false
 })
-function DeleteAccount(url) {
-   
+function DeleteQa(url) {
+
     swalWithBootstrapButtons.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",

@@ -25,29 +25,26 @@ namespace OnlineMoviesBooking.Controllers
             return View(await cinemaContext.ToListAsync());
         }
 
-        // GET: Qas/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Get(string id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id = '{id}'");    // 
+                return Json(new { data = qa });
             }
-
-            var qa = await _context.Qa
-                .Include(q => q.IdAccountNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (qa == null)
+            catch (Exception e)
             {
-                return NotFound();
-            }
 
-            return View(qa);
+                return Json(new { data = e.Message });
+
+
+            }
         }
-
+       
         // GET: Qas/Create
         public IActionResult Create()
         {
-            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Name");
+            //ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id");
             return View();
         }
 
@@ -55,14 +52,16 @@ namespace OnlineMoviesBooking.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdAccount,Email,Time,Content")] Qa qa)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Email,Content")] Qa qa)
         {
             if (ModelState.IsValid)
             {
-                
-                _context.Add(qa);
-                await _context.SaveChangesAsync();
+                qa.Id = Guid.NewGuid().ToString();
+                qa.Time = DateTime.Now;
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetIDForEmailAccount @Email = '{qa.Email}'").ToList();
+                qa.IdAccount = account[0].Id;
+                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa.IdAccount);
@@ -77,13 +76,13 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            var qa = await _context.Qa.FindAsync(id);
+            var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id ={id}").ToList();
             if (qa == null)
             {
                 return NotFound();
             }
-            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa.IdAccount);
-            return View(qa);
+            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa[0].IdAccount);
+            return View(qa[0]);
         }
 
         // POST: Qas/Edit/5
@@ -102,8 +101,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 try
                 {
-                    _context.Update(qa);
-                    await _context.SaveChangesAsync();
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_UpdateQA @id = {qa.Id}, @time = {qa.Time}, @content = {qa.Content}");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +122,7 @@ namespace OnlineMoviesBooking.Controllers
 
         // POST: Qas/Delete/5
         [HttpDelete]
-        public IActionResult DeleteConfirmed(string id)
+        public IActionResult Delete(string id)
         {
             try
             {
