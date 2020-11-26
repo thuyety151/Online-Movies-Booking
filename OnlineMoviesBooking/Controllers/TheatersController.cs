@@ -69,7 +69,7 @@ namespace OnlineMoviesBooking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Address,Hotline")] Theater theater)
+        public  IActionResult Create([Bind("Id,Name,Address,Hotline")] Theater theater)
         {
             theater.Id = Guid.NewGuid().ToString();
             if (ModelState.IsValid)
@@ -97,9 +97,6 @@ namespace OnlineMoviesBooking.Controllers
             return View(theater);
         }
 
-        // POST: Theaters/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)

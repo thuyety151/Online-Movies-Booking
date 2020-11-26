@@ -16,9 +16,6 @@ $(document).ready(function () {
                                 <a href="/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                 <a data-toggle="modal" data-target="#Detail" data-id="${data}" 
-                                    class="btn btn-success" style="font-size:small">Detail</a> |
-                                </a>
                                 <a href="/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
                                     Detail</a>
                                 <a onClick=Delete("/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">

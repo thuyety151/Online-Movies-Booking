@@ -50,15 +50,22 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
 
-        [HttpGet]
         public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            
-            var movie = Exec.ExecuteMovieDetail(id);
+            try
+            {
+                var movie = Exec.ExecuteMovieDetail(id);
+                return View(movie);
+            }
+            catch
+            {
+                return NotFound();
+            }
+
             //var obj = new
             //{
             //    id = movie.Id,
@@ -74,7 +81,7 @@ namespace OnlineMoviesBooking.Controllers
             //    poster = movie.Poster
             //};
             //return Json(new { data = obj});
-            return View(movie);
+            
         }
 
         // GET: Movies/Create
@@ -96,6 +103,7 @@ namespace OnlineMoviesBooking.Controllers
                 }
             }
             ViewBag.Id = "";
+            id = "";
             return View();
         }
 

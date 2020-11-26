@@ -37,13 +37,6 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var obj = _context.Movie.FromSqlRaw("EXEC USP_GetDetailMovie @Id",sqlParam).ToList();
             return obj[0];
         }
-        public int CheckNameMovie(string name)
-        {
-
-            var sqlParam = new SqlParameter("@Name", name);
-            var i = _context.Movie.FromSqlRaw("EXEC USP_CheckNameMovie @Name ", sqlParam).ToList();
-            return i.Count();
-        }
         public void ExecuteInsertMovie(Movie movie)
         {
             var sqlParam = new SqlParameter[]

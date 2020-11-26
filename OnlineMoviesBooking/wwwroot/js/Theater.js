@@ -13,7 +13,7 @@ $(document).ready(function () {
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Theaters/Create/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Theaters/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
                                 <a href="/Theaters/Details/${data}" 

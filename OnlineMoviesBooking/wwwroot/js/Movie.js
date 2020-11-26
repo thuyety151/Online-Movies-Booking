@@ -25,7 +25,7 @@
                                     Edit
                                 </a>
                                  <a href="/Movies/Details/${data}"
-                                    class="btn btn-success" style="font-size:small">Details</a> |
+                                    class="btn btn-success" style="font-size:small">Details</a> 
 
                                 </a>
 

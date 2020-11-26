@@ -42,12 +42,17 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="Trailer" class="control-label"></label>
-                <input asp-for="Trailer" class="form-control" />
+                <textarea asp-for="Trailer" class="form-control"></textarea>
+                <p class="text-info">Link embed trên youtube  (VD:https://www.youtube.com/embed/DWYwmTdXpqw)</p>
                 <span asp-validation-for="Trailer" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+                <input type="file" name="files" accept="image/*" class="form-control-file" />
+                @if (ViewBag.Id != "")
+                {
+                    <img width="560" src="@Model.Poster" />
+                }
                 <span asp-validation-for="Poster" class="text-danger"></span>
             </div>
             @*<div class="form-group">
@@ -55,11 +60,11 @@ else
             <input name="image"  asp-for="Poster" accept="image/*" type="file" class="form-control-file"
                    id="exampleInputFile" aria-describedby="fileHelp">
             </div>*@
-            <div class="form-group">
+            @*<div class="form-group">
                 <label for="exampleInputFile">File input</label>
                 <input name="image" type="file" class="form-control-file"
                        id="exampleInputFile" aria-describedby="fileHelp">
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" type="date" />
@@ -77,20 +82,25 @@ else
                 <span asp-validation-for="Rated" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" onclick="validateInput()" class="btn btn-primary">Tạo</button>
+                @if (ViewBag.Id == "")
+                {
+                    <button type="submit" class="btn btn-primary">Tạo</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                }
+
             </div>
         </form>
+        <p>
+            <a asp-action="Index">Trở lại</a>
+        </p>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Trở về</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <script>
-        
-    </script>
+
 }
