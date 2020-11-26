@@ -23,9 +23,10 @@ namespace OnlineMoviesBooking.Controllers
 
 
         // GET: TypesOfSeats
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.TypesOfSeat.ToListAsync());
+            var types = Exec.GetAllTypesOfSeat();
+            return View(types);
         }
 
         // GET: TypesOfSeats/Details/5

@@ -45,7 +45,10 @@
                             <td>
                                 @item.Cost.ToString("#,###")
                             </td>
-                            
+                            <td>
+                                @item.Num
+                            </td>
+                                
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
                                 <a asp-action="Edit" asp-route-id="@item.Id">Thay đổi giá</a>
