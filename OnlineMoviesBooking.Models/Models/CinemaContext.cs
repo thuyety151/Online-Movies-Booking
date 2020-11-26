@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.SqlServer;
-
 
 namespace OnlineMoviesBooking.Models.Models
 {
@@ -162,6 +160,10 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<Movie>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("U_Name")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -175,8 +177,6 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.Property(e => e.Director)
                     .IsRequired()
                     .HasMaxLength(500);
-
-                //entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Genre)
                     .IsRequired()
@@ -263,12 +263,6 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasForeignKey(d => d.IdRole)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RoleClaim_Role");
-
-                entity.HasOne(d => d.IdTypesOfAccountNavigation)
-                    .WithMany(p => p.RoleClaim)
-                    .HasForeignKey(d => d.IdTypesOfAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RoleClaim_TypesOfAccount");
             });
 
             modelBuilder.Entity<Screen>(entity =>
@@ -371,6 +365,10 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<Theater>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("U_Theater")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(10)
                     .IsUnicode(false);
@@ -403,6 +401,10 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<TypesOfSeat>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("U_TypesOfSeat")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(10)
                     .IsUnicode(false);

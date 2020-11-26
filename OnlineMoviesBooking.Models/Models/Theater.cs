@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace OnlineMoviesBooking.Models.Models
 {
@@ -12,14 +11,8 @@ namespace OnlineMoviesBooking.Models.Models
         }
 
         public string Id { get; set; }
-        [Display(Name="Tên rạp chiếu")]
-        [Required]
         public string Name { get; set; }
-        [Display(Name="Địa chỉ")]
-        [Required]
         public string Address { get; set; }
-        [Display(Name="Hotline")]
-        [Required]
         public string Hotline { get; set; }
 
         public virtual ICollection<Screen> Screen { get; set; }

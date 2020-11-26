@@ -4,8 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-
-
 @section Header{
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 }
@@ -31,6 +29,9 @@
                         <th>
                             Giá
                         </th>
+                        <th>
+                            Số lượng ghế
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -44,6 +45,7 @@
                             <td>
                                 @item.Cost.ToString("#,###")
                             </td>
+                            
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
                                 <a asp-action="Edit" asp-route-id="@item.Id">Thay đổi giá</a>
