@@ -8,6 +8,7 @@ namespace OnlineMoviesBooking.Controllers
 {
     public class DashBoardController : Controller
     {
+       
         public IActionResult DashBoard()
         {
             return View();

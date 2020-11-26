@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <h1>Danh sách tài khoản</h1>
 
@@ -42,78 +41,77 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            @{
-                if (item.IdTypesOfUser == "1")
-                {
-                    <td >
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        Quản trị viên
-                    </td>
+            <tr>
+                @{
+                    if (item.IdTypesOfUser == "1")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            Quản trị viên
+                        </td>
+                    }
+                    else if (item.IdTypesOfUser == "0")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            Thành viên
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="color:darkgrey">
+                            Không có
+                        </td>
+                    }
                 }
-                else if (item.IdTypesOfUser == "0")
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        Thành viên
-                    </td>
-                }
-                else
-                {
-                    <td >
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td style="color:darkgrey">
-                        Không có
-                    </td>
-                }
-            }
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Point)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sdt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Point)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image)
+                </td>
 
-            <td style="width:15rem;text-align:right">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
-                <a href="#" data-toggle="modal" data-target="#DetailAccountModal" data-id="@item.Id" class="btn btn-secondary">Details</a> |
-                <a onclick=DeleteAccount("/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
+                <td style="width:15rem;text-align:right">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
+                    <a href="#" data-toggle="modal" data-target="#DetailAccountModal" onclick=showModal("@item.Id") @*id="detailbtn"*@ class="btn btn-secondary" style="cursor:pointer">Details</a> |
+                    <a onclick=DeleteAccount("/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
         }
-    </tbody>
-</table>
+    </tbody></table>
 
 
 @*Modal của detail Account*@
 
 
-<div class="modal fade" id="DetailAccountModal" tabindex="-1" role="dialog" >
+<div class="modal fade" id="DetailAccountModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabelAccount">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" >Chi tiết tài khoản</h5>
+                <h5 class="modal-title" id="EditModalLabelAccount" >Chi tiết tài khoản</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="table_detail">
+                <form onsubmit="return false">
                     <div class="form-group">
                         <label>Tên</label>
                         <input class=" form-control" type="text" id="name_detail_account" readonly />
@@ -163,6 +161,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
-    <script src="~/js/Account.js"></script>
+    
     <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/Account.js"></script>
 }

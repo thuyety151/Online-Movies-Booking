@@ -10,6 +10,7 @@ using OnlineMoviesBooking.Models;
 
 namespace OnlineMoviesBooking.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

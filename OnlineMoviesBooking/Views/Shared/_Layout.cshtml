@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/styles.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />*@
     <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 </head>
-<body class="sb-nav-fixed" >
+<body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark shadow" style="opacity:0.8;background-color:#311b92  ;height:5rem">
         <a href="/DashBoard/DashBoard" class="navbar-brand" style="text-align:left;font-size:2.6rem">
             Manager
@@ -97,7 +97,7 @@
                                 <a class="nav-link" href="#">
                                     <img src="~/assets/img/gift_icon-icons.com_48294.png" alt="gift" style="width:20px;margin-right:0.5rem;" /> Sự kiện
                                 </a>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="/Qas/Index">
                                     <img src="~/assets/img/353441-bubble-chat-communication-double-message-round-speech-talk_107511.png" style="width:20px;margin-right:0.5rem;" alt="Alternate Text" /> Phản hồi
                                 </a>
                             </nav>
@@ -118,12 +118,14 @@
     <script src="~/jquery/jquery.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    @*<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>*@
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    
-    
+
+
     <script>
         (function ($) {
             "use strict";

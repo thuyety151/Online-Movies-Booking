@@ -58,7 +58,7 @@
 
                 <td style="width:15rem;text-align:right">
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
-                    <a href="#" data-toggle="modal" data-target="#DetailMemberModal" data-id="@item.Id" class="btn btn-secondary">Details</a> |
+                    <a href="#" data-toggle="modal" data-target="#DetailMemberModal" onclick=showModal("@item.Id") class="btn btn-secondary">Details</a> |
                     <a onclick=DeleteMember("/Members/Delete/@item.Id") class="btn btn-danger">Delete</a>
                 </td>
             </tr>
@@ -129,6 +129,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
-    <script src="~/js/Member.js"></script>
+    
     <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/Member.js"></script>
 }

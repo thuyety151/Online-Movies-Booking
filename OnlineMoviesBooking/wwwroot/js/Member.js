@@ -3,30 +3,52 @@
 });
 
 //--chi tiết thành viên
-$('#DetailMemberModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var idaccount = button.data('id') // Extract info from data-* attributes
-    console.log(idaccount)
-    var modal = $(this)
+function showModal(id) {
+
+    var modal = $('#DetailMemberModal');
+    console.log(1);
     $.ajax({
         method: "GET",
-        url: '/Accounts/Get/' + idaccount,
+        url: '/Members/Details/' + id,
         success: function (data) {
             console.log(data)
-            modal.find('#name_detail_account').val(data.data.name)
-            modal.find('#birthdate_detail_account').val(data.data.birthdate)
-            modal.find('#gender_detail_account').val(data.data.gender)
-            modal.find('#address_detail_account').val(data.data.address)
-            modal.find('#sdt_detail_account').val(data.data.sdt)
-            modal.find('#email_detail_account').val(data.data.email)
-            modal.find('#password_detail_account').val(data.data.password)
-            modal.find('#point_detail_account').val(data.data.point)
-            modal.find('#image_detail_account').val(data.data.image)
-
+            modal.find('#name_detail_member').val(data.data[0].name)
+            modal.find('#birthdate_detail_member').val(data.data[0].birthdate)
+            modal.find('#gender_detail_member').val(data.data[0].gender)
+            modal.find('#address_detail_member').val(data.data[0].address)
+            modal.find('#sdt_detail_member').val(data.data[0].sdt)
+            modal.find('#email_detail_member').val(data.data[0].email)
+            modal.find('#password_detail_member').val(data.data[0].password)
+            modal.find('#point_detail_member').val(data.data[0].point)
+            modal.find('#image_detail_member').val(data.data[0].image)
             //modal.find().val(data.data[0].id)
         }
     })
-})
+}
+//$('#DetailMemberModal').on('show.bs.modal', function (event) {
+//    var button = $(event.relatedTarget) // Button that triggered the modal
+//    var idaccount = button.data('id') // Extract info from data-* attributes
+//    console.log(idaccount)
+//    var modal = $(this)
+//    $.ajax({
+//        method: "GET",
+//        url: '/Accounts/Get/' + idaccount,
+//        success: function (data) {
+//            console.log(data)
+//            modal.find('#name_detail_account').val(data.data.name)
+//            modal.find('#birthdate_detail_account').val(data.data.birthdate)
+//            modal.find('#gender_detail_account').val(data.data.gender)
+//            modal.find('#address_detail_account').val(data.data.address)
+//            modal.find('#sdt_detail_account').val(data.data.sdt)
+//            modal.find('#email_detail_account').val(data.data.email)
+//            modal.find('#password_detail_account').val(data.data.password)
+//            modal.find('#point_detail_account').val(data.data.point)
+//            modal.find('#image_detail_account').val(data.data.image)
+
+//            //modal.find().val(data.data[0].id)
+//        }
+//    })
+//})
 
 //xóa thành viên
 const swalWithBootstrapButtons = Swal.mixin({

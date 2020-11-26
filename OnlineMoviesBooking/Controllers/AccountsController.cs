@@ -33,30 +33,22 @@ namespace OnlineMoviesBooking.Controllers
         //    return Json(new { data = list });
         //}
         // GET: Accounts/Details/5
-        [HttpGet]
+
         public IActionResult Get(string id)
         {
-            var account = _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_GetDetailAccount @id = {id}");
-            return Json(new { data = account });
+            try
+            {
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailMember @id = '{id}'");    // 
+                return Json(new { data = account });
+            }
+            catch (Exception e)
+            {
+
+                return Json(new { data = e.Message });
+
+
+            }
         }
-        //public async Task<IActionResult> Details(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var account = await _context.Account
-        //        .Include(a => a.IdTypesOfUserNavigation)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (account == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(account);
-        //}
-
         // GET: Accounts/Create
         public IActionResult Create()
         {
