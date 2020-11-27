@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.Models.Show
+﻿@model OnlineMoviesBooking.Models.ViewModels.ShowViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -17,11 +17,11 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Rạp</label>
-                <select id="theater"  class="form-control" asp-items="ViewBag.Theaters"></select>
+                <select id="theater" class="form-control" asp-items="ViewBag.Theaters"></select>
             </div>
             <div class="form-group">
                 <label asp-for="IdScreen" class="control-label"></label>
-                <select id="screen" asp-for="IdScreen" class="form-control js-example-basic-single" ></select>
+                <select id="screen" asp-for="IdScreen" class="form-control js-example-basic-single"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Languages" class="control-label"></label>
@@ -33,16 +33,7 @@
                 <input asp-for="TimeStart" class="form-control" />
                 <span asp-validation-for="TimeStart" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TimeEnd" class="control-label"></label>
-                <input asp-for="TimeEnd" class="form-control" />
-                <span asp-validation-for="TimeEnd" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="IdScreen" class="control-label"></label>
-                <select asp-for="IdScreen" class="form-control" asp-items="ViewBag.IdScreen"></select>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Tạo" class="btn btn-primary" />
             </div>
@@ -54,15 +45,15 @@
 </div>
 
 @section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <!-- select 2-->
-
-    <!-- thư viện jquery-->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <!-- thư viện jquery-->
+
     <script src="~/js/Show.js"></script>
 }
 @section Header{
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    
+
 
 }

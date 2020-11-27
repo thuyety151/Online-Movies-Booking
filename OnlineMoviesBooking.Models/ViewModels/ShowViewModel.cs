@@ -15,13 +15,20 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Required]
         public DateTime TimeStart { get; set; }
         public DateTime TimeEnd { get; set; }
+        [Display(Name ="Tên phim")]
+        [Required]
         public string IdMovie { get; set; }
+        [Display(Name ="Tên phòng chiếu")]
+        [Required]
         public string IdScreen { get; set; }
         [Display(Name ="Phim")]
+        [Required]
         public string MovieName { get; set; }
         [Display(Name ="Phòng chiếu")]
+        [Required]
         public string ScreenName { get; set; }
         [Display(Name ="Rạp")]
+        [Required]
         public string  TheaterName { get; set; }
     }
 }

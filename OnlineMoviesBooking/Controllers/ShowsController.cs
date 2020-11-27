@@ -47,6 +47,12 @@ namespace OnlineMoviesBooking.Controllers
             return View(show);
         }
         [HttpGet]
+        public IActionResult GetTheater()
+        {
+            var theater = Exec.ExecuteTheaterGetAll();
+            return Json(new { data = theater });
+        }
+        [HttpGet]
         public IActionResult GetScreen(string id)
         {
             var screen = Exec.SearchScreenwithTheater(id);
@@ -61,8 +67,6 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Shows/Create
         public IActionResult Create()
         {
-            //ViewData["IdMovie"] = new SelectList(_context.Movie, "Id", "Id");
-            //ViewData["IdScreen"] = new SelectList(_context.Screen, "Id", "Id");
             var movies = Exec.ExecuteMovieGetAll();
             ViewBag.Movies = new SelectList(movies, "Id", "Name");
 
