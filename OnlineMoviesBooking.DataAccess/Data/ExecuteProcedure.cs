@@ -80,7 +80,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@RunningTime",movie.RunningTime),
                 new SqlParameter("@Poster",movie.Poster)
             };
-            var i = _context.Database.ExecuteSqlCommand("EXEC USP_UpdateMovie @Id, @Name, @Genre, @Director," +
+            var i = _context.Database.ExecuteSqlRaw("EXEC USP_UpdateMovie @Id, @Name, @Genre, @Director," +
                 " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
                 "@RunningTime , @Poster", sqlParam);
             return i;
@@ -129,10 +129,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
             };
             return _context.Database.ExecuteSqlCommand("USP_InsertTheater @Id, @Name, @Address, @Hotline", sqlParam);
         }
-        public int ExecuteDeleteTheater(string id)
+        public void ExecuteDeleteTheater(string id)
         {
             var sqlParam = new SqlParameter("@Id", id);
-            return _context.Database.ExecuteSqlCommand("USP_DeleteThreater @Id", sqlParam);
+            _context.Database.ExecuteSqlRaw("USP_DeleteThreater @Id", sqlParam);
         }
         //-----------------------Screen
         public List<Screen_Theater> ExecuteScreenGetAllwithTheater()

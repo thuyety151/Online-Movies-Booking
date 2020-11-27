@@ -83,7 +83,7 @@ function Delete(url) {
                 type: "DELETE",
                 url: url,
                 success: function (data) {
-                    console.log("data");
+                    console.log(data.success);
                     if (data.success) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',

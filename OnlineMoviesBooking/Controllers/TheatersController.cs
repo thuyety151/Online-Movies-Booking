@@ -32,7 +32,7 @@ namespace OnlineMoviesBooking.Controllers
             return Json(new { data = obj });
         }
         // GET: Theaters
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -130,9 +130,9 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
-            var i = Exec.ExecuteDeleteTheater(id);
+            Exec.ExecuteDeleteTheater(id);
             return Json(new { success = true });
         }
 
