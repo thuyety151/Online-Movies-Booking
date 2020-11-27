@@ -1,0 +1,63 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.TypeOfMember>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table" id="MemberTypeTable">
+    <thead class="bg-secondary text-light">
+        <tr>
+            <th>
+                Mã loại
+            </th>
+            <th>
+                Tên loại
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                Số điểm tương ứng
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.IdTypeMember
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfMemberName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Point)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdTypeMember" class="btn btn-secondary">Edit</a> |
+                    <a href="#" onclick=DeleteMemberType("/TypeOfMembers/Delete/@item.IdTypeMember") class="btn btn-danger")>Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/Member.js"></script>
+}
