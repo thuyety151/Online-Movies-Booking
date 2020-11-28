@@ -38,7 +38,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             try
             {
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailMember @id = '{id}'");    // 
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();    // 
                 return Json(new { data = account });
             }
             catch (Exception e)
@@ -52,7 +52,8 @@ namespace OnlineMoviesBooking.Controllers
         // GET: Accounts/Create
         public IActionResult Create()
         {
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id");
+            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id");
             return View();
         }
 
@@ -69,7 +70,7 @@ namespace OnlineMoviesBooking.Controllers
                 {
                     account.Id = Guid.NewGuid().ToString();
 
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@image={account.Image},@action ={"Insert"} ");
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember},@image={account.Image},@action ={"Insert"} ");
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -87,8 +88,8 @@ namespace OnlineMoviesBooking.Controllers
                 //}
                 return View();
             }
-                
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
+            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
         }
 
@@ -105,7 +106,8 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
+            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
         }
 
@@ -114,7 +116,7 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,Image")] Account account)
+        public async Task<IActionResult> Edit(string id,Account account)
         {
             if (id != account.Id)
             {
@@ -125,7 +127,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 try
                 {
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@image={account.Image},@action ={"Update"} ");
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Update"} ");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,7 +142,8 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
+            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
         }
 

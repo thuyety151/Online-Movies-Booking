@@ -14,6 +14,7 @@ namespace OnlineMoviesBooking.Models.Models
         public string TypeOfMemberName { get; set; }
         public string Content { get; set; }
         public int? Point { get; set; }
+        public double? Money { get; set; }
 
         public virtual ICollection<Account> Account { get; set; }
     }

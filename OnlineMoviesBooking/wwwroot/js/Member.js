@@ -31,7 +31,7 @@ function DeleteMemberType(url) {
                             data.message,
                             'success'
                         );
-                        //$('#MemberTable').DataTable().ajax.reload(null, true);
+                        $('#MemberTypeTable').DataTable().ajax.reload(null, true);
                     }
                     else {
                         swalWithBootstrapButtons.fire(

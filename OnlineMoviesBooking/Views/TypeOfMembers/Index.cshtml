@@ -23,7 +23,10 @@
                 Mô tả
             </th>
             <th>
-                Số điểm tương ứng
+                Số tiền qui đổi
+            </th>
+            <th>
+                Số điểm qui đổi
             </th>
             <th></th>
         </tr>
@@ -31,24 +34,27 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @item.IdTypeMember
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TypeOfMemberName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Point)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdTypeMember" class="btn btn-secondary">Edit</a> |
-                    <a href="#" onclick=DeleteMemberType("/TypeOfMembers/Delete/@item.IdTypeMember") class="btn btn-danger")>Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @item.IdTypeMember
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfMemberName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Point)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdTypeMember" class="btn btn-secondary">Edit</a> |
+                <a href="#" onclick=DeleteMemberType("/TypeOfMembers/Delete/@item.IdTypeMember") class="btn btn-danger" )>Delete</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

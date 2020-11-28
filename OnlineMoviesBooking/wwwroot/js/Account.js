@@ -84,7 +84,7 @@ function DeleteAccount(url) {
                             data.message,
                             'success'
                         );
-                        $('#dataTable').DataTable().ajax.reload();
+                        $('#AccountTable').DataTable().ajax.reload();
                     }
                     else {
                         swalWithBootstrapButtons.fire(

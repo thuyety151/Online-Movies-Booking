@@ -21,7 +21,7 @@ namespace OnlineMoviesBooking.Controllers
         // GET: TypeOfMembers
         public async Task<IActionResult> Index()
         {
-            var list = _context.TypeOfMember.FromSqlRaw($"EXEC dbo.USP_SelectAllMemberType");
+            var list = _context.TypeOfMember.FromSqlRaw($"EXEC dbo.USP_GetAllMemberType");
             return View(list);
         }
 
@@ -38,11 +38,11 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTypeMember,TypeOfMemberName,Content,Point")] TypeOfMember typeOfMember)
+        public async Task<IActionResult> Create(TypeOfMember typeOfMember)
         {
             if (ModelState.IsValid)
             {
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content}, @point = {typeOfMember.Point}");
+                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content},@money={typeOfMember.Money}, @point = {typeOfMember.Point}");
                 return RedirectToAction(nameof(Index));
             }
             return View(typeOfMember);
@@ -56,12 +56,12 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            var typeOfMember = await _context.TypeOfMember.FindAsync(id);
+            var typeOfMember =  _context.TypeOfMember.FromSqlRaw($"EXEC dbo.USP_GetMemberType @id = '{id}'").ToList();
             if (typeOfMember == null)
             {
                 return NotFound();
             }
-            return View(typeOfMember);
+            return View(typeOfMember[0]);
         }
 
         // POST: TypeOfMembers/Edit/5
@@ -69,7 +69,7 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("IdTypeMember,TypeOfMemberName,Content,Point")] TypeOfMember typeOfMember)
+        public async Task<IActionResult> Edit(string id,TypeOfMember typeOfMember)
         {
             if (id != typeOfMember.IdTypeMember)
             {
@@ -80,7 +80,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 try
                 {
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_UpdateMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content}, @point = {typeOfMember.Point}");
+                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_UpdateMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content},@money = {typeOfMember.Money}, @point = {typeOfMember.Point}");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

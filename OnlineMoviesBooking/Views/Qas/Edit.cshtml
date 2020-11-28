@@ -19,7 +19,7 @@
             <input type="hidden" asp-for="Id" />
             @{
                 CinemaContext context = new CinemaContext();
-                var account = context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailMember @id = '{Model.IdAccount}'").ToList();
+                var account = context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{Model.IdAccount}'").ToList();
             }
             <div class="form-group">
                 <input asp-for="IdAccount" class="form-control" hidden />

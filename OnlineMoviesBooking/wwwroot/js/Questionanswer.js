@@ -32,7 +32,7 @@ function DeleteQa(url) {
                             data.message,
                             'success'
                         );
-                        $('#dataTable').DataTable().ajax.reload();
+                        $('#QaTable').DataTable().ajax.reload();
                     }
                     else {
                         swalWithBootstrapButtons.fire(

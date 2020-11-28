@@ -172,10 +172,6 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<Movie>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("U_Name")
-                    .IsUnique();
-
                 entity.Property(e => e.Id)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -370,18 +366,20 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdMovieNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdMovie)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Movie");
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdScreen)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Screen");
             });
 
             modelBuilder.Entity<Theater>(entity =>
             {
+                entity.HasIndex(e => e.Address)
+                    .HasName("U_Address")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Name)
                     .HasName("U_Theater")
                     .IsUnique();

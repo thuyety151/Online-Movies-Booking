@@ -59,7 +59,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 qa.Id = Guid.NewGuid().ToString();
                 qa.Time = DateTime.Now;
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetIDForEmailAccount @Email = '{qa.Email}'").ToList();
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{qa.Email}'").ToList();
                 qa.IdAccount = account[0].Id;
                 _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
                 return RedirectToAction(nameof(Index));
@@ -76,7 +76,7 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id ={id}").ToList();
+            var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id = '{id}'").ToList();
             if (qa == null)
             {
                 return NotFound();
