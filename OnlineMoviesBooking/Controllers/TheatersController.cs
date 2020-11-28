@@ -74,8 +74,14 @@ namespace OnlineMoviesBooking.Controllers
             theater.Id = Guid.NewGuid().ToString();
             if (ModelState.IsValid)
             {
-                var i = Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
-
+                // chưa đưa ra được trigger execption
+                string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
+                if(s!="")
+                {
+                    // có error message
+                    ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
+                    return View(theater);
+                }    
                 return RedirectToAction(nameof(Index));
             }
             return View(theater);

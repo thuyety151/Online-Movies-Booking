@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
+using OnlineMoviesBooking.Models.ViewModels;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -83,17 +84,24 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Languages,TimeStart,TimeEnd,IdMovie,IdScreen")] Show show)
+        public async Task<IActionResult> Create(Show showVM)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(show);
+                _context.Add(showVM);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdMovie"] = new SelectList(_context.Movie, "Id", "Id", show.IdMovie);
-            ViewData["IdScreen"] = new SelectList(_context.Screen, "Id", "Id", show.IdScreen);
-            return View(show);
+
+            var movies = Exec.ExecuteMovieGetAll();
+            ViewBag.Movies = new SelectList(movies, "Id", "Name");
+
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theaters = new SelectList(theater, "Id", "Name");
+
+            var screen = Exec.ExecuteScreenGetAllwithTheater();
+            ViewBag.Screens = new SelectList(screen, "Id", "Name");
+            return View(showVM);
         }
 
         // GET: Shows/Edit/5

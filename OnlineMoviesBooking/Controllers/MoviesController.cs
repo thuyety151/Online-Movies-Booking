@@ -93,7 +93,7 @@ namespace OnlineMoviesBooking.Controllers
                 // Edit
                 try
                 {
-                    var movie=Exec.ExecuteMovieDetail(id);
+                    var movie = Exec.ExecuteMovieDetail(id);
                     ViewBag.Id = movie.Id;
                     return View(movie);
                 }

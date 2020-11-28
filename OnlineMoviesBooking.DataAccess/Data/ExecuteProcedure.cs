@@ -14,10 +14,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
 {
     public class ExecuteProcedure
     {
+        private string cs;
         private readonly CinemaContext _context;
 
         public ExecuteProcedure()
         {
+             cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
+               "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
         }
 
         public ExecuteProcedure(CinemaContext context)
@@ -118,8 +121,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var obj= _context.Theater.FromSqlRaw("EXEC USP_GetDetailTheater @Id", new SqlParameter("@Id", id)).ToList();
             return obj[0];
         }
-        public int ExecuteInsertTheater(string id, string name, string address, string hotline)
+        public string ExecuteInsertTheater(string id, string name, string address, string hotline)
         {
+            string mess = "";
             var sqlParam = new SqlParameter[]
             {
                 new SqlParameter("@Id",id),
@@ -127,7 +131,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@Address",address),
                 new SqlParameter("@Hotline",hotline)
             };
-            return _context.Database.ExecuteSqlCommand("USP_InsertTheater @Id, @Name, @Address, @Hotline", sqlParam);
+            try 
+            {
+                _context.Database.ExecuteSqlCommand("USP_InsertTheater @Id, @Name, @Address, @Hotline", sqlParam);
+
+            }
+            catch(SqlException s)
+            {
+                 mess = s.Message;
+            }
+            return mess;
         }
         public void ExecuteDeleteTheater(string id)
         {
@@ -272,6 +285,34 @@ namespace OnlineMoviesBooking.DataAccess.Data
            };
             var ls = _context.TypesOfSeat.FromSqlRaw("EXEC USP_CheckToSeatName @Id , @Name ", sqlParam).ToList();
             return ls.Count();
+        }
+        //------------------SHOW
+        public List<ShowViewModel> ExecuteGetAllShow()
+        {
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllShowwithMovieandScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new ShowViewModel { 
+                        Id=rdr["Id"].ToString(),
+                        Languages=rdr["Languages"].ToString(),
+                        TimeStart= DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd= DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        MovieName=rdr["MovieName"].ToString(),
+                        ScreenName=rdr["ScreenName"].ToString(),
+                        TheaterName=rdr["TheaterName"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
         }
     }
 }
