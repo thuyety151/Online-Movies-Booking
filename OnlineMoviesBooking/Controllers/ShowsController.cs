@@ -86,13 +86,37 @@ namespace OnlineMoviesBooking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Show showVM)
         {
+
             if (ModelState.IsValid)
             {
-                _context.Add(showVM);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                showVM.Id = Guid.NewGuid().ToString();
+                if(showVM.Languages==null)
+                {
+                    showVM.Languages = "";
+                }    
+                // Chuyển số phút sang hh:mm:ss
+                TimeSpan ts = TimeSpan.FromMinutes(114);
 
+                string s=Exec.ExecuteInsertShow(showVM);
+
+                if (s.Contains("Trùng lịch chiếu"))
+                {
+                    // show trigger error
+                    ModelState.AddModelError("Screen","Trùng lịch chiếu");
+                }
+                else if(s.Contains("Giờ không hợp lệ á"))
+                {
+                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                } 
+                
+                // có lỗi catch từ trigger
+                if(ModelState.ErrorCount==0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }    
+            }
+            // modelstate.valid== false 
+            // modelstate.errorcount>0
             var movies = Exec.ExecuteMovieGetAll();
             ViewBag.Movies = new SelectList(movies, "Id", "Name");
 
@@ -101,6 +125,7 @@ namespace OnlineMoviesBooking.Controllers
 
             var screen = Exec.ExecuteScreenGetAllwithTheater();
             ViewBag.Screens = new SelectList(screen, "Id", "Name");
+            
             return View(showVM);
         }
 

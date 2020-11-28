@@ -12,48 +12,15 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Languages)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimeStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimeEnd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdMovieNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdScreenNavigation)
-            </th>
+            <th>Tên phim</th>
+            <th>Poster</th>
+            <th>Thời gian bắt đầu</th>
+            <th>Thời gian kết thúc</th>
+            <th>Phòng chiếu</th>
+            <th>Rạp chiếu phim</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Languages)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdMovieNavigation.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdScreenNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
     </tbody>
 </table>

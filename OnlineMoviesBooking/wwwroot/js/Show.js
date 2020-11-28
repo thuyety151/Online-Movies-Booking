@@ -1,21 +1,17 @@
 ﻿$(document).ready(function () {
     var val = $('#theater').val();
-    console.log(val);
 
-    $('#screen').select2({
-        ajax: {
-            method: 'GET',
-            url: '/Shows/GetScreen/' + val,
-            processResults: function (data) {
-                return {
-                    results: data.items
-                }
-            },
-        }
-    });
-    $('#theater').select2({
-        width: 'resolve'     
-    });
+    //$('#screen').select2({
+    //    ajax: {
+    //        method: 'GET',
+    //        url: '/Shows/GetScreen/' + val,
+    //        processResults: function (data) {
+    //            return {
+    //                results: data.items
+    //            }
+    //        },
+    //    }
+    //});
 
     $('#theater').change(function () {
         var value = $('#theater').val();

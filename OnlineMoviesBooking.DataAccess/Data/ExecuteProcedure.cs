@@ -314,5 +314,28 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return lstShow;
             }
         }
+        public string ExecuteInsertShow(Show show)
+        {
+            string result = "";
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",show.Id),
+                new SqlParameter("@Languages",show.Languages),
+                new SqlParameter("@TimeStart",show.TimeStart),
+                //new SqlParameter("@TimeEnd",show.TimeEnd),
+                new SqlParameter("@Id_Movie",show.IdMovie),
+                new SqlParameter("@Id_Screen",show.IdScreen)
+            };
+            try
+            {
+                _context.Database.ExecuteSqlRaw("EXEC USP_InsertShow @Id, @Languages ,@TimeStart," +
+                    " @Id_Movie,  @Id_Screen", sqlParam);
+            }
+            catch(SqlException s)
+            {
+                result = s.Message;
+            }
+            return result;
+        }
     }
 }
