@@ -23,6 +23,9 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Display(Name ="Tên phòng chiếu")]
         [Required]
         public string IdScreen { get; set; }
+        [Display(Name = "Tên phòng chiếu")]
+        [Required]
+        public string IdTheater { get; set; }
 
         [Display(Name = "Phim")]
         public string MovieName { get; set; }
@@ -32,5 +35,6 @@ namespace OnlineMoviesBooking.Models.ViewModels
 
         [Display(Name = "Rạp")]
         public string TheaterName { get; set; }
+        public string Poster { get; set; }
     }
 }

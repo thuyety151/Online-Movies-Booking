@@ -4,23 +4,84 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm lịch chiếu</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Tên phim</th>
-            <th>Poster</th>
-            <th>Thời gian bắt đầu</th>
-            <th>Thời gian kết thúc</th>
-            <th>Phòng chiếu</th>
-            <th>Rạp chiếu phim</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div class="card shadow mb-4 ">
+    <div class="card-header py-3">
+        Lịch chiếu phim
+    </div> 
+    <div class="card-body">
+        <div class="table-responsive">
+            <table lass="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tên phim</th>
+                        <th>Poster</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Phòng chiếu</th>
+                        <th>Rạp chiếu phim</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
+
+@section Scripts{
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        $('#dataTable').DataTable({
+            "ajax": {
+                "url": '/shows/getall'
+            },
+            "columns": [
+                { "data": "movieName" },
+                {
+                    "data": "poster",
+                    "render": function (data) {
+                        return `
+                            <img src="${data}" style="width: 150px;"/>
+                        `;
+                    }
+                },
+                { "data": "timeStart" },
+                { "data": "screenName" },
+                { "data": "theaterName" },
+
+                {
+                    "data": "id",
+                    "render": function (data) {
+                        return `
+                             <div class="text-center" style="display:grid" >
+                                <a href="/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Edit
+                                </a>
+                                 <a href="/Shows/Details/${data}"
+                                    class="btn btn-success" style="font-size:small">Details</a> 
+
+                                </a>
+
+                                <a onClick=Delete("/Shows/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Delete</a>
+                            </div>                           
+                            `
+                    }
+                }
+            ]
+        });
+    </script>
+}

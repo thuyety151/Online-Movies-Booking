@@ -20,26 +20,26 @@ namespace OnlineMoviesBooking.Controllers
             _context = context;
             Exec = new ExecuteProcedure(_context);
         }
-
-        // GET: Shows
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult GetAll()
         {
-            var cinemaContext = _context.Show.Include(s => s.IdMovieNavigation).Include(s => s.IdScreenNavigation);
-            return View(await cinemaContext.ToListAsync());
+            var shows=Exec.ExecuteGetAllShow();
+            return Json(new { data = shows });
+        }
+        public IActionResult Index()
+        {
+            return View();
         }
 
         // GET: Shows/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var show = await _context.Show
-                .Include(s => s.IdMovieNavigation)
-                .Include(s => s.IdScreenNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            ShowViewModel show = Exec.ExecuteGetDetailShow(id);
             if (show == null)
             {
                 return NotFound();
@@ -79,9 +79,6 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
 
-        // POST: Shows/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Show showVM)
@@ -130,20 +127,28 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Shows/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var show = await _context.Show.FindAsync(id);
+            var show = Exec.ExecuteGetDetailShowEdit(id);
             if (show == null)
             {
                 return NotFound();
             }
-            ViewData["IdMovie"] = new SelectList(_context.Movie, "Id", "Id", show.IdMovie);
-            ViewData["IdScreen"] = new SelectList(_context.Screen, "Id", "Id", show.IdScreen);
+
+            var movies = Exec.ExecuteMovieGetAll();
+            ViewBag.Movies = new SelectList(movies, "Id", "Name");
+
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theaters = new SelectList(theater, "Id", "Name");
+
+            var screen = Exec.ExecuteScreenGetAllwithTheater();
+            ViewBag.Screens = new SelectList(screen, "Id", "Name");
+
             return View(show);
         }
 
@@ -152,7 +157,7 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Languages,TimeStart,TimeEnd,IdMovie,IdScreen")] Show show)
+        public async Task<IActionResult> Edit(string id, ShowViewModel show)
         {
             if (id != show.Id)
             {
@@ -161,26 +166,37 @@ namespace OnlineMoviesBooking.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if(show.Languages==null)
                 {
-                    _context.Update(show);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                    show.Languages = "";
+                }    
+                string s = Exec.ExecuteUpdateShow(show);
+                if (s.Contains("Trùng lịch chiếu"))
                 {
-                    if (!ShowExists(show.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // show trigger error
+                    ModelState.AddModelError("Screen", "Trùng lịch chiếu");
                 }
-                return RedirectToAction(nameof(Index));
+                else if (s.Contains("Giờ không hợp lệ á"))
+                {
+                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                }
+
+                // có lỗi catch từ trigger
+                if (ModelState.ErrorCount == 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
-            ViewData["IdMovie"] = new SelectList(_context.Movie, "Id", "Id", show.IdMovie);
-            ViewData["IdScreen"] = new SelectList(_context.Screen, "Id", "Id", show.IdScreen);
+            var movies = Exec.ExecuteMovieGetAll();
+            ViewBag.Movies = new SelectList(movies, "Id", "Name");
+
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theaters = new SelectList(theater, "Id", "Name");
+
+            var screen = Exec.ExecuteScreenGetAllwithTheater();
+            ViewBag.Screens = new SelectList(screen, "Id", "Name");
+
             return View(show);
         }
 
