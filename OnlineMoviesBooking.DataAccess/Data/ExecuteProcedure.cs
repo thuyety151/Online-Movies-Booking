@@ -478,8 +478,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
                         DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
                         ImageDiscount = rdr["ImageDiscount"].ToString(),
-                        //NoTicket = int.Parse(rdr["NoTicket"].ToString()),
-                        //Point = int.Parse(rdr["Point"].ToString())
+                        NoTicket = int.Parse(rdr["NoTicket"].ToString()),
+                        Point = int.Parse(rdr["Point"].ToString())
                     });
 
                 }

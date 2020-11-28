@@ -20,6 +20,7 @@ namespace OnlineMoviesBooking.Models.Models
         public string ImageDiscount { get; set; }
         public int? NoTicket { get; set; }
         public int? Point { get; set; }
+        public int? Used { get; set; }
 
         public virtual ICollection<UseDiscount> UseDiscount { get; set; }
     }
