@@ -52,6 +52,7 @@ namespace OnlineMoviesBooking.Models.ViewModels
         [Required]
         public int RunningTime { get; set; }
         [Display(Name = "Poster")]
+        [Required]
         public string Poster { get; set; }
 
         // property tren code
