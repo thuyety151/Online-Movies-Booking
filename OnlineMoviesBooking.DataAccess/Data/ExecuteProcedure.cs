@@ -454,5 +454,37 @@ namespace OnlineMoviesBooking.DataAccess.Data
         {
             _context.Database.ExecuteSqlRaw("EXEC USP_DeleteShow @IdShow", new SqlParameter("@IdShow", id));
         }
+        //------------------DISCOUNT
+        public List<Discount> ExecuteGetAllDiscount()
+        {
+            List<Discount> lstDiscount = new List<Discount>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstDiscount.Add(new Discount
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Description = rdr["Description"].ToString(),
+                        PercentDiscount = int.Parse(rdr["PercentDiscount"].ToString()),
+                        MaxCost = int.Parse(rdr["MaxCost"].ToString()),
+                        DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
+                        DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
+                        ImageDiscount = rdr["ImageDiscount"].ToString(),
+                        //NoTicket = int.Parse(rdr["NoTicket"].ToString()),
+                        //Point = int.Parse(rdr["Point"].ToString())
+                    });
+
+                }
+                return lstDiscount;
+            }
+        }
     }
 }

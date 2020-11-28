@@ -26,6 +26,7 @@ namespace OnlineMoviesBooking.Models.Models
         public virtual DbSet<Seat> Seat { get; set; }
         public virtual DbSet<Show> Show { get; set; }
         public virtual DbSet<Theater> Theater { get; set; }
+        public virtual DbSet<TypeOfMember> TypeOfMember { get; set; }
         public virtual DbSet<TypesOfAccount> TypesOfAccount { get; set; }
         public virtual DbSet<TypesOfSeat> TypesOfSeat { get; set; }
         public virtual DbSet<UseDiscount> UseDiscount { get; set; }
@@ -59,6 +60,11 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IdTypeOfMember)
+                    .HasColumnName("Id_TypeOfMember")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.IdTypesOfUser)
                     .IsRequired()
                     .HasColumnName("Id_TypesOfUser")
@@ -83,6 +89,12 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasColumnName("SDT")
                     .HasMaxLength(15)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdTypeOfMemberNavigation)
+                    .WithMany(p => p.Account)
+                    .HasForeignKey(d => d.IdTypeOfMember)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_TypeMemberOfAccount");
 
                 entity.HasOne(d => d.IdTypesOfUserNavigation)
                     .WithMany(p => p.Account)
@@ -160,10 +172,6 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<Movie>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("U_Name")
-                    .IsUnique();
-
                 entity.Property(e => e.Id)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -263,6 +271,12 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasForeignKey(d => d.IdRole)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RoleClaim_Role");
+
+                entity.HasOne(d => d.IdTypesOfAccountNavigation)
+                    .WithMany(p => p.RoleClaim)
+                    .HasForeignKey(d => d.IdTypesOfAccount)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RoleClaim_TypesOfAccount");
             });
 
             modelBuilder.Entity<Screen>(entity =>
@@ -284,7 +298,6 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdTheaterNavigation)
                     .WithMany(p => p.Screen)
                     .HasForeignKey(d => d.IdTheater)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Screen_Theater");
             });
 
@@ -353,18 +366,20 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdMovieNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdMovie)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Movie");
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdScreen)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Screen");
             });
 
             modelBuilder.Entity<Theater>(entity =>
             {
+                entity.HasIndex(e => e.Address)
+                    .HasName("U_Address")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Name)
                     .HasName("U_Theater")
                     .IsUnique();
@@ -385,6 +400,21 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<TypeOfMember>(entity =>
+            {
+                entity.HasKey(e => e.IdTypeMember);
+
+                entity.Property(e => e.IdTypeMember)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Content).HasMaxLength(1000);
+
+                entity.Property(e => e.TypeOfMemberName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TypesOfAccount>(entity =>

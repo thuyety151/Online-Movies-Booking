@@ -10,5 +10,6 @@ namespace OnlineMoviesBooking.Models.Models
         public string Name { get; set; }
 
         public virtual Role IdRoleNavigation { get; set; }
+        public virtual TypesOfAccount IdTypesOfAccountNavigation { get; set; }
     }
 }
