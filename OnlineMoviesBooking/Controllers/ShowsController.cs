@@ -200,35 +200,12 @@ namespace OnlineMoviesBooking.Controllers
             return View(show);
         }
 
-        // GET: Shows/Delete/5
-        public async Task<IActionResult> Delete(string id)
+     
+        [HttpDelete]
+        public IActionResult Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var show = await _context.Show
-                .Include(s => s.IdMovieNavigation)
-                .Include(s => s.IdScreenNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (show == null)
-            {
-                return NotFound();
-            }
-
-            return View(show);
-        }
-
-        // POST: Shows/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var show = await _context.Show.FindAsync(id);
-            _context.Show.Remove(show);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            Exec.ExecuteDeleteShow(id);
+            return Json(new { success = true });
         }
 
         private bool ShowExists(string id)

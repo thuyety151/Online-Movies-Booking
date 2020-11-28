@@ -420,5 +420,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }
+        public void ExecuteDeleteShow(string id)
+        {
+            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteShow @IdShow", new SqlParameter("@IdShow", id));
+        }
     }
 }
