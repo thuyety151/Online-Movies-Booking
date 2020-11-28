@@ -4,7 +4,18 @@
     ViewData["Title"] = "Index";
 }
 
+<div class="jumbotron" style="padding: 1rem;">
+    <h4>Rạp</h4>
+    <hr />
+    <div style="display: flex;">
+        <select id="select" class="form-control col-md-6" asp-items="ViewBag.Theater">
+            <option value="">Tất cả</option>
+        </select>
 
+        <button id="Search" class="btn btn-primary" style="margin-left: 2rem;">Lọc</button>
+    </div>
+
+</div>
 <p>
     <a asp-action="Create">Thêm lịch chiếu</a>
 </p>
@@ -134,5 +145,49 @@
                 }
             })
         }
+        $('#Search').click(function () {
+            var value = $('#select').val();
+            var table = $('#dataTable').DataTable();
+            //ajax.load(url,data,callback)
+            table.clear();
+            table.destroy();
+            $('#dataTable').DataTable({
+                "ajax": {
+                    "url": "/Shows/Search/" + value,
+                },
+                "columns": [
+                    { "data": "movieName" },
+                    {
+                        "data": "poster",
+                        "render": function (data) {
+                            return `
+                            <img src="${data}" style="width: 150px;"/>
+                        `;
+                        }
+                    },
+                    { "data": "timeStart" },
+                    { "data": "screenName" },
+                    { "data": "theaterName" },
+
+                    {
+                        "data": "id",
+                        "render": function (data) {
+                            return `
+                             <div class="text-center" style="display:grid" >
+                                <a href="/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Edit
+                                </a>
+                                 <a href="/Shows/Details/${data}"
+                                    class="btn btn-success" style="font-size:small">Details</a> 
+                                </a>
+                                <a onClick=Delete("/Shows/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Delete</a>
+                            </div>                           
+                            `
+                        }
+                    }
+                ]
+            });
+        });
     </script>
 }

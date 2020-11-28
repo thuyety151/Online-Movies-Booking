@@ -26,8 +26,21 @@ namespace OnlineMoviesBooking.Controllers
             var shows=Exec.ExecuteGetAllShow();
             return Json(new { data = shows });
         }
+        public IActionResult Search(string id)
+        {
+            if (id == null)
+            {
+                var obja = Exec.ExecuteGetAllShow();
+                return Json(new { data = obja });
+            }
+            // tìm cáp phòng chiếu theo rạp
+            var obj = Exec.ExecuteGetAllShowTheater(id);
+            return Json(new { data = obj });
+        }
         public IActionResult Index()
         {
+            var theater = Exec.ExecuteTheaterGetAll();
+            ViewBag.Theater = new SelectList(theater, "Id", "Name");
             return View();
         }
 
