@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Customer\Views\Shows\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="wwwroot\images\movies\" />
     <Folder Include="wwwroot\images\discounts\" />

@@ -111,6 +111,14 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return pos;
             }
         }
+        public List<Movie> ExecuteGetMovieNow()
+        {
+            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieNow").ToList();
+        }
+        public List<Movie> ExecuteGetMovieComingSoon()
+        {
+            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieComingSoon").ToList();
+        }
         //----------------------THEATER
         public List<Theater> ExecuteTheaterGetAll()
         {
@@ -326,6 +334,66 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_GetAllShowTheater", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdTheater", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new ShowViewModel
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Languages = rdr["Languages"].ToString(),
+                        TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        MovieName = rdr["MovieName"].ToString(),
+                        Poster = rdr["Poster"].ToString(),
+                        ScreenName = rdr["ScreenName"].ToString(),
+                        TheaterName = rdr["TheaterName"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
+        }
+        public List<ShowViewModel> ExecuteGetAllShowMovie(string id)
+        {
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllShowMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdMovie", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new ShowViewModel
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Languages = rdr["Languages"].ToString(),
+                        TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        MovieName = rdr["MovieName"].ToString(),
+                        Poster = rdr["Poster"].ToString(),
+                        ScreenName = rdr["ScreenName"].ToString(),
+                        TheaterName = rdr["TheaterName"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
+        }
+        public List<ShowViewModel> ExecuteGetAllShowDate(DateTime date)
+        {
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllShowDate", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@DateStart", date);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())
