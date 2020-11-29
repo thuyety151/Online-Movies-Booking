@@ -200,33 +200,11 @@ namespace OnlineMoviesBooking.Controllers
             return View(discount);
         }
 
-        // GET: Discounts/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete]
+        public IActionResult Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var discount = await _context.Discount
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            return View(discount);
-        }
-
-        // POST: Discounts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var discount = await _context.Discount.FindAsync(id);
-            _context.Discount.Remove(discount);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            Exec.ExecuteDeleteDiscount(id);
+            return Json(new { success = true });
         }
 
         private bool DiscountExists(string id)

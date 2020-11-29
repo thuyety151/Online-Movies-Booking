@@ -598,5 +598,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }
+        public void ExecuteDeleteDiscount(string id)
+        {
+            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteDiscount @Id " ,new SqlParameter("@Id", id));
+        }
     }
 }
