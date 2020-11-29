@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = "_LayoutLogin";
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+    @RenderSection("Header", required: false)
+</head>
+<body style="background-color: rgb(21,24,41);" class="text-center">
+    
+    <div id="layoutSidenav_content">
+        <main class="container-fluid">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    @RenderSection("Scripts", required: false);
+</body>
+</html>
