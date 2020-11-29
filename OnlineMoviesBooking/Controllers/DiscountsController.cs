@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -34,15 +36,15 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Discounts/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var discount = await _context.Discount
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var discount = Exec.ExecuteGetDetailDiscount(id);
+
             if (discount == null)
             {
                 return NotFound();
@@ -59,14 +61,69 @@ namespace OnlineMoviesBooking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,PercentDiscount,MaxCost,DateStart,DateEnd,ImageDiscount")] Discount discount)
+        public async Task<IActionResult> Create(Discount discount, IFormFile files)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(discount);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // save image to wwwroot/image
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                //var filess = HttpContext.Request.Form.Files;
+
+                if (files != null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"images\discounts\");
+                    var extension = Path.GetExtension(files.FileName);
+
+                    if (discount.ImageDiscount != null)
+                    {
+                        // edit 
+                        var imagePath = Path.Combine(wwwRootPath, discount.ImageDiscount.TrimStart('\\'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+
+                    }
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        files.CopyTo(filesStreams);
+                    }
+                    discount.ImageDiscount = @"\images\discounts\" + fileName + extension;
+
+                }
+                else
+                {
+                    // update when do not change the image
+                    if (discount.Id != null)
+                    {
+                        //discount.ImageDiscount = Exec.ExecuteGetImageMovie(discount.Id);
+                    }
+                }
+
+                // gán các giá trị null để insert vào db
+                discount.Id = Guid.NewGuid().ToString();
+                discount.Used = 0;
+                if(discount.MaxCost==null)
+                {
+                    discount.MaxCost = 0;
+                }    
+                if(discount.Point==null)
+                {
+                    discount.Point = 0;
+                }
+
+                string result = Exec.ExecuteInsertDiscount(discount);
+                if(result=="")
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                if(result.Contains("Ngày không hợp lệ"))
+                {
+                    ModelState.AddModelError("DateEnd", "Ngày không hợp lệ");
+                }      
             }
+
             return View(discount);
         }
 

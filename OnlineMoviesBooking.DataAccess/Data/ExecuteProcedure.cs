@@ -487,5 +487,67 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return lstDiscount;
             }
         }
+        public Discount ExecuteGetDetailDiscount(string id)
+        {
+            Discount d = new Discount();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    d=new Discount
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Description = rdr["Description"].ToString(),
+                        PercentDiscount = int.Parse(rdr["PercentDiscount"].ToString()),
+                        MaxCost = int.Parse(rdr["MaxCost"].ToString()),
+                        DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
+                        DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
+                        ImageDiscount = rdr["ImageDiscount"].ToString(),
+                        NoTicket = int.Parse(rdr["NoTicket"].ToString()),
+                        Point = int.Parse(rdr["Point"].ToString()),
+                        Used = int.Parse(rdr["Used"].ToString())
+                    };
+
+                }
+                return d;
+            }
+        }
+        public string ExecuteInsertDiscount(Discount discount)
+        {
+            string result = "";
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",discount.Id),
+                new SqlParameter("@Name",discount.Name),
+                new SqlParameter("@Description",discount.Description),
+                new SqlParameter("@PercentDiscount",discount.PercentDiscount),
+                new SqlParameter("@MaxCost",discount.MaxCost),
+                new SqlParameter("@DateStart",discount.DateStart),
+                new SqlParameter("@DateEnd",discount.DateEnd),
+                new SqlParameter("@ImageDiscount",discount.ImageDiscount),
+                new SqlParameter("@NoTicket",discount.NoTicket),
+                new SqlParameter("@Point",discount.Point),
+                new SqlParameter("@Used",discount.Used)
+            };
+            try
+            {
+                _context.Database.ExecuteSqlRaw("EXEC USP_InsertDiscount @Id, @Name ,@Description," +
+                    " @PercentDiscount,  @MaxCost ,@DateStart,@DateEnd,@ImageDiscount,@NoTicket,@Point," +
+                    "@Used  ", sqlParam);
+            }
+            catch (SqlException s)
+            {
+                result = s.Message;
+            }
+            return result;
+        }
     }
 }
