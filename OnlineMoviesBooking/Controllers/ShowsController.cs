@@ -23,7 +23,14 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var shows=Exec.ExecuteGetAllShow();
+            var shows=Exec.ExecuteGetAllShow().Select(x=> new {
+                movieName=x.MovieName,
+                poster=x.Poster,
+                timeStart=x.TimeStart.ToShortTimeString() +"\n"+ x.TimeStart.ToShortDateString(),
+                screenName=x.ScreenName,
+                theaterName=x.TheaterName,
+                id=x.Id
+            });
             return Json(new { data = shows });
         }
         public IActionResult Search(string id)
