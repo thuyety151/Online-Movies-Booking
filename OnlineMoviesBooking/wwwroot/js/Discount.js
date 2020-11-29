@@ -5,7 +5,7 @@
             "url": '/discounts/getall'
         },
         "columns": [
-            { "data": "name" },
+            {"data": "name", "width":"20%" },
             {
                 "data": "imageDiscount",
                 "render": function (data) {
@@ -21,7 +21,7 @@
                 "data": "id",
                 "render": function (data) {
                     return `
-                             <div class="text-center" >
+                             <div class="text-center" style="display:grid" >
                                 <a href="/Discounts/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>

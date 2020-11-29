@@ -27,7 +27,16 @@ namespace OnlineMoviesBooking.Controllers
 
         public IActionResult GetAll()
         {
-            var obj = Exec.ExecuteGetAllDiscount();
+            var obj = Exec.ExecuteGetAllDiscount().Select(x => new
+            {
+                id=x.Id,
+                name=x.Name,
+                dateStart=x.DateStart.GetValueOrDefault().ToShortTimeString() +"\n"+ x.DateStart.GetValueOrDefault().ToShortDateString(),
+                dateEnd= x.DateEnd.GetValueOrDefault().ToShortTimeString() + "\n" + x.DateEnd.GetValueOrDefault().ToShortDateString(),
+                imageDiscount = x.ImageDiscount,
+                used=x.Used
+
+            });
             return Json(new { data = obj });
         }
         public IActionResult Index()
