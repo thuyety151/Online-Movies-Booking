@@ -92,14 +92,6 @@ namespace OnlineMoviesBooking.Controllers
                     discount.ImageDiscount = @"\images\discounts\" + fileName + extension;
 
                 }
-                else
-                {
-                    // update when do not change the image
-                    if (discount.Id != null)
-                    {
-                        //discount.ImageDiscount = Exec.ExecuteGetImageMovie(discount.Id);
-                    }
-                }
 
                 // gán các giá trị null để insert vào db
                 discount.Id = Guid.NewGuid().ToString();
@@ -135,7 +127,8 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            var discount = await _context.Discount.FindAsync(id);
+            var discount = Exec.ExecuteGetDetailDiscount(id);
+
             if (discount == null)
             {
                 return NotFound();
@@ -148,7 +141,7 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Description,PercentDiscount,MaxCost,DateStart,DateEnd,ImageDiscount")] Discount discount)
+        public async Task<IActionResult> Edit(string id, Discount discount,IFormFile files)
         {
             if (id != discount.Id)
             {
@@ -157,24 +150,53 @@ namespace OnlineMoviesBooking.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                // save image to wwwroot/image
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                //var filess = HttpContext.Request.Form.Files;
+
+                if (files != null)
                 {
-                    _context.Update(discount);
-                    await _context.SaveChangesAsync();
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"images\discounts\");
+                    var extension = Path.GetExtension(files.FileName);
+
+                    if (discount.ImageDiscount != null)
+                    {
+                        // edit 
+                        var imagePath = Path.Combine(wwwRootPath, discount.ImageDiscount.TrimStart('\\'));
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+
+                    }
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        files.CopyTo(filesStreams);
+                    }
+                    discount.ImageDiscount = @"\images\discounts\" + fileName + extension;
+
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!DiscountExists(discount.Id))
+                    // update when do not change the image
+                    if (discount.Id != null)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                string results = Exec.ExecuteUpdateDiscount(discount);
+                if(results=="")
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                if (results.Contains("Ngày không hợp lệ"))
+                {
+                    ModelState.AddModelError("DateEnd", "Ngày không hợp lệ");
+                }
             }
+            discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
             return View(discount);
         }
 

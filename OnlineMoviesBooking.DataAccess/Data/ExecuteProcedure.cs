@@ -549,5 +549,54 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }
+        public string ExecuteGetImageDiscount(string id)
+        {
+            string pos = "";
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetImageDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    pos = (rdr["ImageDiscount"]).ToString();
+
+                }
+                return pos;
+            }
+        }
+        public string ExecuteUpdateDiscount(Discount discount)
+        {
+            string result = "";
+            var sqlParam = new SqlParameter[]
+            {
+                new SqlParameter("@Id",discount.Id),
+                new SqlParameter("@Name",discount.Name),
+                new SqlParameter("@Description",discount.Description),
+                new SqlParameter("@PercentDiscount",discount.PercentDiscount),
+                new SqlParameter("@MaxCost",discount.MaxCost),
+                new SqlParameter("@DateStart",discount.DateStart),
+                new SqlParameter("@DateEnd",discount.DateEnd),
+                new SqlParameter("@ImageDiscount",discount.ImageDiscount),
+                new SqlParameter("@NoTicket",discount.NoTicket),
+                new SqlParameter("@Point",discount.Point),
+                new SqlParameter("@Used",discount.Used)
+            };
+            try
+            {
+                _context.Database.ExecuteSqlRaw("EXEC USP_UpdateDiscount @Id, @Name ,@Description," +
+                    " @PercentDiscount,  @MaxCost ,@DateStart,@DateEnd,@ImageDiscount,@NoTicket,@Point," +
+                    "@Used  ", sqlParam);
+            }
+            catch (SqlException s)
+            {
+                result = s.Message;
+            }
+            return result;
+        }
     }
 }
