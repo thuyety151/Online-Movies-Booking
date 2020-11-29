@@ -39,7 +39,7 @@ namespace OnlineMoviesBooking.Models.Models
         [Required]
         public int RunningTime { get; set; }
         [Display(Name = "Poster")]
-        [Required]
+
         public string Poster { get; set; }
 
         public virtual ICollection<Show> Show { get; set; }
