@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 
 namespace OnlineMoviesBooking.Controllers
@@ -12,16 +14,23 @@ namespace OnlineMoviesBooking.Controllers
     public class DiscountsController : Controller
     {
         private readonly CinemaContext _context;
-
-        public DiscountsController(CinemaContext context)
+        private ExecuteProcedure Exec;
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public DiscountsController(CinemaContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            Exec = new ExecuteProcedure(context);
+            this._hostEnvironment = hostEnvironment;
         }
 
-        // GET: Discounts
-        public async Task<IActionResult> Index()
+        public IActionResult GetAll()
         {
-            return View(await _context.Discount.ToListAsync());
+            var obj = Exec.ExecuteGetAllDiscount();
+            return Json(new { data = obj });
+        }
+        public IActionResult Index()
+        {
+            return View();
         }
 
         // GET: Discounts/Details/5
@@ -48,9 +57,6 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
 
-        // POST: Discounts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,PercentDiscount,MaxCost,DateStart,DateEnd,ImageDiscount")] Discount discount)

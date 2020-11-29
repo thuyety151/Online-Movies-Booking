@@ -48,7 +48,7 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" type="file" name="files" accept="image/*" class="form-control-file" />
+                <input  type="file" name="files" accept="image/*" class="form-control-file" />
                 @if (ViewBag.Id != "")
                 {
                     <img width="560" src="@Model.Poster" />

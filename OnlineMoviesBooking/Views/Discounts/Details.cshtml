@@ -4,57 +4,47 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h4 class="row justify-content-center">
+    Chi tiết khuyến mãi
+</h4>
+<div class="row justify-content-center">
+    
+    <div class=" col-lg-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" class="form-control" hidden />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="PercentDiscount" class="control-label"></label>
+            <input asp-for="PercentDiscount" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="MaxCost" class="control-label"></label>
+            <input asp-for="MaxCost" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="DateStart" class="control-label"></label>
+            <input asp-for="DateStart" class="form-control" type="datetime-local" />
+        </div>
+        <div class="form-group">
+            <label asp-for="DateEnd" class="control-label"></label>
+            <input asp-for="DateEnd" class="form-control" type="datetime-local" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageDiscount" class="control-label"></label>
+            <img width="560" src="@Model.ImageDiscount" />
+        </div>
+        <div class="form-group">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Chỉnh sửa</a> |
+            <a asp-action="Index">Trở lại</a>
+        </div>
+    </div>
+</div>
 
-<div>
-    <h4>Discount</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PercentDiscount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PercentDiscount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxCost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxCost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateStart)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateStart)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateEnd)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateEnd)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageDiscount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageDiscount)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
