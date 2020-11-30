@@ -522,6 +522,37 @@ namespace OnlineMoviesBooking.DataAccess.Data
         {
             _context.Database.ExecuteSqlRaw("EXEC USP_DeleteShow @IdShow", new SqlParameter("@IdShow", id));
         }
+
+        //-------- front end
+        public List<Show> ExecuteGetShowByDate(string idMovie, string date)
+        {
+            List<Show> lstShow = new List<Show>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetShowByDate", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdMovie", idMovie);
+                com.Parameters.AddWithValue("@Date",date);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new Show
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Languages=rdr["Languages"].ToString(),
+                        TimeStart=DateTime.Parse((rdr["TimeStart"]).ToString()),
+                        TimeEnd=DateTime.Parse((rdr["TimeEnd"]).ToString()),
+                        IdMovie=rdr["Id_Movie"].ToString(),
+                        IdScreen=rdr["Id_Screen"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
+        }
         //------------------DISCOUNT
         public List<Discount> ExecuteGetAllDiscount()
         {

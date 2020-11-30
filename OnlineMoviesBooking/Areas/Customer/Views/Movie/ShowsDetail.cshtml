@@ -33,6 +33,9 @@
         <a href="http://pixner.net/boleto/demo/movie-seat-plan.html" class="custom-button seatPlanButton">Seat Plans<i class="fas fa-angle-right"></i></a>
     </div>
 </section>
+<div >
+    <h1 id="Id" hidden>@ViewBag.Id</h1>
+</div>
 <!-- ==========Window-Warning-Section========== -->
 <!-- ==========Banner-Section========== -->
 <section class="details-banner hero-area bg_img" data-background="./assets/images/banner/banner03.jpg" style="background-image: url(&quot;./assets/images/banner/banner03.jpg&quot;);">
@@ -40,18 +43,70 @@
         <div class="details-banner-wrapper">
             <div class="details-banner-content">
                 <!--TÊN MOVIE-->
-                <h3 class="title">@ViewBag.Movie</h3>
+                <h3 id="nameMovie"class="title">@ViewBag.Movie</h3>
                 <div class="tags">
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">English</a>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Hindi</a>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Telegu</a>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Tamil</a>
+                    <a>English</a>
+                    <a>Hindi</a>
+                    <a>Telegu</a>
+                    <a>Tamil</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- ==========Banner-Section========== -->
+<!-- ============ date==================-->
+<section id="date" class="book-section bg-one" style=" margin-bottom: 2rem;">
+    <div class="container">
+        <div class=" ticket-search-form two row justify-content-center" style="font-size: 25px;margin-bottom: 2rem;">
+            Chọn ngày
+        </div>
+        <form class="ticket-search-form two" style=" display: inline-flex;">
+            @foreach (var item in ViewBag.Date)
+            {
+                <div id="dates" class="details-banner-content" style=" margin: 0 1rem;">
+                    <a href="#theater" id="date-a" class="button">@item</a>
+                </div>
+            }
+        </form>
+    </div>
+</section>
+<!-- ===========Theater================-->
+
+<section id="theater" class="book-section bg-one" style=" margin-bottom: 2rem;">
+    <div class="container">
+        <div class=" ticket-search-form two row justify-content-center" style="font-size: 25px;margin-bottom: 2rem;">
+            Chọn Rạp
+        </div>
+        <form class="ticket-search-form two" style=" display: inline-flex;">
+            @foreach (var item in ViewBag.Theater)
+            {
+                <div class="details-banner-content" style=" margin: 0 1rem;">
+                    <a href="#language" id="theater-a"  class="  button">@item.Name</a>
+                </div>
+            }
+        </form>
+    </div>
+</section>
+<!-- ===========Languages================-->
+
+<section id="language" class="book-section bg-one" style=" margin-bottom: 2rem;">
+    <div class="container">
+        <div class=" ticket-search-form two row justify-content-center" style="font-size: 25px;margin-bottom: 2rem;">
+            Chọn .....
+        </div>
+        <form class="ticket-search-form two" style=" display: inline-flex;">
+            @foreach (var item in ViewBag.Theater)
+            {
+                <div class="details-banner-content" style=" margin: 0 1rem;">
+                    <a class="  button">@item.Name</a>
+                </div>
+            }
+        </form>
+    </div>
+</section>
+
+
 <!-- ==========Book-Section========== -->
 <section class="book-section bg-one">
     <div class="container">
@@ -60,7 +115,7 @@
                 <div class="thumb">
                     <img src="~/Customer/logo/city.png" alt="ticket">
                 </div>
-                <span class="type">Thanh phố</span>
+                <span class="type">Thành phố</span>
                 <select class="select-bar" style="display: none;">
                     <option value="london">London</option>
                     <option value="dhaka">dhaka</option>
@@ -72,16 +127,12 @@
 
                 </select>
             </div>
-            <div class="form-group">
+            <div id="date" class="form-group">
                 <div class="thumb">
                     <img src="~/Customer/logo/date.png" alt="ticket">
                 </div>
                 <span class="type">Ngày</span>
                 <select class="select-bar" style="display:block !important">
-                    <option value="26-12-19">23/10/2020</option>
-                    <option value="26-12-19">24/10/2020</option>
-                    <option value="26-12-19">25/10/2020</option>
-                    <option value="26-12-19">26/10/2020</option>
                 </select>
             </div>
             <!-- debug-->
@@ -90,20 +141,17 @@
                     <img src="~/Customer/logo/cinema.png" alt="ticket">
                 </div>
                 <span class="type">Rạp</span>
-                <div class="nice-select select-bar">
-                    <select class="list">
-                        <option value="Awaken">Awaken</option>
-                        <option value="Venus">Venus</option>
-                        <option value="wanted">wanted</option>
-                        <option value="joker">joker</option>
-                        <option value="fid">fid</option>
-                        <option value="kidio">kidio</option>
-                        <option value="mottus">mottus</option>
+                <div id="theater" class="nice-select select-bar">
+                    <select>
+                        @foreach (var item in ViewBag.Theater)
+                        {
+                            <option id="theater" value=@item.Id>@item.Name</option>
+                        }
                     </select>
                 </div>
             </div>
-            
-            
+
+
             <div class="form-group">
                 <div class="thumb">
                     <img src="~/Customer/logo/exp.png" alt="ticket">
@@ -126,6 +174,7 @@
 <div class="ticket-plan-section padding-bottom padding-top">
     <div class="container">
         <div class="row justify-content-center">
+            <!-- lịch chiếu-->
             <div class="col-lg-9 mb-5 mb-lg-0">
                 <ul class="seat-plan-wrapper bg-five">
                     <li>
@@ -139,10 +188,15 @@
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
                         </div>
+
                         <div class="movie-schedule">
-                            <div class="item">
-                                09:40
-                            </div>
+                            @foreach (var item in ViewBag.Show)
+                            {
+                                <div class="item">
+                                    @item.
+                                </div>
+                            }
+
                             <div class="item">
                                 13:45
                             </div>
@@ -292,85 +346,12 @@
 </div>
 <!-- ==========Movie-Section========== -->
 <!-- ==========Newslater-Section========== -->
-<footer class="footer-section">
-    <div class="newslater-section padding-bottom">
-        <div class="container">
-            <div class="newslater-container bg_img" data-background="./assets/images/newslater/newslater-bg01.jpg" style="background-image: url(&quot;./assets/images/newslater/newslater-bg01.jpg&quot;);">
-                <div class="newslater-wrapper">
-                    <h5 class="cate">subscribe to Boleto </h5>
-                    <h3 class="title">to get exclusive benifits</h3>
-                    <form class="newslater-form">
-                        <input type="text" placeholder="Your Email Address">
-                        <button type="submit">subscribe</button>
-                    </form>
-                    <p>We respect your privacy, so we never share your info</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="footer-top">
-            <div class="logo">
-                <a href="http://pixner.net/boleto/demo/index-1.html">
-                    <img src="~/Customer/logo/footer-logo.png" alt="footer">
-                </a>
-            </div>
-            <ul class="social-icons">
-                <li>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0" class="active">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">
-                        <i class="fab fa-pinterest-p"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">
-                        <i class="fab fa-google"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="footer-bottom">
-            <div class="footer-bottom-area">
-                <div class="left">
-                    <p>Copyright © 2020.All Rights Reserved By <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Boleto </a></p>
-                </div>
-                <ul class="links">
-                    <li>
-                        <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">About</a>
-                    </li>
-                    <li>
-                        <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Terms Of Use</a>
-                    </li>
-                    <li>
-                        <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Privacy Policy</a>
-                    </li>
-                    <li>
-                        <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">FAQ</a>
-                    </li>
-                    <li>
-                        <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0">Feedback</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
 <!-- ==========Newslater-Section========== -->
 @section Scripts{
-
+    <script src="~/Customer/js/ShowDetail.js"></script>
 }
 
+@section Header
+{ 
+<script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
+}

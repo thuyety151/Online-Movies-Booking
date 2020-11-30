@@ -24,49 +24,7 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         {
             return View();
         }
-        public IActionResult NowShowing()
-        {
-            var movie = Exec.ExecuteGetMovieNow();
-            return Json(new { data = movie });
-        }
-        [HttpGet]
-        public JsonResult getAllPost( int? page)
-        {
-            // search
-            //var data = (from s in _db.Posts select s);
-            //if (!String.IsNullOrEmpty(txtSearch))
-            //{
-            //    ViewBag.txtSearch = txtSearch;
-            //    data = data.Where(s => s.Title.Contains(txtSearch));
-            //}
-            var movie = Exec.ExecuteGetMovieComingSoon();
-            
-            if (page > 0)
-            {
-                page = page;
-            }
-            else
-            {
-                page = 1;
-            }
-            int pageSize = 9;
-            int start = (int)(page - 1) * pageSize;
-
-            ViewBag.pageCurrent = page;
-            int totalPage = movie.Count();
-            float totalNumsize = (totalPage / (float)pageSize);
-            int numSize = (int)Math.Ceiling(totalNumsize);
-            ViewBag.numSize = numSize;
-            //var movie = Exec.ExecuteGetMovieComingSoon();
-            // return Json(listPost);
-            return Json(new { data = movie, pageCurrent = page, numSize = numSize });
-        }
-
-        public IActionResult Coming()
-        {
-            var movie = Exec.ExecuteGetMovieComingSoon();
-            return Json(new { data = movie });
-        }
+       
         public IActionResult ComingSoon()
         {
             var movie = Exec.ExecuteGetMovieComingSoon();
@@ -74,6 +32,7 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         }
         public IActionResult Detail(string id)
         {
+            id = "c778815e-dc24-403d-a";
             if (id == null)
             {
                 return NotFound();
@@ -95,25 +54,98 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
 
+            ViewBag.Id = id;
+            // rạp option
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theater = theater;
 
-            
+            // date option
+            DateTime now = DateTime.Now;
+            int temp = 0;
+            List<string> dateshow = new List<string>();
+             while(temp!=7)
+            {
+                now =now.AddDays(1);
+                dateshow.Add(now.Date.ToString("dd/MM/yyyy"));
+                // now.Date.ToString("") + "/" + now.Date.ToString("MM") + "/" + now.Date.ToString("yyyy")
+                temp++;
+            }
+            ViewBag.Date = dateshow;
             List<ShowViewModel> lstshow = new List<ShowViewModel>();
             lstshow = Exec.ExecuteGetAllShowMovie(id);
-            ViewBag.Movie = lstshow[0].MovieName;
 
-            //if (show == null)
-            //{
-            //    return NotFound();
-            //}
+            // không có show
+            if (lstshow.Count == 0)
+            {
+                ViewBag.Movie = Exec.ExecuteMovieDetail(id).Name;
+            }
+            else
+            {
+                ViewBag.Movie = lstshow[0].MovieName;
+            }
+            ViewBag.Show = lstshow;
+            
 
             return View(lstshow);
         }
+
+
+        //============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
-            var show=Exec.ExecuteGetAllShowDate(date);
+            var show = Exec.ExecuteGetAllShowDate(date);
             return Json(new { data = show });
+        }
+        public IActionResult Coming()
+        {
+            var movie = Exec.ExecuteGetMovieComingSoon();
+            return Json(new { data = movie });
+        }
+        public IActionResult NowShowing()
+        {
+            var movie = Exec.ExecuteGetMovieNow();
+            return Json(new { data = movie });
+        }
+        [HttpGet]
+        public JsonResult getAllPost(int? page)
+        {
+            // search
+            //var data = (from s in _db.Posts select s);
+            //if (!String.IsNullOrEmpty(txtSearch))
+            //{
+            //    ViewBag.txtSearch = txtSearch;
+            //    data = data.Where(s => s.Title.Contains(txtSearch));
+            //}
+            var movie = Exec.ExecuteGetMovieComingSoon();
+
+            if (page > 0)
+            {
+                page = page;
+            }
+            else
+            {
+                page = 1;
+            }
+            int pageSize = 9;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalPage = movie.Count();
+            float totalNumsize = (totalPage / (float)pageSize);
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+            //var movie = Exec.ExecuteGetMovieComingSoon();
+            // return Json(listPost);
+            return Json(new { data = movie, pageCurrent = page, numSize = numSize });
+        }
+
+        [HttpGet]
+        public IActionResult getshowbydate(string idMovie,string date)
+        {
+            DateTime d = DateTime.Parse(date);
+            var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
+
+            return Json(new { data = shows });
         }
     }
 }
