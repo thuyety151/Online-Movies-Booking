@@ -213,7 +213,7 @@
 
                 <div class="widget-1 widget-check">
                     <div class="widget-header">
-                        <h5 class="m-title">Filter By</h5> <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="clear-check">Clear All</a>
+                        <h5 class="m-title">Filter By</h5> <a  class="clear-check">Clear All</a>
                     </div>
                     <div class="widget-1-body">
                         <h6 class="subtitle">Language</h6>
@@ -254,7 +254,7 @@
                             </div>
                         </div>
                         <div class="add-check-area">
-                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">view more <i class="plus"></i></a>
+                            <a >view more <i class="plus"></i></a>
                         </div>
                     </div>
                 </div>
@@ -294,13 +294,13 @@
                             </div>
                         </div>
                         <div class="add-check-area">
-                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">view more <i class="plus"></i></a>
+                            <a >view more <i class="plus"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="widget-1 widget-banner">
                     <div class="widget-1-body">
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
+                        <a >
                             <img src="~/Customer/logo/banner02.jpg" alt="banner">
                         </a>
                     </div>
@@ -390,7 +390,8 @@
                                 <!-- movie list-->
                                 @foreach (var item in Model)
                                 {
-                                    <div class="movie-list">
+                                    var x = @TimeSpan.FromMinutes(@item.RunningTime);
+                                    <div class="movie-list" style="text-align:justify">
                                         <div class="movie-thumb c-thumb">
                                             <a href="/Customer/Movie/Detail/" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie02.jpg" style="background-image: url(&quot;./assets/images/movie/movie02.jpg&quot;);">
                                                 <img src=@item.Poster alt="movie">
@@ -400,24 +401,25 @@
                                             <h5 class="title">
                                                 @item.Name
                                             </h5>
-                                            <p class="duration">@item.RunningTime</p>
+                                            <p class="duration">Thời lượng : @x</p>
                                             <div class="movie-tags">
-                                                @item.Genre
+                                               Thể loại : @item.Genre
                                             </div>
                                             <div class="release">
-                                                <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0">@item.ReleaseDate</a>
+                                                
+                                                <span>Ngày khởi chiếu : </span> <a href="">@item.ReleaseDate.ToShortDateString()</a>
                                             </div>
                                             <div class="book-area">
                                                 <div class="book-ticket">
                                                     <div class="react-item">
-                                                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
+                                                        <a >
                                                             <div class="thumb">
                                                                 <img src="~/Customer/logo/heart.png" alt="icons">
                                                             </div>
                                                         </a>
                                                     </div>
                                                     <div class="react-item mr-auto">
-                                                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
+                                                        <a >
                                                             <div class="thumb">
                                                                 <img src="~/Customer/logo/book.png" alt="icons">
                                                             </div>
@@ -425,7 +427,7 @@
                                                         </a>
                                                     </div>
                                                     <div class="react-item">
-                                                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
+                                                        <a  class="popup-video">
                                                             <div class="thumb">
                                                                 <img src="~/Customer/logo/play-button.png" alt="icons">
                                                             </div>
@@ -450,12 +452,12 @@
                                         </h5>
                                         <p class="duration">2hrs 50 min</p>
                                         <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
+                                            <a >action</a>
+                                            <a >adventure</a>
+                                            <a >fantasy</a>
                                         </div>
                                         <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
+                                            <span>Release Date : </span> <a > November 8 , 2020</a>
                                         </div>
                                         <ul class="movie-rating-percent">
                                             <li>
@@ -474,14 +476,14 @@
                                         <div class="book-area">
                                             <div class="book-ticket">
                                                 <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
+                                                    <a >
                                                         <div class="thumb">
                                                             <img src="~/Customer/logo/heart.png" alt="icons">
                                                         </div>
                                                     </a>
                                                 </div>
                                                 <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
+                                                    <a >
                                                         <div class="thumb">
                                                             <img src="~/Customer/logo/book.png" alt="icons">
                                                         </div>
@@ -489,565 +491,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie04.jpg" style="background-image: url(&quot;./assets/images/movie/movie04.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie04.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">on watch</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie05.jpg" style="background-image: url(&quot;./assets/images/movie/movie05.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie05.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">fury</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie06.jpg" style="background-image: url(&quot;./assets/images/movie/movie06.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie06.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">trooper</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie07.jpg" style="background-image: url(&quot;./assets/images/movie/movie07.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie07.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">horror night</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie08.jpg" style="background-image: url(&quot;./assets/images/movie/movie08.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie08.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">the lost name</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie09.jpg" style="background-image: url(&quot;./assets/images/movie/movie09.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie09.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">calm stedfast</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie10.jpg" style="background-image: url(&quot;./assets/images/movie/movie10.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie10.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">criminal on party</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie11.jpg" style="background-image: url(&quot;./assets/images/movie/movie11.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie11.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">halloween party</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                        </div>
-                                                        <span>watch trailer</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-list">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="http://pixner.net/boleto/demo/movie-details.html" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie12.jpg" style="background-image: url(&quot;./assets/images/movie/movie12.jpg&quot;);">
-                                            <img class="d-sm-none" src="~/Customer/logo/movie12.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html">the most wanted</a>
-                                        </h5>
-                                        <p class="duration">2hrs 50 min</p>
-                                        <div class="movie-tags">
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">action</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">adventure</a>
-                                            <a href="http://pixner.net/boleto/demo/movie-grid.html#0">fantasy</a>
-                                        </div>
-                                        <div class="release">
-                                            <span>Release Date : </span> <a href="http://pixner.net/boleto/demo/movie-grid.html#0"> November 8 , 2020</a>
-                                        </div>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/tomato.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="~/Customer/logo/cake.png" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                        <div class="book-area">
-                                            <div class="book-ticket">
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/heart.png" alt="icons">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item mr-auto">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0">
-                                                        <div class="thumb">
-                                                            <img src="~/Customer/logo/book.png" alt="icons">
-                                                        </div>
-                                                        <span>book ticket</span>
-                                                    </a>
-                                                </div>
-                                                <div class="react-item">
-                                                    <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="popup-video">
+                                                    <a  class="popup-video">
                                                         <div class="thumb">
                                                             <img src="~/Customer/logo/play-button.png" alt="icons">
                                                         </div>
@@ -1062,13 +506,13 @@
                         </div>
                     </div>
                     <div class="pagination-area text-center">
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">1</a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">2</a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0" class="active">3</a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">4</a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0">5</a>
-                        <a href="http://pixner.net/boleto/demo/movie-grid.html#0"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
+                        <a ><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
+                        <a >1</a>
+                        <a >2</a>
+                        <a  class="active">3</a>
+                        <a >4</a>
+                        <a >5</a>
+                        <a ><span>Next</span><i class="fas fa-angle-double-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -1077,6 +521,7 @@
 </section>
 <!-- ==========Movie-Section========== -->
 
-@section Scripts{
-    
+@section Header{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/Customer/js/ComingSoon.js"></script>
 }

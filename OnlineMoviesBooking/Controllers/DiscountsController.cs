@@ -211,8 +211,20 @@ namespace OnlineMoviesBooking.Controllers
 
         [HttpDelete]
         public IActionResult Delete(string id)
-        {
+        { 
+            // xóa hình trong file
+            var image = Exec.ExecuteGetImageDiscount(id);
+            System.IO.File.Delete(image);
+
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            var imagePath = Path.Combine(wwwRootPath, image.TrimStart('\\'));
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
             Exec.ExecuteDeleteDiscount(id);
+            
             return Json(new { success = true });
         }
 

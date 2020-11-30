@@ -71,45 +71,39 @@
                     <option value="khoksa">khoksa</option>
 
                 </select>
-                <div class="nice-select select-bar" tabindex="0">
-                <span class="current">London</span><ul class="list">
-                    <li data-value="london" class="option selected">London</li><li data-value="dhaka" class="option">dhaka</li><li data-value="rosario" class="option">rosario</li><li data-value="madrid" class="option">madrid</li><li data-value="koltaka" class="option">kolkata</li><li data-value="rome" class="option">rome</li><li data-value="khoksa" class="option">khoksa</li></ul></div>
             </div>
             <div class="form-group">
                 <div class="thumb">
                     <img src="~/Customer/logo/date.png" alt="ticket">
                 </div>
                 <span class="type">Ngày</span>
-                <select class="select-bar" style="">
+                <select class="select-bar" style="display:block !important">
                     <option value="26-12-19">23/10/2020</option>
                     <option value="26-12-19">24/10/2020</option>
                     <option value="26-12-19">25/10/2020</option>
                     <option value="26-12-19">26/10/2020</option>
-                </select><div class="nice-select select-bar" tabindex="0"><span class="current">23/10/2020</span><ul class="list"><li data-value="26-12-19" class="option selected">23/10/2020</li><li data-value="26-12-19" class="option">24/10/2020</li><li data-value="26-12-19" class="option">25/10/2020</li><li data-value="26-12-19" class="option">26/10/2020</li></ul></div>
+                </select>
             </div>
+            <!-- debug-->
             <div class="form-group">
                 <div class="thumb">
                     <img src="~/Customer/logo/cinema.png" alt="ticket">
                 </div>
-                <!-- CÁC RẠP-->
                 <span class="type">Rạp</span>
-                <section class="nice-select select-bar" id="none">
-                    <span class="current">Chọn rạp</span>
-                    <ul class="list">
-                        @foreach (var item in ViewBag.Theater)
-                        {
-                            <li data-value=@item.Id class="option selected">@item.Name</li>
-                        }
-                        <li data-value="Awaken" class="option selected">Awaken</li>
-                        <li data-value="Venus" class="option">Venus</li>
-                        <li data-value="wanted" class="option">wanted</li>
-                        <li data-value="joker" class="option">joker</li>
-                        <li data-value="fid" class="option">fid</li>
-                        <li data-value="kidio" class="option">kidio</li>
-                        <li data-value="mottus" class="option">mottus</li>
-                    </ul>
-                </section>
+                <div class="nice-select select-bar">
+                    <select class="list">
+                        <option value="Awaken">Awaken</option>
+                        <option value="Venus">Venus</option>
+                        <option value="wanted">wanted</option>
+                        <option value="joker">joker</option>
+                        <option value="fid">fid</option>
+                        <option value="kidio">kidio</option>
+                        <option value="mottus">mottus</option>
+                    </select>
+                </div>
             </div>
+            
+            
             <div class="form-group">
                 <div class="thumb">
                     <img src="~/Customer/logo/exp.png" alt="ticket">
@@ -123,17 +117,6 @@
                     <option value="Telegu-2D">Telegu-2D</option>
                     <option value="Telegu-3D">Telegu-3D</option>
                 </select>
-                <div class="nice-select select-bar" tabindex="0">
-                    <span class="current">English-2D</span>
-                    <ul class="list">
-                        <li data-value="English-2D" class="option selected">English-2D</li>
-                        <li data-value="English-3D" class="option">English-3D</li>
-                        <li data-value="Hindi-2D" class="option">Hindi-2D</li>
-                        <li data-value="Hindi-3D" class="option">Hindi-3D</li>
-                        <li data-value="Telegu-2D" class="option">Telegu-2D</li>
-                        <li data-value="Telegu-3D" class="option">Telegu-3D</li>
-                    </ul>
-                </div>
             </div>
         </form>
     </div>

@@ -29,6 +29,39 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             var movie = Exec.ExecuteGetMovieNow();
             return Json(new { data = movie });
         }
+        [HttpGet]
+        public JsonResult getAllPost( int? page)
+        {
+            // search
+            //var data = (from s in _db.Posts select s);
+            //if (!String.IsNullOrEmpty(txtSearch))
+            //{
+            //    ViewBag.txtSearch = txtSearch;
+            //    data = data.Where(s => s.Title.Contains(txtSearch));
+            //}
+            var movie = Exec.ExecuteGetMovieComingSoon();
+            
+            if (page > 0)
+            {
+                page = page;
+            }
+            else
+            {
+                page = 1;
+            }
+            int pageSize = 9;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalPage = movie.Count();
+            float totalNumsize = (totalPage / (float)pageSize);
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+            //var movie = Exec.ExecuteGetMovieComingSoon();
+            // return Json(listPost);
+            return Json(new { data = movie, pageCurrent = page, numSize = numSize });
+        }
+
         public IActionResult Coming()
         {
             var movie = Exec.ExecuteGetMovieComingSoon();
