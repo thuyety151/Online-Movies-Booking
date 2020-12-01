@@ -82,7 +82,7 @@
             @foreach (var item in ViewBag.Theater)
             {
                 <div class="details-banner-content" style=" margin: 0 1rem;">
-                    <a href="#language" id="theater-a"  class="  button">@item.Name</a>
+                    <a href="#language" id="theater-option"  class="  button">@item.Name</a>
                 </div>
             }
         </form>
@@ -99,7 +99,7 @@
             @foreach (var item in ViewBag.Theater)
             {
                 <div class="details-banner-content" style=" margin: 0 1rem;">
-                    <a class="  button">@item.Name</a>
+                    <a class="button" data-value="@item.Id">@item.Name</a>
                 </div>
             }
         </form>
@@ -141,11 +141,11 @@
                     <img src="~/Customer/logo/cinema.png" alt="ticket">
                 </div>
                 <span class="type">Rạp</span>
-                <div id="theater" class="nice-select select-bar">
+                <div id="theater-div" class="nice-select select-bar">
                     <select>
                         @foreach (var item in ViewBag.Theater)
                         {
-                            <option id="theater" value=@item.Id>@item.Name</option>
+                            <option id="" value=@item.Id>@item.Name</option>
                         }
                     </select>
                 </div>
@@ -176,10 +176,11 @@
         <div class="row justify-content-center">
             <!-- lịch chiếu-->
             <div class="col-lg-9 mb-5 mb-lg-0">
-                <ul class="seat-plan-wrapper bg-five">
+                <ul id="shows-date" class="seat-plan-wrapper bg-five">
+                    <!--- DÙNG AJAX Ở ĐÂY-->
                     <li>
-                        <!--- DÙNG AJAX Ở ĐÂY-->
-                        <div id="shows-date" class="movie-name">
+                        
+                        <div  class="movie-name">
 
                         </div>
                         <div class="movie-name">

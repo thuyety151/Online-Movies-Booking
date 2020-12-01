@@ -522,11 +522,64 @@ namespace OnlineMoviesBooking.DataAccess.Data
         {
             _context.Database.ExecuteSqlRaw("EXEC USP_DeleteShow @IdShow", new SqlParameter("@IdShow", id));
         }
+        public object ExecuteFindTheaterShow(string idmovie, string date)
+        {
+            List<object> theater= new List<object>();
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_FindTheaterofShow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdMovie", idmovie);
+                com.Parameters.AddWithValue("@Date", date);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    var times = ExecuteFindTimeofTheater(idmovie, date, rdr["Id_Theater"].ToString());
+
+                    theater.Add( new
+                    {
+                        Id = rdr["Id_Theater"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Times=times
+                    });
+                }
+                return theater;
+            }
+        }
+        public object ExecuteFindTimeofTheater(string idmovie, string date,string idtheater)
+        {
+            List<object> times = new List<object>();
+
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_FindTimeofTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdMovie", idmovie);
+                com.Parameters.AddWithValue("@Date", date);
+                com.Parameters.AddWithValue("@IdTheater", idtheater);
+                com.Parameters.AddWithValue("@TimeNow", DateTime.Now);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    times.Add(new
+                    {   
+                        Id=rdr["Id"].ToString(),
+                        Times = DateTime.Parse(rdr["Time"].ToString()).ToShortTimeString()
+                });
+                }
+                return times;
+            }
+        }
 
         //-------- front end
-        public List<Show> ExecuteGetShowByDate(string idMovie, string date)
+        public List<ShowViewModel> ExecuteGetShowByDate(string idMovie, string date)
         {
-            List<Show> lstShow = new List<Show>();
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -539,14 +592,15 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
                 while (rdr.Read())
                 {
-                    lstShow.Add(new Show
+                    lstShow.Add(new ShowViewModel
                     {
                         Id = rdr["Id"].ToString(),
                         Languages=rdr["Languages"].ToString(),
                         TimeStart=DateTime.Parse((rdr["TimeStart"]).ToString()),
                         TimeEnd=DateTime.Parse((rdr["TimeEnd"]).ToString()),
                         IdMovie=rdr["Id_Movie"].ToString(),
-                        IdScreen=rdr["Id_Screen"].ToString()
+                        IdScreen=rdr["Id_Screen"].ToString(),
+
                     });
 
                 }
