@@ -35,12 +35,27 @@ $(function ($) {
                 type: 'GET',
                 url: '/customer/movie/getshowbydate/',
                 data: {
-                    "theaterName": $('#Id').text(),
+                    "idMovie": $('#Id').text(),
                     "date": $(this).text()
                 },
+                dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    $.each(data, function (index, value) {
+                        console.log(value);
+                        $('#shows-date').html(function () {
+                            return `<div class="icons">
+                                <i class="far fa-heart"></i>
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0" class="name">${value.idMovie}</a >
+                            <div class="location-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>` 
+                        });
+                    });
                 }
+
+                
             });
         });
     });

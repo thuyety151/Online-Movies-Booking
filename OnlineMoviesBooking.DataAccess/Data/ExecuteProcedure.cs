@@ -58,7 +58,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 new SqlParameter("@Poster",movie.Poster)
              };
 
-            _context.Database.ExecuteSqlCommand("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
+            _context.Database.ExecuteSqlRaw("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
                 " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
                 "@RunningTime , @Poster", sqlParam);
            
@@ -66,7 +66,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public int ExecuteDeleteMovie(string id)
         {
             var sqlParam = new SqlParameter("@Id", id);
-            return _context.Database.ExecuteSqlCommand("EXEC USP_DeleteMovie @Id", sqlParam);
+            return _context.Database.ExecuteSqlRaw("EXEC USP_DeleteMovie @Id", sqlParam);
         }
         public int ExecuteUpdateMovie(Movie movie)
         {

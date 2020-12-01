@@ -129,7 +129,7 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Discounts/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {

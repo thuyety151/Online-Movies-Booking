@@ -118,34 +118,17 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             //}
             var movie = Exec.ExecuteGetMovieComingSoon();
 
-            if (page > 0)
-            {
-                page = page;
-            }
-            else
-            {
-                page = 1;
-            }
-            int pageSize = 9;
-            int start = (int)(page - 1) * pageSize;
-
-            ViewBag.pageCurrent = page;
-            int totalPage = movie.Count();
-            float totalNumsize = (totalPage / (float)pageSize);
-            int numSize = (int)Math.Ceiling(totalNumsize);
-            ViewBag.numSize = numSize;
-            //var movie = Exec.ExecuteGetMovieComingSoon();
-            // return Json(listPost);
-            return Json(new { data = movie, pageCurrent = page, numSize = numSize });
+      
+            return Json(new { data = movie });
         }
 
         [HttpGet]
-        public IActionResult getshowbydate(string idMovie,string date)
+        public IActionResult getshowbydate(string idMovie, string date)
         {
             DateTime d = DateTime.Parse(date);
             var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
-
-            return Json(new { data = shows });
+            // can co them ten rap
+            return Json(  shows );
         }
     }
 }
