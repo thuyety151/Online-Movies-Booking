@@ -25,6 +25,7 @@ namespace OnlineMoviesBooking.Controllers
             return View(await cinemaContext.ToListAsync());
         }
 
+       
         public IActionResult Get(string id)
         {
             try
@@ -64,7 +65,6 @@ namespace OnlineMoviesBooking.Controllers
                 _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa.IdAccount);
             return View(qa);
         }
 
@@ -139,5 +139,43 @@ namespace OnlineMoviesBooking.Controllers
         {
             return _context.Qa.Any(e => e.Id == id);
         }
+
+
+
+        public IActionResult ContactView()
+        {
+            return View();
+        }
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateContactView([Bind("Email,Content")] Qa qa)
+        {
+            if (ModelState.IsValid)
+            {
+                qa.Id = Guid.NewGuid().ToString();
+                qa.Time = DateTime.Now;
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{qa.Email}'").ToList();
+                qa.IdAccount = account[0].Id;
+                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
+                return RedirectToAction(nameof(ContactView));
+            }
+            return RedirectToActionPermanent("ContactView", qa);
+        }
+        //public IActionResult CreateContactView(string email, string content)
+        //{
+        //    try
+        //    {
+        //        string id = Guid.NewGuid().ToString();
+        //        DateTime time = DateTime.Now;
+        //        var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{email}'").ToList();
+        //        string idAccount = account[0].Id;
+        //        _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {id}, @idaccount = {idAccount},@email = {email}, @time = {time}, @content ={content} ");
+        //        return Json(new { success = true, message = "khởi tạo thành công danh mục" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = ex.Message });
+        //    }
+        //}
     }
 }

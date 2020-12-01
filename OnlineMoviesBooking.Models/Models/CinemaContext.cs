@@ -72,7 +72,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -89,12 +89,6 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasColumnName("SDT")
                     .HasMaxLength(15)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.IdTypeOfMemberNavigation)
-                    .WithMany(p => p.Account)
-                    .HasForeignKey(d => d.IdTypeOfMember)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_TypeMemberOfAccount");
 
                 entity.HasOne(d => d.IdTypesOfUserNavigation)
                     .WithMany(p => p.Account)
@@ -162,7 +156,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.ImageDiscount)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)

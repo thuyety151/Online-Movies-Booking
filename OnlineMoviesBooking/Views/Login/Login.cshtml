@@ -9,100 +9,98 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/css/styles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+    <link href="~/Template/css/all.min.css" rel="stylesheet" />
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+
+
 </head>
-<body style="background-color: rgb(43,3,1);z-index:0;top:0px;width:100%;height:100%" class="text-center">
-    
-    <div style="width:100%;position:relative;background-color:rgb(43,3,1)">
+<body style="z-index:0;top:0px;width:100%;height:100%" class="text-center">
 
-        
-        <div class="row justify-content-center">
-            <img src="~/assets/Img_aventure/tải xuống (7).jfif" alt="Alternate Text" style="width:103%;position:absolute;z-index:0" />
-            <div style="width:30rem;margin-top:25rem;position:relative;z-index:1000">
-                <!--Content-->
-                <form asp-action="Login" method="post">
-                    <!--Header-->
-                    <div class="modal-header text-center">
-                        <h3 class="modal-title w-100 text-light font-weight-bold my-3"><strong>Đăng nhập</strong></h3>
-                    </div>
-                    <!--Body-->
-                    <div class="modal-body mx-4">
-                        <!--Body-->
-                        <div class="md-form mb-5">
-                            @*<label data-error="wrong" data-success="right" for="Form-email1">Email</label>*@
-                            <input asp-for="Email" class="form-control validate" placeholder="Email">
-                        </div>
-
-                        <div class="md-form pb-3">
-                            @*<label data-error="wrong" data-success="right" for="Form-pass1">Mật khẩu</label>*@
-                            <input type="password"asp-for="Password" class="form-control validate" placeholder="Mật khẩu">
-                            <p class="font-small blue-text d-flex justify-content-end">
-                                <a href="/Login/ForgotPassword" class="blue-text ml-1">
-                                    Quên mật khẩu?
-                                </a>
-                            </p>
-                        </div>
-
-                        <div class="text-center mb-3">
-                            <input type="submit" class="btn blue-gradient btn-block btn-rounded z-depth-1a" value="Đăng nhập"/>
-                        </div>
-
-                        <div class="row my-3 d-flex justify-content-center">
-                            <!--Facebook-->
-                            <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fab fa-facebook-f text-center"></i></button>
-                            <!--Twitter-->
-                            <button type="button" class="btn btn-white btn-rounded mr-md-3 z-depth-1a"><i class="fab fa-twitter"></i></button>
-                            <!--Google +-->
-                            <button type="button" class="btn btn-white btn-rounded z-depth-1a"><i class="fab fa-google-plus-g"></i></button>
-                        </div>
-                    </div>
-                    <!--Footer-->
-                    <div class="modal-footer mx-5 pt-3 mb-1">
-                        <p class="font-small grey-text d-flex justify-content-end">
-                            Chưa có tài khoản? 
-                            <a href="/Login/Register" class="blue-text ml-1">
-                                Đăng ký
-                            </a>
-                        </p>
-                    </div>
-                </form>
-                @*<div class="shadow border-0 rounded" style="margin-top:10rem;background-color:darkred;opacity:0.85">
-                    <div style="width:100%;font-size:2rem;padding:1rem;color:aliceblue;text-align:center">Login</div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-group" style="text-align:left">
-                                <label class="small" for="inputEmailAddress" style="color:aliceblue;font-size:24px">Email</label>
-                                <input class="form-control py-4" id="inputEmailAddress" type="email" placeholder="Enter email address" />
-                            </div>
-                            <div class="form-group" style="text-align:left">
-                                <label class="small mb-1" for="inputPassword" style="color:aliceblue;font-size:24px">Password</label>
-                                <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" />
-                            </div>
-                            <div class="form-group" style="text-align:left">
-                                <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
-                                    <label class="custom-control-label" style="color:aliceblue;" for="rememberPasswordCheck">Remember password</label>
-                                </div>
-                            </div>
-                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                <a style="font-weight:500;" href="/Login/ForgotPassword">Forgot Password?</a>
-                                <a class="btn btn-primary" href="/DashBoard/DashBoard">Login</a>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div><a href="#" style="font-weight:500;">Need an account? Sign up!</a></div>
-                    </div>
-                </div>*@
+    <!-- ==========Preloader========== -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
             </div>
         </div>
-
     </div>
-
+    <!-- ==========Preloader========== -->
+    <!-- ==========Sign-In-Section========== -->
+    <section class="account-section bg_img" data-background="./assets/images/account/account-bg.jpg">
+        <div class="container">
+            <div class="padding-top padding-bottom">
+                <div class="account-area">
+                    <div class="section-header-3">
+                        <span class="cate">hello</span>
+                        <h2 class="title">welcome back</h2>
+                    </div>
+                    <form class="account-form">
+                        <div class="form-group">
+                            <label for="email2">Email<span>*</span></label>
+                            <input type="text" placeholder="Email" id="email2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass3">Password<span>*</span></label>
+                            <input type="password" placeholder="Mật khẩu" id="pass3" required>
+                        </div>
+                        <div class="form-group checkgroup">
+                            <input type="checkbox" id="bal2" required checked>
+                            <label for="bal2">Nhớ mật khẩu</label>
+                            <a href="#0" class="forget-pass">Quên mật khẩu</a>
+                        </div>
+                        <div class="form-group text-center">
+                            <input type="submit" value="log in">
+                        </div>
+                    </form>
+                    <div class="option">
+                        Chưa có tài khoản? <a href="/Login/Register">Đăng ký ngay</a>
+                    </div>
+                    <div class="or"><span>Or</span></div>
+                    <ul class="social-icons">
+                        <li>
+                            <a href="#0">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#0" class="active">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#0">
+                                <i class="fab fa-google"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==========Sign-In-Section========== -->
+    <script src="~/Template/js/bootstrap.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/main.js"></script>
+    <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
 
 </body>
 </html>

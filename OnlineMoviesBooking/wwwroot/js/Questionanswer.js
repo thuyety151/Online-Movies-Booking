@@ -2,6 +2,27 @@
     $('#QaTable').DataTable();
 });
 
+$('#QaSubmitContectView').click(function () {
+    var Email = $('#email').val();
+    var Content = $('#mesage').val();
+    console.log(1);
+    $.ajax({
+        method: 'POST',
+        url: "/Qas/CreateContactView",
+        data: { email: Email, content: Content },
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success: function (data) {
+            if (data.success) {
+                toastr.success(data.message);
+                $('#productTableSeller').DataTable().ajax.reload();
+            }
+            else {
+                toastr.error(data.message);
+            }
+        }
+    })
+})
+
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {

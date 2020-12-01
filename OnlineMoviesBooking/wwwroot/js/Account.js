@@ -12,7 +12,7 @@ function showModal(id) {
         url: '/Accounts/Get/' + id,
         success: function (data) {
             console.log(data);
-           
+            modal.find(imageUrl).val(data.data[0].image)
             modal.find('#name_detail_account').val(data.data[0].name)
             modal.find('#birthdate_detail_account').val(data.data[0].birthdate)
             modal.find('#gender_detail_account').val(data.data[0].gender)
@@ -84,7 +84,7 @@ function DeleteAccount(url) {
                             data.message,
                             'success'
                         );
-                        $('#AccountTable').DataTable().ajax.reload();
+                       // $('#AccountTable').DataTable().ajax.reload();
                     }
                     else {
                         swalWithBootstrapButtons.fire(
@@ -107,3 +107,4 @@ function DeleteAccount(url) {
         }
     })
 }
+
