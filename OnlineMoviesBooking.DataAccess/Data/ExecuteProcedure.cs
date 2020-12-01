@@ -569,6 +569,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     times.Add(new
                     {   
                         Id=rdr["Id"].ToString(),
+                        Name=rdr["Name"].ToString(),
                         Times = DateTime.Parse(rdr["Time"].ToString()).ToShortTimeString()
                 });
                 }

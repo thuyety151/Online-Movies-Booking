@@ -123,24 +123,26 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public IActionResult getshowbydate(string idMovie, string date, string? idTheater)
+        public IActionResult getshowbydate(string idMovie, string date, string idTheater)
         {
-            DateTime d = DateTime.Parse(date);
-            var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
-            // can co them ten rap
-            var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
-            // tìm tên, id các rạp thỏa điều kiện
+           
 
            
             if (idTheater == null)
             {
+                DateTime d = DateTime.Parse(date);
+                var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
+                // can co them ten rap
+                var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
+                // tìm tên, id các rạp thỏa điều kiện
                 return Json(theater);
             }
             else
             {
-                var theaters = Exec.ExecuteFindTimeofTheater(idMovie, date, idTheater);
+                var theaters = Exec.ExecuteFindTimeofTheater(idMovie, DateTime.Parse(date).ToString("yyyy-MM-dd"), idTheater);
+                return Json(theaters);
             }
-            return Json(theater);
+            return Json(true);
         }
         [HttpGet]
         public IActionResult getshowbydate_theater(string idMovie, string date, string idTheater)

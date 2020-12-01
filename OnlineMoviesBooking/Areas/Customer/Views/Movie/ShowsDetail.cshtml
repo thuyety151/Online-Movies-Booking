@@ -82,7 +82,7 @@
             @foreach (var item in ViewBag.Theater)
             {
                 <div class="details-banner-content" style=" margin: 0 1rem;">
-                    <a href="#language" id="theater-option"  class="  button">@item.Name</a>
+                    <a href="#language" id="theater-option" data-value="@item.Id"  class="  button">@item.Name</a>
                 </div>
             }
         </form>
