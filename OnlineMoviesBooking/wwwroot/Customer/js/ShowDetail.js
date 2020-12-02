@@ -44,7 +44,7 @@ $(function ($) {
                             '<i class="fas fa-map-marker-alt"></i></div></div><div class="movie-schedule">';
 
                         $.each(value.times, function (index, time) {
-                            div = div + '<div class="" style="color: #ffffff;padding: 5px;">' + time.times + '</div>';
+                            div = div + '<div class="details-banner-content"><a class="button" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
                         })
                         div = div + '</div ></li>';
                         $('#shows-date').append(div);

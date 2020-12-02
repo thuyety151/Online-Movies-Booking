@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineMoviesBooking.Models.ViewModels.ShowViewModel>
+﻿@model OnlineMoviesBooking.Models.Models.Movie;
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
@@ -38,12 +38,12 @@
 </div>
 <!-- ==========Window-Warning-Section========== -->
 <!-- ==========Banner-Section========== -->
-<section class="details-banner hero-area bg_img" data-background="" style="">
+<section class="details-banner hero-area bg_img" data-background="@Model.Poster" style="background-image: url(&quot;./assets/images/banner/banner03.jpg&quot;);">
     <div class="container">
         <div class="details-banner-wrapper">
             <div class="details-banner-content">
                 <!--TÊN MOVIE-->
-                <h3 id="nameMovie"class="title">@ViewBag.Movie</h3>
+                <h3 id="nameMovie" class="title">@Model.Name</h3>
                 <div class="tags">
                     <a>English</a>
                     <a>Hindi</a>
@@ -195,12 +195,7 @@
                         </div>
 
                         <div class="movie-schedule">
-                            @foreach (var item in ViewBag.Show)
-                            {
-                                <div class="item">
-                                    @item.
-                                </div>
-                            }
+                            
 
                             <div class="item">
                                 13:45

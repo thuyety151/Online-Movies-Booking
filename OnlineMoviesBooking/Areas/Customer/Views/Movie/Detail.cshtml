@@ -22,9 +22,7 @@
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
                     <img src="@Model.Poster" alt="movie">
-                    <a href="https://www.youtube.com/embed/KGeBMAgc46E" class="video-popup">
-                        <img src="~/Customer/logo/video-button.png" alt="movie">
-                    </a>
+                    
                 </div>
                 <div class="details-banner-content offset-lg-3">
                     <h3 class="title">@Model.Name</h3>
@@ -34,7 +32,6 @@
                         <a href="http://pixner.net/boleto/demo/movie-details.html#0">Telegu</a>
                         <a href="http://pixner.net/boleto/demo/movie-details.html#0">Tamil</a>
                     </div>
-                    <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="button">horror</a>
                     <div class="social-and-duration">
                         <div class="duration-area">
                             <div class="item">
@@ -87,21 +84,9 @@
                     </div>
                     <p>Users Rating</p>
                 </div>
-                <div class="item">
-                    <div class="item-header">
-                        <div class="rated rate-it">
-                            <i class="fas fa-heart"></i>
-                            <i class="fas fa-heart"></i>
-                            <i class="fas fa-heart"></i>
-                            <i class="fas fa-heart"></i>
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <h5 class="title">0.0</h5>
-                    </div>
-                    <p><a href="http://pixner.net/boleto/demo/movie-details.html#0">Rate It</a></p>
-                </div>
+                
             </div>
-            <a href="/Customer/Movie/ShowsDetail/@Model.Id" class="custom-button">book tickets</a>
+            <a href="/Customer/Movie/ShowsDetail/@Model.Id" class="custom-button">đặt vé</a>
         </div>
     </div>
 </section>
@@ -114,222 +99,35 @@
 
             <div class="col-lg-9 mb-50">
                 <div class="movie-details">
-                    <h3 class="title">photos</h3>
-                    <div class="details-photos owl-carousel owl-loaded owl-drag">
-
-                        <div class="owl-stage-outer">
-                            <div class="owl-stage" style="transform: translate3d(-877px, 0px, 0px); transition: all 1s ease 0s; width: 1755px;">
-                                <div class="owl-item" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details01.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details01.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div><div class="owl-item" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details02.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details02.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div><div class="owl-item" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details03.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details03.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div><div class="owl-item active" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details01.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details01.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div><div class="owl-item active" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details02.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details02.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div><div class="owl-item active" style="width: 262.5px; margin-right: 30px;">
-                                    <div class="thumb">
-                                        <a href="~/Customer/logo/movie-details03.jpg" class="img-pop">
-                                            <img src="~/Customer/logo/movie-details03.jpg" alt="movie">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div><div class="owl-dots disabled"></div>
-                    </div>
+                    
                     <div class="tab summery-review">
-                        <ul class="tab-menu">
-                            <li class="active">
-                                giới thiệu
+                        <ul class="tab-menu" style="justify-content: center;">
+                            <li class="active" >
+                                <a  style="color:white;">giới thiệu</a>
                             </li>
                         </ul>
                         <div class="tab-area">
-                            <div class="tab-item active">
+                            <div class="tab-item active" id="info">
                                 <div class="item">
-                                    <h5 class="sub-title">đạo diễn</h5>
+                                    <h5 class="sub-title">thông tin chung</h5>
+                                    <div class="content">
+                                        <p>Đạo diễn : @Model.Director</p>
+                                        <p>Ngày khởi chiếu : @Model.ReleaseDate</p>
+                                        <p>Diễn viên : @Model.Casts</p>
+                                        <p>Thời lượng : @Model.RunningTime</p>
+                                        <p>Qui định : @Model.Rated</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="tab-item active">
-                                <div class="item">
+                                <div id="content" class="item">
                                     <h5 class="sub-title">Nội dung</h5>
                                     <p>@Model.Description</p>
                                 </div>
-                                <div class="item">
+                                <div id="trailer" class="item">
                                     <h5 class="sub-title">Trailer</h5>
                                     <iframe width="560" height="315" src="@Model.Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             </div>
-                            <div class="tab-item">
-                                <div class="movie-review-item">
-                                    <div class="author">
-                                        <div class="thumb">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <img src="~/Customer/logo/cast02.jpg" alt="cast">
-                                            </a>
-                                        </div>
-                                        <div class="movie-review-info">
-                                            <span class="reply-date">13 Days Ago</span>
-                                            <h6 class="subtitle"><a href="http://pixner.net/boleto/demo/movie-details.html#0">minkuk seo</a></h6>
-                                            <span><i class="fas fa-check"></i> verified review</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-review-content">
-                                        <div class="review">
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                        </div>
-                                        <h6 class="cont-title">Awesome Movie</h6>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
-                                        <div class="review-meta">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <i class="flaticon-hand"></i><span>8</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="dislike">
-                                                <i class="flaticon-dont-like-symbol"></i><span>0</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                Report Abuse
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-review-item">
-                                    <div class="author">
-                                        <div class="thumb">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <img src="~/Customer/logo/cast04.jpg" alt="cast">
-                                            </a>
-                                        </div>
-                                        <div class="movie-review-info">
-                                            <span class="reply-date">13 Days Ago</span>
-                                            <h6 class="subtitle"><a href="http://pixner.net/boleto/demo/movie-details.html#0">rudra rai</a></h6>
-                                            <span><i class="fas fa-check"></i> verified review</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-review-content">
-                                        <div class="review">
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                        </div>
-                                        <h6 class="cont-title">Awesome Movie</h6>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
-                                        <div class="review-meta">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <i class="flaticon-hand"></i><span>8</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="dislike">
-                                                <i class="flaticon-dont-like-symbol"></i><span>0</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                Report Abuse
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-review-item">
-                                    <div class="author">
-                                        <div class="thumb">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <img src="~/Customer/logo/cast01.jpg" alt="cast">
-                                            </a>
-                                        </div>
-                                        <div class="movie-review-info">
-                                            <span class="reply-date">13 Days Ago</span>
-                                            <h6 class="subtitle"><a href="http://pixner.net/boleto/demo/movie-details.html#0">rafuj</a></h6>
-                                            <span><i class="fas fa-check"></i> verified review</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-review-content">
-                                        <div class="review">
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                        </div>
-                                        <h6 class="cont-title">Awesome Movie</h6>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
-                                        <div class="review-meta">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <i class="flaticon-hand"></i><span>8</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="dislike">
-                                                <i class="flaticon-dont-like-symbol"></i><span>0</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                Report Abuse
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="movie-review-item">
-                                    <div class="author">
-                                        <div class="thumb">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <img src="~/Customer/logo/cast03.jpg" alt="cast">
-                                            </a>
-                                        </div>
-                                        <div class="movie-review-info">
-                                            <span class="reply-date">13 Days Ago</span>
-                                            <h6 class="subtitle"><a href="http://pixner.net/boleto/demo/movie-details.html#0">bela bose</a></h6>
-                                            <span><i class="fas fa-check"></i> verified review</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-review-content">
-                                        <div class="review">
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                            <i class="flaticon-favorite-heart-button"></i>
-                                        </div>
-                                        <h6 class="cont-title">Awesome Movie</h6>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
-                                        <div class="review-meta">
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                <i class="flaticon-hand"></i><span>8</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="dislike">
-                                                <i class="flaticon-dont-like-symbol"></i><span>0</span>
-                                            </a>
-                                            <a href="http://pixner.net/boleto/demo/movie-details.html#0">
-                                                Report Abuse
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="load-more text-center">
-                                    <a href="http://pixner.net/boleto/demo/movie-details.html#0" class="custom-button transparent">load more</a>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

@@ -32,7 +32,7 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         }
         public IActionResult Detail(string id)
         {
-            id = "c778815e-dc24-403d-a";
+           
             if (id == null)
             {
                 return NotFound();
@@ -54,6 +54,9 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
 
+            // tìm phim 
+            var movie = Exec.ExecuteMovieDetail(id);
+
             ViewBag.Id = id;
             // rạp option
             var theater = Exec.ExecuteTheaterGetAll();
@@ -71,22 +74,11 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 temp++;
             }
             ViewBag.Date = dateshow;
-            List<ShowViewModel> lstshow = new List<ShowViewModel>();
-            lstshow = Exec.ExecuteGetAllShowMovie(id);
 
-            // không có show
-            if (lstshow.Count == 0)
-            {
-                ViewBag.Movie = Exec.ExecuteMovieDetail(id).Name;
-            }
-            else
-            {
-                ViewBag.Movie = lstshow[0].MovieName;
-            }
-            ViewBag.Show = lstshow;
+                 
             
             
-            return View(lstshow);
+            return View(movie);
         }
 
 
