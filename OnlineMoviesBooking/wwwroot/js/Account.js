@@ -21,7 +21,7 @@ function showModal(id) {
             modal.find('#email_detail_account').val(data.data[0].email)
             modal.find('#password_detail_account').val(data.data[0].password)
             modal.find('#point_detail_account').val(data.data[0].point)
-            modal.find('#image_detail_account').val(data.data[0].image)
+            modal.find('#image_detail_account').attr('src', data.data[0].image)
             //modal.find().val(data.data[0].id)
         }
     })

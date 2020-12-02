@@ -102,22 +102,7 @@ namespace OnlineMoviesBooking.Controllers
                         
 
                     account.Id = Guid.NewGuid().ToString();
-                    //var sqlParam = new SqlParameter[]
-                    //{
-                    //    new SqlParameter("@id",account.Id),
-                    //    new SqlParameter("@name",account.Name),
-                    //    new SqlParameter("@birthdate",account.Birthdate),
-                    //    new SqlParameter("@gender",account.Gender),
-                    //    new SqlParameter("@address",account.Address),
-                    //    new SqlParameter("@SDT",account.Sdt),
-                    //    new SqlParameter("@Email",account.Email),
-                    //    new SqlParameter("@password",account.Password),
-                    //    new SqlParameter("@point",account.Point),
-                    //    new SqlParameter("@usertypeid",account.IdTypesOfUser),
-                    //    new SqlParameter("@membertypeid",account.IdTypeOfMember),
-                    //    new SqlParameter("@image",account.Image),
-                    //    new SqlParameter("@id","Insert")
-                    //};
+                    
                     _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Insert"} ");
                     return RedirectToAction(nameof(Index));
                 }
@@ -226,20 +211,16 @@ namespace OnlineMoviesBooking.Controllers
         {
             try
             {
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
+                if(account.Count() == 0)
+                    return Json(new { success = false, message = "Tài khoản không tồn tại! Vui lòng tải lại trang" });
                 string wwwRootPath = _hostEnvironment.WebRootPath;
 
                 var image = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0].Image;
-                var imageUrl = wwwRootPath + image;
-                System.IO.File.Delete(imageUrl);
-
-                
                 if (image != null)
                 {
-                    var imagePath = Path.Combine(wwwRootPath, image.TrimStart('\\'));
-                    if (System.IO.File.Exists(imagePath))
-                    {
-                        System.IO.File.Delete(imagePath);
-                    }
+                    var imageUrl = wwwRootPath + image;
+                    System.IO.File.Delete(imageUrl);
                 }    
                 _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteAccount @id = {id} ");
                 return Json(new { success = true, message = "Xóa mục thành công" });

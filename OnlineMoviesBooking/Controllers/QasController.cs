@@ -19,10 +19,10 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: Qas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var cinemaContext = _context.Qa.Include(q => q.IdAccountNavigation);
-            return View(await cinemaContext.ToListAsync());
+            var cinemaContext = _context.Qa.FromSqlRaw("EXEC dbo.USP_GetAllQa");
+            return View(cinemaContext);
         }
 
        
