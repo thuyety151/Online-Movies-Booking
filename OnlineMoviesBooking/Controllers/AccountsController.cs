@@ -220,17 +220,19 @@ namespace OnlineMoviesBooking.Controllers
             //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
         }
-
+        [HttpDelete]
         // GET: Accounts/Delete/5
         public IActionResult Delete(string id)
         {
             try
             {
-                
-                var image = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0].Image;
-                System.IO.File.Delete(image);
-
                 string wwwRootPath = _hostEnvironment.WebRootPath;
+
+                var image = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0].Image;
+                var imageUrl = wwwRootPath + image;
+                System.IO.File.Delete(imageUrl);
+
+                
                 if (image != null)
                 {
                     var imagePath = Path.Combine(wwwRootPath, image.TrimStart('\\'));
@@ -239,7 +241,7 @@ namespace OnlineMoviesBooking.Controllers
                         System.IO.File.Delete(imagePath);
                     }
                 }    
-                _context.Account.FromSqlRaw($"EXEC dbo.USP_DeleteAccount @id = {id}");
+                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteAccount @id = {id} ");
                 return Json(new { success = true, message = "Xóa mục thành công" });
             }
             catch (Exception ex)
