@@ -569,16 +569,24 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.Parameters.AddWithValue("@IdMovie", idmovie);
                 com.Parameters.AddWithValue("@Date", date);
                 com.Parameters.AddWithValue("@IdTheater", idtheater);
-                com.Parameters.AddWithValue("@TimeNow", DateTime.Now);
+                com.Parameters.AddWithValue("@TimeNow", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                string s = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 SqlDataReader rdr = com.ExecuteReader();
-                while (rdr.Read())
+                try
                 {
-                    times.Add(new
-                    {   
-                        Id=rdr["Id"].ToString(),
-                        Name=rdr["Name"].ToString(),
-                        Times = DateTime.Parse(rdr["Time"].ToString()).ToShortTimeString()
-                });
+                    while (rdr.Read())
+                    {
+                        times.Add(new
+                        {
+                            Id = rdr["Id"].ToString(),
+                            Times = DateTime.Parse(rdr["Time"].ToString()).ToShortTimeString()
+                        });
+                    }
+                    return times;
+                }
+                catch(SqlException e)
+                {
+                    string ss = e.Message;
                 }
                 return times;
             }
