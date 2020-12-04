@@ -67,10 +67,10 @@
             
             <div id="dates" class="details-banner-content" role="group" aria-label="Basic example">
                 <input id="date-hidden" value="text" type="text" hidden />
-                <a id="date-a" href="#theater" class="button clickcolor">@ViewBag.Date[0]</a>
+                <a id="date-a" href="#shows-date" class="button clickcolor">@ViewBag.Date[0]</a>
                 @for(int i=1;i<ViewBag.Date.Count;i++)
                 {
-                    <a id="date-a" href="#theater"  class="button">@ViewBag.Date[i]</a>
+                    <a id="date-a" href="#shows-date"  class="button">@ViewBag.Date[i]</a>
                 }
             </div>
         </form>

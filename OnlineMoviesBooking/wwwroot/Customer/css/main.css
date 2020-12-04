@@ -4527,7 +4527,7 @@ input[type="submit"] {
 
 @media (min-width: 576px) {
   .screen-area .subtitle {
-    margin-bottom: 60px;
+    
   }
 }
 
@@ -4538,7 +4538,6 @@ input[type="submit"] {
 
 @media (min-width: 576px) {
   .seat-area {
-    margin-bottom: 55px;
   }
 }
 
@@ -4583,7 +4582,7 @@ input[type="submit"] {
 
 @media (max-width: 991px) and (min-width: 768px) {
   .seat-area .seat-line .single-seat {
-    width: 35px;
+    width: 2rem;
     padding: 2px !important;
   }
   .seat-area .seat-line .single-seat img {

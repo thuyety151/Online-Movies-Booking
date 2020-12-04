@@ -30,6 +30,11 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             var movie = Exec.ExecuteGetMovieComingSoon();
             return View(movie);
         }
+        public IActionResult Now()
+        {
+            var movie = Exec.ExecuteGetMovieNow();
+            return View("ComingSoon",movie);
+        }
         public IActionResult Detail(string id)
         {
            
@@ -81,7 +86,15 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             
             return View(movie);
         }
-
+        public IActionResult SeatPlan(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var plan = Exec.ExecuteGetDetailShow(id);
+            return View(plan);
+        }
 
         //============================ Json
         public IActionResult ShowsDate(DateTime date)
