@@ -1,4 +1,4 @@
-﻿$(function () {
+﻿(function ($) {
     $(document).ready(function () {
 
         // get row
@@ -15,6 +15,18 @@
                 //console.log(seat.name);
             });
 
+        });
+        var cost = 0;
+        $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
+        //get price
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/Movie/getprice',
+            success: function (data) {
+                $('.type-1').val(data[0].cost);
+                $('.type-2').val(data[1].cost);
+                $('.type-3').val(data[2].cost);
+            }
         });
 
         // goi cac ghe

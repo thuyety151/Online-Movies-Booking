@@ -8,9 +8,9 @@
     <div class="container">
         <div class="details-banner-wrapper">
             <div class="details-banner-content style-two">
-                <input id="idshow" value="@Model.Id" hidden/>
-                <input id="idscreen" value="@Model.IdScreen" hidden/>
-                <input id="idscreen" value="@Model.IdMovie" hidden/>
+                <input id="idshow" value="@Model.Id" hidden />
+                <input id="idscreen" value="@Model.IdScreen" hidden />
+                <input id="idmovie" value="@Model.IdMovie" hidden />
                 <h3 class="title">@Model.MovieName</h3>
                 <div class="tags">
                     <a href="http://pixner.net/boleto/demo/movie-seat-plan.html#0">City Walk</a>
@@ -43,6 +43,11 @@
                 <h5 class="title">@Model.TimeStart.ToString("HH:mm")</h5>
                 <p>Mins Left</p>
             </div>
+            <div id="price">
+                <div class="type-1"></div>
+                <div class="type-2"></div>
+                <div class="type-3"></div>
+            </div>
         </div>
     </div>
 </section>
@@ -63,7 +68,7 @@
                             <span>A</span>
                             <li class="front-seat">
                                 <ul>
-                                    <li class="single-seat" >
+                                    <li class="single-seat">
                                         <img src="~/Customer/logo/seat01.png" alt="seat">
                                     </li>
                                     <li class="single-seat">
@@ -78,7 +83,7 @@
                                 </ul>
                             </li>
                             <li class="front-seat">
-                                <ul>
+                                <ul >
                                     <li class="single-seat">
                                         <img src="~/Customer/logo/seat01.png" alt="seat">
                                     </li>
@@ -123,7 +128,7 @@
                         <ul class="seat--area">
                             <span>B</span>
                             <li class="front-seat">
-                                <ul>
+                                <ul >
                                     <li class="single-seat">
                                         <img src="~/Customer/logo/seat01.png" alt="seat">
                                     </li>
@@ -139,7 +144,7 @@
                                 </ul>
                             </li>
                             <li class="front-seat">
-                                <ul>
+                                <ul >
                                     <li class="single-seat">
                                         <img src="~/Customer/logo/seat01.png" alt="seat">
                                     </li>
@@ -550,7 +555,7 @@
                 </div>
                 <div class="book-item">
                     <span>total price</span>
-                    <h3 class="title">$150</h3>
+                    <h3 class="title" id="total-price">0 </h3>
                 </div>
                 <div class="book-item">
                     <a href="http://pixner.net/boleto/demo/movie-checkout.html" class="custom-button">proceed</a>
@@ -561,7 +566,10 @@
 </div>
 <!-- ==========Movie-Section========== -->
 
-@section Scripts{ 
-    <script src="~/Customer/js/seatplan.js" ></script>
+@section Scripts{
 
+    <script src="~/Customer/js/seatplan.js"></script>
+}
+@section Header{
+    <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
 }

@@ -342,28 +342,82 @@
           }
       }
     });
-    var book = 0;
-    $(".seat-free img").on('click', function(e) {
-      if(book == 0) {
-          $(this).attr("src", "/Customer/logo/seat01-free.png");
-          var text = $('#choosed-seat').text().toString();
-          $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
-        book = 1;
-      }
-      else if(book == 1) {
-          $(this).attr("src", "/Customer/logo/seat01-booked.png");
-          $('#choosed-seat').text($('#choosed-seat').text()+' '+this.parentNode.name);
-        book = 0;
-      }
+      var book = 0;
+      var cost = 0;
+
+      $(".seat-free img").on('click', function (e) {
+          // neeus chon moi
+          var source = this.getAttribute('src');
+          // chon => them tien
+          if (source == "/Customer/logo/seat01-free.png") {
+              $(this).attr("src", "/Customer/logo/seat01-booked.png");
+              // them ten ghe vao banner
+              $('#choosed-seat').text($('#choosed-seat').text() + ' ' + this.parentNode.name);
+              // tinh gia cho moi lan chon
+              var price = this.parentNode.name.toString();
+
+              // type 1
+              if (parseFloat(price.replace('B', '')) || parseFloat(price.replace('A', ''))) {
+
+
+                  cost = parseFloat(cost) + parseFloat($('.type-1').val());
+
+                  var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                  $('#total-price').text(vnd);
+              }
+              //type 2
+              else if (parseFloat(price.replace('C', '')) ||
+                  parseFloat(price.replace('D', '')) ||
+                  parseFloat(price.replace('E', '')) ||
+                  parseFloat(price.replace('F', ''))) {
+                  //console.log('c');
+                  cost = parseFloat(cost) + parseFloat($('.type-2').val());
+
+                  var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                  $('#total-price').text(vnd);
+              }
+          } 
+          else if (source == "/Customer/logo/seat01-booked.png") {
+              $(this).attr("src", "/Customer/logo/seat01-free.png");
+              var text = $('#choosed-seat').text().toString();
+              $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
+
+              var price = this.parentNode.name.toString();
+
+              // type 1
+              if (parseFloat(price.replace('B', '')) || parseFloat(price.replace('A', ''))) {
+
+
+                  cost = parseFloat(cost) - parseFloat($('.type-1').val());
+
+                  var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                  $('#total-price').text(vnd);
+              }
+              //type 2
+              else if (parseFloat(price.replace('C', '')) ||
+                  parseFloat(price.replace('D', '')) ||
+                  parseFloat(price.replace('E', '')) ||
+                  parseFloat(price.replace('F', ''))) {
+                  //console.log('c');
+                  cost = parseFloat(cost) - parseFloat($('.type-2').val());
+
+                  var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                  $('#total-price').text(vnd);
+              }
+          }
+           
     });
     var bookTwo = 1;  
     $(".seat-free-two img").on('click', function(e) {
       if(bookTwo == 0) {
-          $(this).attr("src","/Customer/logo/seat02-free.png");
+          $(this).attr("src", "/Customer/logo/seat02-free.png");
+          var text = $('#choosed-seat').text().toString();
+          $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
         bookTwo = 1;
       }
       else if(bookTwo == 1) {
-          $(this).attr("src","/Customer/logo/seat02-booked.png");
+          $(this).attr("src", "/Customer/logo/seat02-booked.png");
+          $('#choosed-seat').text($('#choosed-seat').text() + ' ' + this.parentNode.name);
         bookTwo = 0;
       }
     });

@@ -146,5 +146,12 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             // tìm tên, id các rạp thỏa điều kiện
             return Json(  theater );
         }
+        [HttpGet]
+        public IActionResult getprice()
+        {
+            //List<TypesOfSeat> price = new List<TypesOfSeat>();
+             var price = Exec.GetAllTypesOfSeat();
+            return Json(price);
+        }
     }
 }
