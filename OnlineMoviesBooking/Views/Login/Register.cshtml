@@ -1,6 +1,7 @@
-﻿@model OnlineMoviesBooking.Models.Models.Account
+﻿@model OnlineMoviesBooking.Models.ViewModel.RegisterViewModel
+
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Register1";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
 
@@ -10,16 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 
-    <link href="~/Template/css/all.min.css" rel="stylesheet" />
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
     <link href="~/Template/css/animate.css" rel="stylesheet" />
-    <link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Template/css/flaticon.css" rel="stylesheet" />
     <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
-    <link href="~/Template/css/main.css" rel="stylesheet" />
-    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
     <link href="~/Template/css/odometer.css" rel="stylesheet" />
     <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
 
 
 </head>
@@ -36,7 +36,7 @@
     </div>
     <!-- ==========Preloader========== -->
     <!-- ==========Sign-In-Section========== -->
-    <section class="account-section bg_img" style="background-image: url(&quot;./assets/images/account/account-bg.jpg&quot;);margin-top:10rem">
+    <section class="account-section" style="margin-top:7rem">
         <div class="container">
             <div class="padding-top padding-bottom">
                 <div class="account-area">
@@ -91,19 +91,20 @@
         </div>
     </section>
     <!-- ==========Sign-In-Section========== -->
-    <script src="~/Template/js/bootstrap.min.js"></script>
-    <script src="~/Template/js/countdown.min.js"></script>
-    <script src="~/Template/js/isotope.pkgd.min.js"></script>
     <script src="~/Template/js/jquery-3.3.1.min.js"></script>
-    <script src="~/Template/js/magnific-popup.min.js"></script>
-    <script src="~/Template/js/main.js"></script>
     <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
-    <script src="~/Template/js/nice-select.js"></script>
-    <script src="~/Template/js/odometer.min.js"></script>
-    <script src="~/Template/js/owl.carousel.min.js"></script>
     <script src="~/Template/js/plugins.js"></script>
-    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/bootstrap.min.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
     <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
 
 </body>
 </html>
+
