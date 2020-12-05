@@ -398,27 +398,47 @@
                   parseFloat(price.replace('D', '')) ||
                   parseFloat(price.replace('E', '')) ||
                   parseFloat(price.replace('F', ''))) {
-                  //console.log('c');
+                  // them tien
                   cost = parseFloat(cost) - parseFloat($('.type-2').val());
-
+                  // hien thi duoi dang vnd
                   var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
                   $('#total-price').text(vnd);
               }
           }
            
     });
-    var bookTwo = 1;  
-    $(".seat-free-two img").on('click', function(e) {
-      if(bookTwo == 0) {
-          $(this).attr("src", "/Customer/logo/seat02-free.png");
-          var text = $('#choosed-seat').text().toString();
-          $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
-        bookTwo = 1;
+    $(".seat-free-two img").on('click', function (e) {
+        var source = this.getAttribute('src');
+        // bo chon
+        var text = $('#choosed-seat').text().toString();
+        if (source == "/Customer/logo/seat02-free.png") {
+            $(this).attr("src", "/Customer/logo/seat02-booked.png");
+            
+            console.log(text + 'text');
+            $('#choosed-seat').text($('#choosed-seat').text() + ' ' + this.parentNode.name.toString());
+             console.log(text + 'text');
+            console.log($('#choosed-seat').text());
+
+            cost = parseFloat(cost) + parseFloat($('.type-3').val());
+
+            var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+            $('#total-price').text(vnd);
       }
-      else if(bookTwo == 1) {
-          $(this).attr("src", "/Customer/logo/seat02-booked.png");
-          $('#choosed-seat').text($('#choosed-seat').text() + ' ' + this.parentNode.name);
-        bookTwo = 0;
+        else if (source == "/Customer/logo/seat02-booked.png") {
+            // thay doi css
+            $(this).attr("src", "/Customer/logo/seat02-free.png");
+            // tim ten ghe
+            var span = (this.parentNode).querySelector('.sit-num');
+
+            console.log($('#choosed-seat').text());
+            console.log(this.parentNode.name.toString());
+            $('#choosed-seat').text(text.replace(this.parentNode.name.toString(), ''));
+            var price = this.parentNode.name.toString();
+
+            cost = parseFloat(cost) - parseFloat($('.type-3').val());
+
+            var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+            $('#total-price').text(vnd);
       }
     });
     // shop cart + - start here

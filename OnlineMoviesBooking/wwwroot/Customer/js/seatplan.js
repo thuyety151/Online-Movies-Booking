@@ -6,14 +6,31 @@
         $.each(rows, function (index, row) {
             var name = row.querySelector('span');
             var seats = row.querySelectorAll('.single-seat');
-            $.each(seats, function (index, seat) {
-                seat.name = name.textContent + (index+1).toString();
-                
-                // tao ten cho ghe ngoi
-                
-                //console.log(seat);
-                //console.log(seat.name);
-            });
+            var span;
+            if (name.textContent === 'G' || name.textContent === 'H') {
+                $.each(seats, function (index, seat) {
+                    seat.name = name.textContent + (index*2 + 1).toString();
+                    seat.name = seat.name + '' + name.textContent + (index * 2 + 2).toString();
+                    console.log(seat.name);
+                    span = seat.querySelector('.sit-num');
+                    if (span != null) {
+                        span.textContent = seat.name;
+                    }
+                   
+                });
+            }
+            else {
+                $.each(seats, function (index, seat) {
+                    // dat ten ghe cho day A,B,C,D,E,F
+
+                    seat.name = name.textContent + (index + 1).toString();
+                    span = seat.querySelector('.sit-num');
+                    if (span != null) {
+                        span.textContent = seat.name;
+                    }
+                });
+            }
+            
 
         });
         var cost = 0;
