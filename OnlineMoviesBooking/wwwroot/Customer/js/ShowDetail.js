@@ -26,6 +26,8 @@
             dataType: 'json',
             success: function (data) {
                 $('#shows-date').empty();
+                console.log(data);
+                console.log($(data).length);
                 if ($(data).lenght > 0) {
                     var div = '<li><p>Không có lịch chiếu</p></li>';
                     $('#shows-date').append(div);
@@ -42,12 +44,11 @@
                             '<i class="fas fa-map-marker-alt"></i></div></div><div class="movie-schedule">';
 
                         $.each(value.times, function (index, time) {
-                            div = div + '<div class="details-banner-content"><a class="button" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
+                            div = div + '<div class="details-banner-content"><a class="button" style="color: #ffffff;padding: 0.2 1rem;">'
+                                + '<a data-id="' + time.id + 'href = "/customer/movie/seatplan/' + time.id + '"' + time.times + '</a></div > ';
                         })
                         div = div + '</div ></li>';
                         $('#shows-date').append(div);
-
-
                     })
                 }
 

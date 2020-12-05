@@ -463,6 +463,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         Languages = rdr["Languages"].ToString(),
                         TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
                         TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        IdMovie=rdr["Id_Movie"].ToString(),
+                        IdScreen=rdr["Id_Screen"].ToString(),
+                        IdTheater=rdr["IdTheater"].ToString(),
                         MovieName = rdr["MovieName"].ToString(),
                         Poster = rdr["Poster"].ToString(),
                         ScreenName = rdr["ScreenName"].ToString(),
@@ -541,6 +544,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdMovie", idmovie);
                 com.Parameters.AddWithValue("@Date", date);
+                com.Parameters.AddWithValue("@TimeNow", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())
                 {
@@ -770,6 +774,58 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public void ExecuteDeleteDiscount(string id)
         {
             _context.Database.ExecuteSqlRaw("EXEC USP_DeleteDiscount @Id " ,new SqlParameter("@Id", id));
+        }
+        //==========SEAT============
+        public List<Seat> ExecGetAllSeat(string idScreen)
+        {
+            List<Seat> lstSeat = new List<Seat>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllSeatOdScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdScreen", idScreen);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstSeat.Add(new Seat
+                    {
+                        Id = rdr["Id"].ToString(),
+                        IdTypesOfSeat = rdr["Id_TypesOfSeat"].ToString(),
+                        IdScreen = rdr["Id_Screen"].ToString(),
+                        Row = rdr["Row"].ToString(),
+                        No = int.Parse(rdr["No"].ToString())
+                    });
+
+                }
+                return lstSeat;
+            }
+        }
+        public List<object> ExecGetChoosedSeat(string idShow, string idScreen)
+        {
+            List<object> lstSeat = new List<object>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetSeatChoosed", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdScreen", idScreen);
+                com.Parameters.AddWithValue("@IdShow", idShow);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstSeat.Add(new Seat
+                    {
+                        Id = rdr["Id_Seat"].ToString()
+                    });
+
+                }
+                return lstSeat;
+            }
         }
     }
 }

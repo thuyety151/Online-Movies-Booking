@@ -1,6 +1,6 @@
 ﻿(function ($) {
     $(document).ready(function () {
-
+        
         // get row
         var rows = document.querySelectorAll('.seat-line');
         $.each(rows, function (index, row) {
@@ -11,7 +11,6 @@
                 $.each(seats, function (index, seat) {
                     seat.name = name.textContent + (index*2 + 1).toString();
                     seat.name = seat.name + '' + name.textContent + (index * 2 + 2).toString();
-                    console.log(seat.name);
                     span = seat.querySelector('.sit-num');
                     if (span != null) {
                         span.textContent = seat.name;
@@ -33,6 +32,8 @@
             
 
         });
+        
+
         var cost = 0;
         $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
         //get price
@@ -43,6 +44,8 @@
                 $('.type-1').val(data[0].cost);
                 $('.type-2').val(data[1].cost);
                 $('.type-3').val(data[2].cost);
+                console.log($('.type-3').val());
+                
             }
         });
 

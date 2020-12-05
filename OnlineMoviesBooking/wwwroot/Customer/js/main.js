@@ -344,7 +344,11 @@
     });
       var book = 0;
       var cost = 0;
+      // price : dung de chuyen vao bill
+      var totalPrice = 0;
+      var seatName = "";
 
+      $('#total-price').val(0);
       $(".seat-free img").on('click', function (e) {
           // neeus chon moi
           var source = this.getAttribute('src');
@@ -353,17 +357,19 @@
               $(this).attr("src", "/Customer/logo/seat01-booked.png");
               // them ten ghe vao banner
               $('#choosed-seat').text($('#choosed-seat').text() + ' ' + this.parentNode.name);
+              $('#choosed-seat').name
               // tinh gia cho moi lan chon
               var price = this.parentNode.name.toString();
 
               // type 1
               if (parseFloat(price.replace('B', '')) || parseFloat(price.replace('A', ''))) {
 
-
                   cost = parseFloat(cost) + parseFloat($('.type-1').val());
-
+                  totalPrice = totalPrice+ cost;
                   var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
                   $('#total-price').text(vnd);
+                 
+                  console.log('cost' + totalPrice);
               }
               //type 2
               else if (parseFloat(price.replace('C', '')) ||
@@ -375,6 +381,8 @@
 
                   var vnd = cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
                   $('#total-price').text(vnd);
+                  totalPrice = cost;
+                  console.log('cost' + totalPrice);
               }
           } 
           else if (source == "/Customer/logo/seat01-booked.png") {

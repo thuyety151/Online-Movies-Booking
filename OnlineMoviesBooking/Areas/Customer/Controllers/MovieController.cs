@@ -86,6 +86,7 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             
             return View(movie);
         }
+        
         public IActionResult SeatPlan(string id)
         {
             if (id == null)
@@ -93,9 +94,22 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
             var plan = Exec.ExecuteGetDetailShow(id);
+            ViewBag.MovieName = plan.MovieName;
+            ViewBag.ScreenName = plan.ScreenName;
+            ViewBag.TheaterName = plan.TheaterName;
+            ViewBag.TimeStart = plan.TimeStart.ToString("HH:mm");
+            ViewBag.Date = plan.TimeStart.ToString("dd/mm/yyyy");
+
+            var allseat = Exec.ExecGetAllSeat(plan.IdScreen);
+            var seatchoosed = Exec.ExecGetChoosedSeat(plan.Id, plan.IdScreen);
             return View(plan);
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SeatPlan(string idshow, string idscreen, string idmovie,string type_3)
+        {
+            return View();
+        }
         //============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
@@ -140,7 +154,6 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
             DateTime d = DateTime.Parse(date);
-            var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện

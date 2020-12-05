@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.ViewModels.ShowViewModel
+﻿@model OnlineMoviesBooking.Models.Models.Bill;
 @{
     ViewData["Title"] = "SeatPlan";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
@@ -8,13 +8,11 @@
     <div class="container">
         <div class="details-banner-wrapper">
             <div class="details-banner-content style-two">
-                <input id="idshow" value="@Model.Id" hidden />
-                <input id="idscreen" value="@Model.IdScreen" hidden />
-                <input id="idmovie" value="@Model.IdMovie" hidden />
-                <h3 class="title">@Model.MovieName</h3>
+               
+                <h3 class="title">ViewBag.MovieName</h3>
                 <div class="tags">
-                    <a href="http://pixner.net/boleto/demo/movie-seat-plan.html#0">City Walk</a>
-                    <a href="http://pixner.net/boleto/demo/movie-seat-plan.html#0">English - 2D</a>
+                    <a>ViewBag.ScreenName</a>
+                    <a>English - 2D</a>
                 </div>
             </div>
         </div>
@@ -22,547 +20,538 @@
 </section>
 <!-- ==========Banner-Section========== -->
 <!-- ==========Page-Title========== -->
-<section class="page-title bg-one">
-    <div class="container">
+<section class="page-title bg-one" style="margin-bottom: 2rem;">
+    <div class="container" style=" place-content: center; display: flex;">
         <div class="page-title-area">
-            <div class="item md-order-1">
-                <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html" class="custom-button back-button">
-                    <i class="flaticon-double-right-arrows-angles"></i>back
-                </a>
-            </div>
-            <div class="item date-item">
-                <span class="date">MON, SEP 09 2020</span>
-                <select class="select-bar" style="display: none;">
-                    <option value="sc1">09:40</option>
-                    <option value="sc2">13:45</option>
-                    <option value="sc3">15:45</option>
-                    <option value="sc4">19:50</option>
-                </select><div class="nice-select select-bar" tabindex="0"><span class="current">09:40</span><ul class="list"><li data-value="sc1" class="option selected">09:40</li><li data-value="sc2" class="option">13:45</li><li data-value="sc3" class="option">15:45</li><li data-value="sc4" class="option">19:50</li></ul></div>
-            </div>
             <div class="item">
-                <h5 class="title">@Model.TimeStart.ToString("HH:mm")</h5>
-                <p>Mins Left</p>
+                <h5 class="date">ViewBag.TimeStart</h5>
+                <p style="padding: 0.5rem;">ViewBag.Date</p>
             </div>
-            <div id="price">
-                <div class="type-1"></div>
-                <div class="type-2"></div>
-                <div class="type-3"></div>
-            </div>
+            
         </div>
     </div>
 </section>
 <!-- ==========Page-Title========== -->
 <!-- ==========Movie-Section========== -->
-<div class="seat-plan-section padding-bottom padding-top">
-    <div class="container">
-        <div class="screen-area">
-            <h4 class="screen">screen</h4>
-            <div class="screen-thumb">
-                <img src="~/Customer/logo/screen-thumb.png" alt="movie">
+<div class="seat-plan-section padding-bottom ">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div id="price" hidden>
+            <input name="type-1" class="type-1" hidden />
+            <input name="type-2" class="type-2" hidden />
+            <input name="type_3" class="type-3" hidden />
+            <input asp-for="Model.IdShow" hidden/>
+        </div>
+        <div class="container">
+            <div class="screen-area">
+                <h4 class="screen">screen</h4>
+                <div class="screen-thumb">
+                    <img src="~/Customer/logo/screen-thumb.png" alt="movie">
+                </div>
+                <h5 class="subtitle" style="font-size: 20px;">ghế thường</h5>
+                <div class="screen-wrapper">
+                    <ul class="seat-area">
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>A</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>A</span>
+                            </ul>
+
+                        </li>
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>B</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f7</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f8</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f9</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f10</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f11</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>b</span>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </div>
+                <h5 class="subtitle" style="font-size: 20px;">ghế vip</h5>
+                <div class="screen-wrapper">
+                    <ul class="seat-area">
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>C</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>C</span>
+                            </ul>
+
+                        </li>
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>D</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f7</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f8</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f9</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f10</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f11</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>D</span>
+                            </ul>
+
+                        </li>
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>E</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>E</span>
+                            </ul>
+
+                        </li>
+                        <li class="seat-line">
+                            <ul class="seat--area">
+                                <span>F</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f7</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f8</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f9</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f10</span>
+                                        </li>
+                                        <li class="single-seat seat-free">
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num">f11</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>F</span>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </div>
+                <h5 class="subtitle" style="font-size: 20px;">ghế đôi</h5>
+                <div class="screen-wrapper">
+                    <ul class="seat-area couple">
+                        <li class="seat-line">
+
+                            <ul class="seat--area">
+                                <span>G</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">b7 b8</span>
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                        <li class="single-seat">
+                                            <img src="~/Customer/logo/seat02.png" alt="seat">
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>G</span>
+                            </ul>
+
+                        </li>
+                        <li class="seat-line">
+
+                            <ul class="seat--area">
+                                <span>H</span>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a1 a2</span>
+                                        </li>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a3 a4</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a5 a6</span>
+                                        </li>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a7 a8</span>
+                                        </li>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a9 a10</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="front-seat">
+                                    <ul>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a11</span>
+                                        </li>
+                                        <li class="single-seat seat-free-two">
+                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                            <span class="sit-num">a12</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <span>H</span>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <h5 class="subtitle" style="font-size: 20px;">ghế thường</h5>
-            <div class="screen-wrapper">
-                <ul class="seat-area">
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>A</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul >
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>A</span>
-                        </ul>
-
-                    </li>
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>B</span>
-                            <li class="front-seat">
-                                <ul >
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul >
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f7</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f8</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f9</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f10</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f11</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>b</span>
-                        </ul>
-
-                    </li>
-                </ul>
-            </div>
-            <h5 class="subtitle" style="font-size: 20px;">ghế vip</h5>
-            <div class="screen-wrapper">
-                <ul class="seat-area">
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>C</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>C</span>
-                        </ul>
-
-                    </li>
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>D</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f7</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f8</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f9</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f10</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f11</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>D</span>
-                        </ul>
-
-                    </li>
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>E</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>E</span>
-                        </ul>
-
-                    </li>
-                    <li class="seat-line">
-                        <ul class="seat--area">
-                            <span>F</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f7</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f8</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f9</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f10</span>
-                                    </li>
-                                    <li class="single-seat seat-free">
-                                        <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                        <span class="sit-num">f11</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat01.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>F</span>
-                        </ul>
-
-                    </li>
-                </ul>
-            </div>
-            <h5 class="subtitle" style="font-size: 20px;">ghế đôi</h5>
-            <div class="screen-wrapper">
-                <ul class="seat-area couple">
-                    <li class="seat-line">
-
-                        <ul class="seat--area">
-                            <span>G</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">b7 b8</span>
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                    <li class="single-seat">
-                                        <img src="~/Customer/logo/seat02.png" alt="seat">
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>G</span>
-                        </ul>
-
-                    </li>
-                    <li class="seat-line">
-
-                        <ul class="seat--area">
-                            <span>H</span>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a1 a2</span>
-                                    </li>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a3 a4</span>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a5 a6</span>
-                                    </li>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a7 a8</span>
-                                    </li>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a9 a10</span>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="front-seat">
-                                <ul>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a11</span>
-                                    </li>
-                                    <li class="single-seat seat-free-two">
-                                        <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                        <span class="sit-num">a12</span>
-                                    </li>
-                                </ul>
-                            </li>
-                            <span>H</span>
-                        </ul>
-
-                    </li>
-                </ul>
+            <div class="proceed-book bg_img" data-background="./assets/images/movie/movie-bg-proceed.jpg" style="background-image: url(&quot;./assets/images/movie/movie-bg-proceed.jpg&quot;);">
+                <div class="proceed-to-book">
+                    <div class="book-item">
+                        <span>Ghế đã chọn</span>
+                        <h3 id="choosed-seat" class="title" style=" max-width: 400px;"></h3>
+                    </div>
+                    <div class="book-item">
+                        <span>Tổng tiền</span>
+                        <h3 class="title" id="total-price">0 </h3>
+                    </div>
+                    <div class="book-item">
+                        <input type="submit"  class="custom-button" value="Thanh toán"/>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="proceed-book bg_img" data-background="./assets/images/movie/movie-bg-proceed.jpg" style="background-image: url(&quot;./assets/images/movie/movie-bg-proceed.jpg&quot;);">
-            <div class="proceed-to-book">
-                <div class="book-item">
-                    <span>Ghế đã chọn</span>
-                    <h3 id="choosed-seat" class="title"></h3>
-                </div>
-                <div class="book-item">
-                    <span>Tổng tiền</span>
-                    <h3 class="title" id="total-price">0 </h3>
-                </div>
-                <div class="book-item">
-                    <a href="http://pixner.net/boleto/demo/movie-checkout.html" class="custom-button">Thanh toán</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    </form>
 </div>
 <!-- ==========Movie-Section========== -->
 
