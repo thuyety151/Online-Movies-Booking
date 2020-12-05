@@ -99,6 +99,10 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         //============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
+            if(date==null)
+            {
+                return NotFound();
+            }
             var show = Exec.ExecuteGetAllShowDate(date);
             return Json(new { data = show });
         }
@@ -131,19 +135,16 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult getshowbydate(string idMovie, string date)
         {
+            if(idMovie==null || date == null)
+            {
+                return NotFound();
+            }
             DateTime d = DateTime.Parse(date);
             var shows = Exec.ExecuteGetShowByDate(idMovie, d.ToString("yyyy-MM-dd"));
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện
             return Json(  theater );
-        }
-        [HttpGet]
-        public IActionResult getshowbydate_theater(string idMovie, string date, string idTheater)
-        {
-            DateTime d = DateTime.Parse(date);
-            var times = Exec.ExecuteFindTimeofTheater(idMovie, d.ToString("yyyy-MM-dd"), idTheater);
-            return Json(times);
         }
     }
 }

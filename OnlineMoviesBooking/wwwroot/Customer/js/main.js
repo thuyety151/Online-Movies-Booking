@@ -345,22 +345,25 @@
     var book = 0;
     $(".seat-free img").on('click', function(e) {
       if(book == 0) {
-        $(this).attr("src","./assets/images/movie/seat01-free.png");
+          $(this).attr("src", "/Customer/logo/seat01-free.png");
+          var text = $('#choosed-seat').text().toString();
+          $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
         book = 1;
       }
       else if(book == 1) {
-        $(this).attr("src","./assets/images/movie/seat01-booked.png");
+          $(this).attr("src", "/Customer/logo/seat01-booked.png");
+          $('#choosed-seat').text($('#choosed-seat').text()+' '+this.parentNode.name);
         book = 0;
       }
     });
     var bookTwo = 1;  
     $(".seat-free-two img").on('click', function(e) {
       if(bookTwo == 0) {
-        $(this).attr("src","./assets/images/movie/seat02-free.png");
+          $(this).attr("src","/Customer/logo/seat02-free.png");
         bookTwo = 1;
       }
       else if(bookTwo == 1) {
-        $(this).attr("src","./assets/images/movie/seat02-booked.png");
+          $(this).attr("src","/Customer/logo/seat02-booked.png");
         bookTwo = 0;
       }
     });
