@@ -80,9 +80,6 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 temp++;
             }
             ViewBag.Date = dateshow;
-
-                 
-            
             
             return View(movie);
         }
@@ -148,7 +145,21 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                     return Json(new { success = false });
                 }
             }
-            
+
+            var money = Exec.FGetPrice("1212121");
+            //var bill = new
+            //{
+            //    idShow = idshow,
+            //    movieName,  // movie
+            //    seats,      
+            //    theatername //theater
+            //    screenname, //screen
+            //    datetimestart,  //show
+            //    totalprice, //seat
+            //    languages   
+
+
+            //};
             return Json( seatVM);
         }
 

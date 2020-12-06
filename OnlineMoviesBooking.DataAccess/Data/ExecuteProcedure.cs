@@ -857,5 +857,18 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return obj;
             }
         }
+        //=================CHECKOUT
+        public int FGetPrice(string idseat)
+        {
+            SqlConnection con = new SqlConnection(cs);
+            SqlCommand cmd = new SqlCommand("SELECT dbo.UF_Price(@IdSeat)", con);
+            // cmd.CommandType=CommandType.StoredProcedure;  
+            cmd.Parameters.AddWithValue("@IdSeat", idseat);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            int str = int.Parse(dt.Rows[0][0].ToString());
+            return str;
+        }
     }
 }
