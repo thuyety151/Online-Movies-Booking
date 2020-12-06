@@ -1,0 +1,60 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Screen>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+    <a asp-action="Create">Thêm phòng chiếu</a>
+</p>
+<partial name="_ModalScreenDetail" model="new OnlineMoviesBooking.Models.Models.Screen()" />
+<div class="jumbotron" style="padding: 1rem;">
+    <h4>Rạp</h4>
+    <hr />
+    <div style="display: flex;">
+        <select id="select" class="form-control col-md-6" asp-items="ViewBag.Theater">
+            <option value="">Tất cả</option>
+        </select>
+
+        <button id="Search" class="btn btn-primary" style="margin-left: 2rem;">Lọc</button>
+    </div>
+
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        Phòng chiếu
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IdTheater)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="~/js/Screen.js"></script>
+
+}
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
