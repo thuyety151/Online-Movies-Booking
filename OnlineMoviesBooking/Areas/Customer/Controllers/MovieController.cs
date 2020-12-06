@@ -117,16 +117,53 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
 
             return View();
         }
-        [HttpPost]
-        public IActionResult SeatPlan(string idshow,string lstSeat)
+        [HttpGet]
+        public IActionResult getinfo(string idshow,string lstSeat)
         {
+            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
+            // Kiểm tra ID show hợp lêk
+            var show = Exec.ExecuteGetDetailShow(idshow);
+            List<string> lstseat = lstSeat.Split(' ').ToList();
+            if (show == null)
+            {
+                return Json(new {  success = false });
+            }
+            foreach (var item in lstseat.ToList())
+            {
+                if(item=="undefined"|| item == "")
+                {
+                    lstseat.Remove(item);
+                }
+            }
+            var seatVM = new List<Seat>();
+            foreach (var item in lstseat)
+            {
+                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow)); 
+            }
 
-            // KIEM TR ID SEAT HOP LE   
-            //KT ID SHOW HOP LE
-            return View();
+            foreach (var item in seatVM)
+            {
+                if ( item.Id== null)
+                {
+                    return Json(new { success = false });
+                }
+            }
+            
+            return Json( seatVM);
         }
-        public IActionResult Checkout()
+
+        public IActionResult Checkout( string idshow)
         {
+            if (idshow == null)
+            {
+                return NotFound();
+            }
+            var show = Exec.ExecuteGetDetailShow(idshow);
+            if (show == null)
+            {
+                return NotFound();
+            }
+
             return View();
         }
        // ============================ Json

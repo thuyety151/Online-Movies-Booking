@@ -827,6 +827,35 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 }
                 return lstSeat;
             }
+            
+        }
+        public Seat ExecCheckIdSeat(string idseat, string idshow)
+        {
+            // lấy seat và kiểm tra seat chưa đặt
+            var obj = new Seat();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdSeat", idseat);
+                com.Parameters.AddWithValue("@IdShow", idshow);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    obj= new Seat
+                    {
+                        Id = rdr["Id"].ToString(),
+                        IdTypesOfSeat = rdr["Id_TypesOfSeat"].ToString(),
+                        IdScreen = rdr["Id_Screen"].ToString(),
+                        Row = rdr["Row"].ToString(),
+                        No = int.Parse(rdr["No"].ToString())
+                    };
+                }
+                return obj;
+            }
         }
     }
 }

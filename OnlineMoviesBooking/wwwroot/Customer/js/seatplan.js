@@ -34,22 +34,39 @@
         });
 
         // thanh toasn
-        //var checkout = document.getElementById("submit");
-        //checkout.addEventListener("click", function () {
-        //    console.log($('#lstSeat').val());
-        //    $.ajax({
-        //        type: 'POST',
-        //        url: '/Customer/Movie/SeatPlan/',
-        //        data: {
-        //            "idshow": $('#idmovie').val(),
-        //            "lstSeat": $('#lstSeat').val(),
-        //        },
-        //        success: function (data) {
+        var checkout = document.getElementById("submit");
+        checkout.addEventListener("click", function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Customer/Movie/getinfo/',
+                
+                data: {
+                    "idshow": $('#idshow').val(),
+                    "lstSeat": $('#lstSeat').val(),
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.success);
+                    if (data.success == false) {
+                        console.log("ffffalse");
+                        alert("Hello! I am an alert box!");
+                    }
+                    else {
+                        console.log("id" + $('#idshow').val());
+                        //location.href = "/Customer/Movie/Checkout/" + $('#idshow').val();
+                        test('a');
+                        //var url = '@Url.Action("Checkout", "Movie", new { idshow="' + $('#idshow').val() + '" })';
+                        //location.href = url;
+                        window.location = '/Customer/Movie/Checkout/?idshow=' + $('#idshow').val();
+                    }
+                }
+            });
+        });
 
-        //        }
-        //    });
-        //});
-         
+        function test(url) {
+            console.log(url);
+        }
         var cost = 0;
         $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
         //get price

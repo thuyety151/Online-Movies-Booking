@@ -388,7 +388,8 @@
               $(this).attr("src", "/Customer/logo/seat01-free.png");
               var text = $('#choosed-seat').text().toString();
               $('#choosed-seat').text(text.replace(this.parentNode.name, ''));
-              $('#lstSeat').val($('#lstSeat').val().replace(this.parentNode.querySelector('input').value));
+              idseat = idseat.replace(this.parentNode.querySelector('input').value);
+              $('#lstSeat').val(idseat);
               console.log($('#lstSeat').val());
               var price = this.parentNode.name.toString();
 
