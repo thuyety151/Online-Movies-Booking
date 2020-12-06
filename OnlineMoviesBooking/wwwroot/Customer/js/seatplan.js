@@ -32,8 +32,24 @@
             
 
         });
-        
 
+        // thanh toasn
+        //var checkout = document.getElementById("submit");
+        //checkout.addEventListener("click", function () {
+        //    console.log($('#lstSeat').val());
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: '/Customer/Movie/SeatPlan/',
+        //        data: {
+        //            "idshow": $('#idmovie').val(),
+        //            "lstSeat": $('#lstSeat').val(),
+        //        },
+        //        success: function (data) {
+
+        //        }
+        //    });
+        //});
+         
         var cost = 0;
         $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
         //get price
@@ -58,7 +74,8 @@
                 //$('#choosed-seat').text(seat.name);
             });
         });
-        
 
     });
+
+    
 })(jQuery);

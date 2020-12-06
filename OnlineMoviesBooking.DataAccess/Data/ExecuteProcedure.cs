@@ -776,27 +776,28 @@ namespace OnlineMoviesBooking.DataAccess.Data
             _context.Database.ExecuteSqlRaw("EXEC USP_DeleteDiscount @Id " ,new SqlParameter("@Id", id));
         }
         //==========SEAT============
-        public List<Seat> ExecGetAllSeat(string idScreen)
+        public List<SeatViewModel> ExecGetAllSeat(string idShow)
         {
-            List<Seat> lstSeat = new List<Seat>();
+            List<SeatViewModel> lstSeat = new List<SeatViewModel>();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_GetAllSeatOdScreen", con);
+                SqlCommand com = new SqlCommand("USP_GetSeat", con);
                 com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@IdScreen", idScreen);
+                com.Parameters.AddWithValue("@IdShow", idShow);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())
                 {
-                    lstSeat.Add(new Seat
+                    lstSeat.Add(new SeatViewModel
                     {
                         Id = rdr["Id"].ToString(),
                         IdTypesOfSeat = rdr["Id_TypesOfSeat"].ToString(),
                         IdScreen = rdr["Id_Screen"].ToString(),
                         Row = rdr["Row"].ToString(),
-                        No = int.Parse(rdr["No"].ToString())
+                        No = int.Parse(rdr["No"].ToString()),
+                        Status=rdr["Status"].ToString()
                     });
 
                 }

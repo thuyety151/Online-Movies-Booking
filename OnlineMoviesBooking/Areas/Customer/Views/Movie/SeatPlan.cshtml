@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.Models.Bill;
+﻿@model OnlineMoviesBooking.Models.ViewModels.BillViewModel;
 @{
     ViewData["Title"] = "SeatPlan";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
@@ -9,9 +9,9 @@
         <div class="details-banner-wrapper">
             <div class="details-banner-content style-two">
                
-                <h3 class="title">ViewBag.MovieName</h3>
+                <h3 class="title">@ViewBag.MovieName</h3>
                 <div class="tags">
-                    <a>ViewBag.ScreenName</a>
+                    <a>@ViewBag.ScreenName</a>
                     <a>English - 2D</a>
                 </div>
             </div>
@@ -24,8 +24,8 @@
     <div class="container" style=" place-content: center; display: flex;">
         <div class="page-title-area">
             <div class="item">
-                <h5 class="date">ViewBag.TimeStart</h5>
-                <p style="padding: 0.5rem;">ViewBag.Date</p>
+                <h5 class="date">@ViewBag.TimeStart</h5>
+                <p style="padding: 0.5rem;">@ViewBag.Date</p>
             </div>
             
         </div>
@@ -34,13 +34,14 @@
 <!-- ==========Page-Title========== -->
 <!-- ==========Movie-Section========== -->
 <div class="seat-plan-section padding-bottom ">
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" >
         @Html.AntiForgeryToken()
         <div id="price" hidden>
             <input name="type-1" class="type-1" hidden />
             <input name="type-2" class="type-2" hidden />
             <input name="type_3" class="type-3" hidden />
-            <input asp-for="Model.IdShow" hidden/>
+            <input id="idmovie" value="@ViewBag.IdShow" hidden/>
+            <input id="lstSeat" asp-for="Model.IdSeat" hidden/>
         </div>
         <div class="container">
             <div class="screen-area">
@@ -56,56 +57,73 @@
                                 <span>A</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowA[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowA[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowA[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowA[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowA[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowA[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>A</span>
@@ -115,63 +133,76 @@
                         <li class="seat-line">
                             <ul class="seat--area">
                                 <span>B</span>
+
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowB[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowB[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f7</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f8</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowB[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowB[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f9</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f10</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f11</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowB[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowB[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>b</span>
@@ -186,58 +217,76 @@
                         <li class="seat-line">
                             <ul class="seat--area">
                                 <span>C</span>
+
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowC[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowC[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowC[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowC[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowC[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowC[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>C</span>
@@ -249,61 +298,73 @@
                                 <span>D</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowD[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="ViewBag.RowD[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowD[i].Status == "")
+                                            {
                                         <li class="single-seat seat-free">
+                                            <input asp-for="Modes.IdSeat" value="@ViewBag.RowD[i].Id" hidden />
                                             <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f7</span>
+                                            <span class="sit-num"></span>
                                         </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f8</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f9</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f10</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f11</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowD[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowD[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>D</span>
@@ -315,56 +376,73 @@
                                 <span>E</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowE[i].Status == "")
+                                            {
+                                        <li class="single-seat seat-free">
+                                            <input asp-for="Modes.IdSeat" value="@ViewBag.RowE[i].Id" hidden />
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num"></span>
                                         </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowE[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowE[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowE[i].Status == "")
+                                            {
+                                        <li class="single-seat seat-free">
+                                            <input asp-for="Modes.IdSeat" value="@ViewBag.RowE[i].Id" hidden />
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num"></span>
                                         </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>E</span>
@@ -376,61 +454,74 @@
                                 <span>F</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            @if (ViewBag.RowF[i].Status == "")
+                                            {
+                                        <li class="single-seat seat-free">
+                                            <input asp-for="Modes.IdSeat" value="@ViewBag.RowF[i].Id" hidden />
+                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                            <span class="sit-num"></span>
                                         </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
+
+
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f7</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f8</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                        @for (int i = 4; i < 10; i++)
+                                        {
+                                            @if (ViewBag.RowF[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowF[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
+                                        @for (int i = 10; i < 14; i++)
+                                        {
+                                            @if (ViewBag.RowF[i].Status == "")
+                                            {
                                         <li class="single-seat seat-free">
+                                            <input asp-for="Modes.IdSeat" value="@ViewBag.RowF[i].Id" hidden />
                                             <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f9</span>
+                                            <span class="sit-num"></span>
                                         </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f10</span>
-                                        </li>
-                                        <li class="single-seat seat-free">
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num">f11</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat01.png" alt="seat">
-                                        </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat01.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>F</span>
@@ -448,36 +539,73 @@
                                 <span>G</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
+                                        @for (int i = 0; i < 2; i++)
+                                        {
+                                            @if (ViewBag.RowG[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowG[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">b7 b8</span>
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
+                                        @for (int i = 2; i < 5; i++)
+                                        {
+                                            @if (ViewBag.RowG[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowG[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
-                                        <li class="single-seat">
-                                            <img src="~/Customer/logo/seat02.png" alt="seat">
-                                        </li>
+                                        @for (int i = 5; i < 7; i++)
+                                        {
+                                            @if (ViewBag.RowG[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowG[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>G</span>
@@ -490,42 +618,74 @@
                                 <span>H</span>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a1 a2</span>
-                                        </li>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a3 a4</span>
-                                        </li>
+                                        @for (int i = 0; i < 2; i++)
+                                        {
+                                            @if (ViewBag.RowH[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowH[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a5 a6</span>
-                                        </li>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a7 a8</span>
-                                        </li>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a9 a10</span>
-                                        </li>
+                                        @for (int i = 2; i < 5; i++)
+                                        {
+                                            @if (ViewBag.RowH[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowH[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <li class="front-seat">
                                     <ul>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a11</span>
-                                        </li>
-                                        <li class="single-seat seat-free-two">
-                                            <img src="~/Customer/logo/seat02-free.png" alt="seat">
-                                            <span class="sit-num">a12</span>
-                                        </li>
+                                        @for (int i = 5; i < 7; i++)
+                                        {
+                                            @if (ViewBag.RowH[i].Status == "")
+                                            {
+                                                <li class="single-seat seat-free-two">
+                                                    <input asp-for="Modes.IdSeat" value="@ViewBag.RowH[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat02-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="single-seat">
+
+                                                    <img src="~/Customer/logo/seat02.png" alt="seat">
+                                                    <input asp-for="IdSeat" hidden />
+                                                </li>
+                                            }
+
+                                        }
                                     </ul>
                                 </li>
                                 <span>H</span>
@@ -546,7 +706,7 @@
                         <h3 class="title" id="total-price">0 </h3>
                     </div>
                     <div class="book-item">
-                        <input type="submit"  class="custom-button" value="Thanh toán"/>
+                        <a id="submit" class="custom-button">Thanh toán</a>
                     </div>
                 </div>
             </div>

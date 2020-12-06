@@ -94,23 +94,42 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
             var plan = Exec.ExecuteGetDetailShow(id);
+            if (plan == null)
+            {
+                return NotFound();
+            }
+            ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
             ViewBag.ScreenName = plan.ScreenName;
             ViewBag.TheaterName = plan.TheaterName;
             ViewBag.TimeStart = plan.TimeStart.ToString("HH:mm");
             ViewBag.Date = plan.TimeStart.ToString("dd/mm/yyyy");
 
-            var allseat = Exec.ExecGetAllSeat(plan.IdScreen);
-            var seatchoosed = Exec.ExecGetChoosedSeat(plan.Id, plan.IdScreen);
-            return View(plan);
+            var allseat = Exec.ExecGetAllSeat(plan.Id);
+            ViewBag.RowA = allseat.Where(x => x.Row == "A").ToList();
+            ViewBag.RowB = allseat.Where(x => x.Row == "B").ToList();
+            ViewBag.RowC = allseat.Where(x => x.Row == "C").ToList();
+            ViewBag.RowD = allseat.Where(x => x.Row == "D").ToList();
+            ViewBag.RowE = allseat.Where(x => x.Row == "E").ToList();
+            ViewBag.RowF = allseat.Where(x => x.Row == "F").ToList();
+            ViewBag.RowG = allseat.Where(x => x.Row == "G").ToList();
+            ViewBag.RowH = allseat.Where(x => x.Row == "H").ToList();
+
+            return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SeatPlan(string idshow, string idscreen, string idmovie,string type_3)
+        public IActionResult SeatPlan(string idshow,string lstSeat)
+        {
+
+            // KIEM TR ID SEAT HOP LE   
+            //KT ID SHOW HOP LE
+            return View();
+        }
+        public IActionResult Checkout()
         {
             return View();
         }
-        //============================ Json
+       // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
             if(date==null)
