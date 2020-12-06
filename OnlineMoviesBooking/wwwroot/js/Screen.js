@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     $('#dataTable').DataTable({
         "ajax": {
-            "url": '/Screens/getall'
+            "url": '/Admin/Screens/getall'
         },
         "columns": [
             { "data": "name" },
@@ -13,12 +13,12 @@ $(document).ready(function () {
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                <a href="/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
                                     Detail</a>
-                                <a onClick=Delete("/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
                                     Delete</a>
                             </div>                           
                             `
@@ -42,7 +42,7 @@ $('#Search').click(function () {
     table.destroy();
     $('#dataTable').DataTable({
         "ajax": {
-            "url": "/Screens/Search/" + value,
+            "url": "/Admin/Screens/Search/" + value,
         },
         "columns": [
             { "data": "name" },
@@ -52,12 +52,12 @@ $('#Search').click(function () {
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                <a href="/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
                                     Detail</a>
-                                <a onClick=Delete("/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
                                     Delete</a>
                             </div>                           
                             `

@@ -4,7 +4,7 @@
     $('#screen').select2({
         ajax: {
             method: 'GET',
-            url: '/Shows/GetScreen/' + val,
+            url: '/Admin/Shows/GetScreen/' + val,
             processResults: function (data) {
                 return {
                     results: data.items
@@ -18,14 +18,14 @@
         var value = $('#theater').val();
         $.ajax({
             method: 'get',
-            url: '/shows/getscreen/' + value,
+            url: '/Admin/shows/getscreen/' + value,
             success: function (data) {
                 //console.log(data);
                 //$('#screen').append('<option value="' + data.id + '">' + data.name + '</option>');
                 $('#screen').select2({
                     ajax: {
                         method: 'GET',
-                        url: '/Shows/GetScreen/' + value,
+                        url: '/Admin/Shows/GetScreen/' + value,
                         processResults: function (data) {
                             return {
                                 results: data.items

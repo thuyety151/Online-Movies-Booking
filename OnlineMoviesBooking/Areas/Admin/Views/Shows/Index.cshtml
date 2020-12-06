@@ -1,0 +1,194 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Show>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron" style="padding: 1rem;">
+    <h4>Rạp</h4>
+    <hr />
+    <div style="display: flex;">
+        <select id="select" class="form-control col-md-6" asp-items="ViewBag.Theater">
+            <option value="">Tất cả</option>
+        </select>
+
+        <button id="Search" class="btn btn-primary" style="margin-left: 2rem;">Lọc</button>
+    </div>
+
+</div>
+<p>
+    <a asp-action="Create">Thêm lịch chiếu</a>
+</p>
+<div class="card shadow mb-4 ">
+    <div class="card-header py-3">
+        Lịch chiếu phim
+    </div> 
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tên phim</th>
+                        <th>Poster</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Phòng chiếu</th>
+                        <th>Rạp chiếu phim</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
+
+@section Scripts{
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        $('#dataTable').DataTable({
+            "ajax": {
+                "url": '/Admin/shows/getall'
+            },
+            "columns": [
+                { "data": "movieName" },
+                {
+                    "data": "poster",
+                    "render": function (data) {
+                        return `
+                            <img src="${data}" style="width: 150px;"/>
+                        `;
+                    }
+                },
+                { "data": "timeStart" },
+                { "data": "screenName" },
+                { "data": "theaterName" },
+
+                {
+                    "data": "id",
+                    "render": function (data) {
+                        return `
+                             <div class="text-center" style="display:grid" >
+                                <a href="/Admin/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Edit
+                                </a>
+                                 <a href="/Admin/Shows/Details/${data}"
+                                    class="btn btn-success" style="font-size:small">Details</a> 
+                                </a>
+                                <a onClick=Delete("/Admin/Shows/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Delete</a>
+                            </div>                           
+                            `
+                    }
+                }
+            ]
+        });
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+        function Delete(url) {
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                swalWithBootstrapButtons.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                );
+                                $('#dataTable').DataTable().ajax.reload();
+                            }
+                            else {
+                                swalWithBootstrapButtons.fire(
+                                    'Error',
+                                    'Can not delete this, maybe it not exit or error from sever',
+                                    'error'
+                                )
+                            }
+                        }
+
+                    })
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
+        $('#Search').click(function () {
+            var value = $('#select').val();
+            var table = $('#dataTable').DataTable();
+            //ajax.load(url,data,callback)
+            table.clear();
+            table.destroy();
+            $('#dataTable').DataTable({
+                "ajax": {
+                    "url": "/Admin/Shows/Search/" + value,
+                },
+                "columns": [
+                    { "data": "movieName" },
+                    {
+                        "data": "poster",
+                        "render": function (data) {
+                            return `
+                            <img src="${data}" style="width: 150px;"/>
+                        `;
+                        }
+                    },
+                    { "data": "timeStart" },
+                    { "data": "screenName" },
+                    { "data": "theaterName" },
+
+                    {
+                        "data": "id",
+                        "render": function (data) {
+                            return `
+                             <div class="text-center" style="display:grid" >
+                                <a href="/Admin/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Edit
+                                </a>
+                                 <a href="/Admin/Shows/Details/${data}"
+                                    class="btn btn-success" style="font-size:small">Details</a> 
+                                </a>
+                                <a onClick=Delete("/Admin/Shows/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Delete</a>
+                            </div>                           
+                            `
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

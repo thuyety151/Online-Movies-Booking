@@ -1,0 +1,98 @@
+﻿@model OnlineMoviesBooking.Models.Models.Movie
+
+@{ 
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Id != "")
+{
+    <h1 class="row justify-content-center">Chỉnh sửa phim</h1>
+}
+else
+{
+    <h1 class="row justify-content-center">Thêm phim</h1>
+}
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <form asp-action="Upsert" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genre" class="control-label"></label>
+                <textarea asp-for="Genre" class="form-control"></textarea>
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director" class="control-label"></label>
+                <textarea asp-for="Director" class="form-control"></textarea>
+                <span asp-validation-for="Director" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Casts" class="control-label"></label>
+                <textarea asp-for="Casts" class="form-control"></textarea>
+                <span asp-validation-for="Casts" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Trailer" class="control-label"></label>
+                <textarea asp-for="Trailer" class="form-control"></textarea>
+                <p class="text-info">Link embed trên youtube  (VD:https://www.youtube.com/embed/DWYwmTdXpqw)</p>
+                <span asp-validation-for="Trailer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Poster" class="control-label"></label>
+                <input  type="file" name="files" accept="image/*" class="form-control-file" />
+                @if (ViewBag.Id != "")
+                {
+                    <img width="560" src="@Model.Poster" />
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RunningTime" class="control-label"></label>
+                <input asp-for="RunningTime" class="form-control" />
+                <span asp-validation-for="RunningTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Rated" class="control-label"></label>
+                <input asp-for="Rated" class="form-control" />
+                <span asp-validation-for="Rated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (ViewBag.Id == "")
+                {
+                    <button type="submit" class="btn btn-primary">Tạo</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                }
+
+            </div>
+        </form>
+        <p>
+            <a asp-action="Index">Trở lại</a>
+        </p>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

@@ -1,0 +1,34 @@
+﻿@model OnlineMoviesBooking.Models.Models.Screen
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h4  class="row justify-content-center">Chi tiết phòng chiếu</h4>
+<hr/>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="jumbotron">
+                <h1 class="display-3">Sơ đồ rạp!</h1>
+                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                <hr class="my-4">
+                <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                </p>
+            </div>
+            <div class="form-group">
+                <a asp-action="Index">Trở về</a>
+            </div>
+        </form>
+    </div>
+</div>
+
