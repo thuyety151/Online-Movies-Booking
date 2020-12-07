@@ -13,8 +13,6 @@
         //const btntheaters = btnT.querySelectorAll('.button');
 
         $('#date-hidden').val(btnDates[0].text);
-        //btnDates[0].classList.toggle('clickcolor');
-        //$('#theater-hidden').val(btntheaters[0].getAttribute('data-value'));    
 
         $.ajax({
             type: 'GET',
@@ -44,8 +42,7 @@
                             '<i class="fas fa-map-marker-alt"></i></div></div><div class="movie-schedule">';
 
                         $.each(value.times, function (index, time) {
-                            div = div + '<div class="details-banner-content"><a class="button" style="color: #ffffff;padding: 0.2 1rem;">'
-                                + '<a data-id="' + time.id + 'href = "/customer/movie/seatplan/' + time.id + '"' + time.times + '</a></div > ';
+                            div = div + '<div class="details-banner-content"><a class="button" data-id="' + time.id + '" href="/customer/movie/seatplan/' + time.id + '" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
                         })
                         div = div + '</div ></li>';
                         $('#shows-date').append(div);

@@ -36,6 +36,10 @@
         // thanh toasn
         var checkout = document.getElementById("submit");
         checkout.addEventListener("click", function () {
+            console.log($('#lstSeat').val());
+            if ($('#lstSeat').val() == "") {
+                alert("Vui lòng chọn vị trí ngồi");
+            }
             $.ajax({
                 type: 'GET',
                 url: '/Customer/Movie/getinfo/',
@@ -47,26 +51,25 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
-                    console.log(data.success);
                     if (data.success == false) {
-                        console.log("ffffalse");
                         alert("Hello! I am an alert box!");
                     }
                     else {
-                        console.log("id" + $('#idshow').val());
-                        //location.href = "/Customer/Movie/Checkout/" + $('#idshow').val();
-                        test('a');
-                        //var url = '@Url.Action("Checkout", "Movie", new { idshow="' + $('#idshow').val() + '" })';
-                        //location.href = url;
-                        window.location = '/Customer/Movie/Checkout/?idshow=' + $('#idshow').val();
+                        $("#Checkout").modal();
+                        var vnd = data.totalprice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                        
+                        $("#Checkout").find('#modal-movie').text(data.movieName);
+                        $("#Checkout").find('#modal-languages').text(data.languages);
+                        $("#Checkout").find('#modal-time').text(data.datestart + ' ' + data.timestart);
+                        $("#Checkout").find('#modal-total').text(vnd);
+                        $("#Checkout").find('#modal-count').text(data.seats.length);
+                        $("#Checkout").find('#modal-theater').text(data.theatername);
                     }
                 }
             });
         });
 
-        function test(url) {
-            console.log(url);
-        }
+        
         var cost = 0;
         $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
         //get price

@@ -125,12 +125,20 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
             {
                 return Json(new {  success = false });
             }
+            if (lstSeat == " undefined")
+            {
+                return Json(new { success = false });
+            }
             foreach (var item in lstseat.ToList())
             {
-                if(item=="undefined"|| item == "")
+                if(item== "undefined" || item == "")
                 {
                     lstseat.Remove(item);
                 }
+            }
+            if (lstseat.Count == 0)
+            {
+                return Json(new { success = false });
             }
             var seatVM = new List<Seat>();
             foreach (var item in lstseat)
@@ -146,24 +154,29 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 }
             }
 
-            var money = Exec.FGetPrice("1212121");
-            //var bill = new
-            //{
-            //    idShow = idshow,
-            //    movieName,  // movie
-            //    seats,      
-            //    theatername //theater
-            //    screenname, //screen
-            //    datetimestart,  //show
-            //    totalprice, //seat
-            //    languages   
+            var totalPrice = 0;
+            foreach (var item in seatVM)
+            {
+                totalPrice+= Exec.FGetPrice(item.Id);
+            }
 
+            var bill = new
+            {
+                idShow = idshow,
+                movieName=show.MovieName,  // movie
+                seats=seatVM,
+                theatername=show.TheaterName, //theater -- show.TheaterName
+                screenname=show.ScreenName, //screen
+                datestart=show.TimeStart.ToString("dd-MM-yyyy"),  //show    --
+                timestart=show.TimeStart.ToString("HH:mm"),  //show    --
+                totalprice=totalPrice, //seat    --
+                languages=show.Languages
 
-            //};
-            return Json( seatVM);
+            };
+            return Json( bill);
         }
 
-        public IActionResult Checkout( string idshow)
+        public IActionResult Checkout( string idshow,string bill)
         {
             if (idshow == null)
             {

@@ -436,11 +436,11 @@
             // thay doi css
             $(this).attr("src", "/Customer/logo/seat02-free.png");
             // tim ten ghe
-            var span = (this.parentNode).querySelector('.sit-num');
 
             $('#choosed-seat').text(text.replace(this.parentNode.name.toString(), ''));
-            var price = this.parentNode.name.toString();
-            $('#lstSeat').val($('#lstSeat').val().replace(this.parentNode.querySelector('input').value));
+            
+            idseat = idseat.replace(this.parentNode.querySelector('input').value);
+            $('#lstSeat').val(idseat);
             console.log($('#lstSeat').val());
             cost = parseFloat(cost) - parseFloat($('.type-3').val());
 

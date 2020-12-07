@@ -3,6 +3,7 @@
     ViewData["Title"] = "SeatPlan";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
 }
+
 <!-- ==========Banner-Section========== -->
 <section class="details-banner hero-area bg_img seat-plan-banner" data-background="./assets/images/banner/banner04.jpg" style="background-image: url(&quot;./assets/images/banner/banner04.jpg&quot;);">
     <div class="container">
@@ -706,14 +707,47 @@
                         <h3 class="title" id="total-price">0 </h3>
                     </div>
                     <div class="book-item">
-                        <a id="submit" class="custom-button">Thanh toán</a>
-                    </div>
+                        <a id="submit"  class="custom-button">Thanh toán</a>
+                    </div> 
                 </div>
             </div>
         </div>
     </form>
 </div>
 <!-- ==========Movie-Section========== -->
+<!-- ===========Popup checkout========-->
+<div class="modal fade" id="Checkout">
+    <div class="modal-dialog col-lg-6 " role="document">
+        <div>
+            <div class="booking-summery bg-one">
+                <h4 class="title">chi tiết đơn</h4>
+                <ul>
+                    <li>
+                        <h6 id="modal-movie" class="subtitle"></h6>
+                        <span id="modal-languages" class="info">English-2d</span>
+                    </li>
+                    <li>
+                        <h6 id="modal-theater" class="subtitle"><span>City Walk</span><span id="modal-count">02</span></h6>
+                        <div id="modal-time" class="info"><span>10 SEP TUE, 11:00 PM</span> <span>Tickets</span></div>
+                    </li>
+                    <li>
+                        <h6 class="subtitle mb-0"><span>giá vé</span><span id="modal-total">$150</span></h6>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <span class="info"><span>price</span><span>$207</span></span>
+                        <span class="info"><span>vat</span><span>$15</span></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="proceed-area  text-center">
+                <h6  class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
+                <a class="custom-button back-button">Thanh toán</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
 
