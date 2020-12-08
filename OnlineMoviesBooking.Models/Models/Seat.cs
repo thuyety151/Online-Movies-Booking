@@ -11,9 +11,10 @@ namespace OnlineMoviesBooking.Models.Models
         }
 
         public string Id { get; set; }
-        public string Name { get; set; }
         public string IdTypesOfSeat { get; set; }
         public string IdScreen { get; set; }
+        public string Row { get; set; }
+        public int No { get; set; }
 
         public virtual Screen IdScreenNavigation { get; set; }
         public virtual TypesOfSeat IdTypesOfSeatNavigation { get; set; }

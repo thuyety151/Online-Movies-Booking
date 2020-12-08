@@ -72,7 +72,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -89,12 +89,6 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasColumnName("SDT")
                     .HasMaxLength(15)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.IdTypeOfMemberNavigation)
-                    .WithMany(p => p.Account)
-                    .HasForeignKey(d => d.IdTypeOfMember)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("FK_TypeMemberOfAccount");
 
                 entity.HasOne(d => d.IdTypesOfUserNavigation)
                     .WithMany(p => p.Account)
@@ -162,7 +156,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.ImageDiscount)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -177,14 +171,14 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Casts)
-                    .IsRequired()
-                    .HasMaxLength(1000);
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Description).HasMaxLength(1000);
 
                 entity.Property(e => e.Director)
-                    .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Genre)
                     .IsRequired()
@@ -233,8 +227,7 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdAccountNavigation)
                     .WithMany(p => p.Qa)
                     .HasForeignKey(d => d.IdAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QA_Account");
+                    .HasConstraintName("FK_QaToAccount");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -319,10 +312,11 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Row)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Seat)
