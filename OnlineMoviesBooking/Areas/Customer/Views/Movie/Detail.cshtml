@@ -1,0 +1,138 @@
+﻿@model OnlineMoviesBooking.Models.Models.Movie
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- ==========Preloader========== -->
+<div class="preloader" style="display: none;">
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ==========Banner-Section========== -->
+<section class="details-banner bg_img" data-background="./assets/images/banner/banner03.jpg"
+         style="background-image: url(&quot;./assets/images/banner/banner03.jpg&quot;);">
+
+        <div class="container">
+            <div class="details-banner-wrapper">
+                <div class="details-banner-thumb">
+                    <img src="@Model.Poster" alt="movie">
+                    
+                </div>
+                <div class="details-banner-content offset-lg-3">
+                    <h3 class="title">@Model.Name</h3>
+                    <div class="tags">
+                        <a href="http://pixner.net/boleto/demo/movie-details.html#0">English</a>
+                        <a href="http://pixner.net/boleto/demo/movie-details.html#0">Hindi</a>
+                        <a href="http://pixner.net/boleto/demo/movie-details.html#0">Telegu</a>
+                        <a href="http://pixner.net/boleto/demo/movie-details.html#0">Tamil</a>
+                    </div>
+                    <div class="social-and-duration">
+                        <div class="duration-area">
+                            <div class="item">
+                                <i class="fas fa-calendar-alt"></i><span>@Model.ReleaseDate.ToLongDateString()</span>
+                            </div>
+                            <div class="item">
+                                <i class="far fa-clock"></i><span>@Model.ReleaseDate.ToLongTimeString()</span>
+                            </div>
+                        </div>
+                        <ul class="social-share">
+                            <li><a href="http://pixner.net/boleto/demo/movie-details.html#0"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="http://pixner.net/boleto/demo/movie-details.html#0"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="http://pixner.net/boleto/demo/movie-details.html#0"><i class="fab fa-pinterest-p"></i></a></li>
+                            <li><a href="http://pixner.net/boleto/demo/movie-details.html#0"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li><a href="http://pixner.net/boleto/demo/movie-details.html#0"><i class="fab fa-google-plus-g"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</section>
+<!-- ==========Banner-Section========== -->
+<!-- ==========Book-Section========== -->
+<section class="book-section bg-one">
+    <div class="container">
+        <div class="book-wrapper offset-lg-3">
+            <div class="left-side">
+                <div class="item">
+                    <div class="item-header">
+                        <div class="thumb">
+                            <img src="~/Customer/logo/cake2.png" alt="movie">
+                        </div>
+                        <div class="counter-area">
+                            <span class="counter-item odometer odometer-auto-theme" data-odometer-final="88"><div class="odometer-inside"><span class="odometer-digit"><span class="odometer-digit-spacer">8</span><span class="odometer-digit-inner"><span class="odometer-ribbon"><span class="odometer-ribbon-inner"><span class="odometer-value">8</span></span></span></span></span><span class="odometer-digit"><span class="odometer-digit-spacer">8</span><span class="odometer-digit-inner"><span class="odometer-ribbon"><span class="odometer-ribbon-inner"><span class="odometer-value">8</span></span></span></span></span></div></span>
+                        </div>
+                    </div>
+                    <p>audience Score</p>
+                </div>
+                <div class="item">
+                    <div class="item-header">
+                        <h5 class="title">4.5</h5>
+                        <div class="rated">
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    <p>Users Rating</p>
+                </div>
+                
+            </div>
+            <a href="/Customer/Movie/ShowsDetail/@Model.Id" class="custom-button">đặt vé</a>
+        </div>
+    </div>
+</section>
+<!-- ==========Book-Section========== -->
+<!-- ==========Preloader========== -->
+<!-- ==========Movie-Section========== -->
+<section class="movie-details-section padding-top padding-bottom">
+    <div class="container">
+        <div class="row justify-content-center flex-wrap-reverse mb--50">
+
+            <div class="col-lg-9 mb-50">
+                <div class="movie-details">
+                    
+                    <div class="tab summery-review">
+                        <ul class="tab-menu" style="justify-content: center;">
+                            <li class="active" >
+                                <a  style="color:white;">giới thiệu</a>
+                            </li>
+                        </ul>
+                        <div class="tab-area">
+                            <div class="tab-item active" id="info">
+                                <div class="item">
+                                    <h5 class="sub-title">thông tin chung</h5>
+                                    <div class="content">
+                                        <p>Đạo diễn : @Model.Director</p>
+                                        <p>Ngày khởi chiếu : @Model.ReleaseDate</p>
+                                        <p>Diễn viên : @Model.Casts</p>
+                                        <p>Thời lượng : @Model.RunningTime</p>
+                                        <p>Qui định : @Model.Rated</p>
+                                    </div>
+                                </div>
+                                <div id="content" class="item">
+                                    <h5 class="sub-title">Nội dung</h5>
+                                    <p>@Model.Description</p>
+                                </div>
+                                <div id="trailer" class="item">
+                                    <h5 class="sub-title">Trailer</h5>
+                                    <iframe width="560" height="315" src="@Model.Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ==========Movie-Section========== -->

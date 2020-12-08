@@ -13,6 +13,7 @@ namespace OnlineMoviesBooking.Models.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public int Cost { get; set; }
+        public int? Num { get; set; }
 
         public virtual ICollection<Seat> Seat { get; set; }
     }

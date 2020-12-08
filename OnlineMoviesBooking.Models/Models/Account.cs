@@ -22,6 +22,7 @@ namespace OnlineMoviesBooking.Models.Models
         public string Password { get; set; }
         public int Point { get; set; }
         public string IdTypesOfUser { get; set; }
+        public string IdTypeOfMember { get; set; }
         public string Image { get; set; }
 
         public virtual TypesOfAccount IdTypesOfUserNavigation { get; set; }

@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/styles.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <!-- Select 2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    @RenderSection("Header", required: false)
+    
 </head>
 <body class="sb-nav-fixed">
-     <nav class="sb-topnav navbar navbar-expand navbar-dark" style="opacity:0.8;background-color:indigo">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark" style="opacity:0.8;background-color:indigo">
         <a href="/DashBoard/DashBoard" class="navbar-brand" style="text-align:left">
             Manager
         </a>
@@ -29,14 +29,14 @@
                     <a class="dropdown-item" href="#">Settings</a>
                     <a class="dropdown-item" href="#">Activity Log</a>
                     <div class="dropdown-divider"></div>
-                   <a class="dropdown-item" href="/Login/Login">Logout</a>
+                    <a class="dropdown-item" href="/Login/Login">Logout</a>
                 </div>
             </li>
         </ul>
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-             <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion" style="opacity:0.95">
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion" style="opacity:0.95">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
 
@@ -46,36 +46,42 @@
                             </div>
                             Dashboard
                         </a>
-                         <a class="nav-link" href="/TaiKhoanUsers/Index">
+                        <a class="nav-link" href="/TaiKhoanUsers/Index">
                             <div>
                                 <img src="~/assets/img/users_21942.png" alt="user account manager" style="width:20px;margin-right:0.5rem;" />
                             </div>
                             Quản lý tài khoản
                         </a>
-                        <a class="nav-link" href="~/index.html">
+                        <a class="nav-link" href="/Movies/Index">
                             <div class="sb-nav-link-icon">
                                 <img src="/assets/img/fullfilmroll_5226.png" alt="film manager" style="width:20px;margin-right:0.5rem;" />
                             </div>
                             Quản lý phim
                         </a>
-                        <a class="nav-link" href="~/index.html">
+                        <a class="nav-link" href="/Theaters/Index">
                             <div class="sb-nav-link-icon">
                                 <img src="/assets/img/window_121576.png" alt="theater manager" style="width:20px;margin-right:0.5rem;" />
                             </div>
                             Quản lý rạp
                         </a>
-                        <a class="nav-link" href="~/index.html">
+                        <!-- Y thêm quản lí lịch chiếu-->
+                        <a class="nav-link" href="/Shows/Index">
+                            <div class="sb-nav-link-icon">
+                                <img src="/assets/img/window_121576.png" alt="theater manager" style="width:20px;margin-right:0.5rem;" />
+                            </div>
+                            Quản lý lịch chiếu
+                        </a>
+                        <a class="nav-link" href="/Screens/Index">
                             <div class="sb-nav-link-icon">
                                 <img src="/assets/img/performance-theater.png" alt="cinema room" style="width:20px;margin-right:0.5rem;" />
                             </div>
                             Quản lý phòng chiếu
                         </a>
-                        <a class="nav-link" href="~/index.html">
-                            <div class="sb-nav-link-icon">
-                                <img src="/assets/img/wondicon-ui-free-calender_111212.png" alt="show calender manager" style="width:20px;margin-right:0.5rem;" />
-                            </div>
-                            Quản lý lịch chiếu
-                        </a>
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/TypesOfSeats/Index">
+                                <img src="~/assets/img/4301474cinemadessertfastfoodfilmfoodpopcornsweet-115954_115888.png" alt="corn" style="width:20px;margin-right:0.5rem;" /> Quản lí loại ghế
+                            </a>
+                        </nav>
                         <a class="nav-link" href="/TaiKhoanMembers/Index">
                             <div class="sb-nav-link-icon">
                                 <img src="/assets/img/3592853-align-employee-general-human-human-list-list-member_107786.png" alt="member manager" style="width:20px;margin-right:0.5rem;" />
@@ -94,7 +100,7 @@
                                 <a class="nav-link" href="#">
                                     <img src="~/assets/img/4301474cinemadessertfastfoodfilmfoodpopcornsweet-115954_115888.png" alt="corn" style="width:20px;margin-right:0.5rem;" /> Thức ăn nhanh
                                 </a>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="/Discounts/Index">
                                     <img src="~/assets/img/gift_icon-icons.com_48294.png" alt="gift" style="width:20px;margin-right:0.5rem;" /> Sự kiện
                                 </a>
                                 <a class="nav-link" href="#">
@@ -114,21 +120,28 @@
             </main>
         </div>
     </div>
+    <!-- Bootstrap core JavaScript-->
+    @*<script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/jquery/jquery.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <!--<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>-->
+
     <script src="~/jquery/jquery.js"></script>
+    <script src="~/js/scripts.js"></script>
+    <script src="~/js/sb-admin-2.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
     <script src="~/assets/demo/chart-area-demo.js"></script>
     <script src="~/assets/demo/chart-bar-demo.js"></script>
     <script src="~/assets/demo/chart-pie-demo.js"></script>
     @RenderSection("Scripts", required: false);
-    <script src="js/scripts.js"></script>
 </body>
 
 </html>
-@section Scripts{ 
-
-}

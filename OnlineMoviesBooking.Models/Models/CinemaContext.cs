@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.SqlServer;
-
 
 namespace OnlineMoviesBooking.Models.Models
 {
@@ -28,6 +26,7 @@ namespace OnlineMoviesBooking.Models.Models
         public virtual DbSet<Seat> Seat { get; set; }
         public virtual DbSet<Show> Show { get; set; }
         public virtual DbSet<Theater> Theater { get; set; }
+        public virtual DbSet<TypeOfMember> TypeOfMember { get; set; }
         public virtual DbSet<TypesOfAccount> TypesOfAccount { get; set; }
         public virtual DbSet<TypesOfSeat> TypesOfSeat { get; set; }
         public virtual DbSet<UseDiscount> UseDiscount { get; set; }
@@ -61,6 +60,11 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IdTypeOfMember)
+                    .HasColumnName("Id_TypeOfMember")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.IdTypesOfUser)
                     .IsRequired()
                     .HasColumnName("Id_TypesOfUser")
@@ -68,7 +72,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Image)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -152,7 +156,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.ImageDiscount)
-                    .HasMaxLength(50)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -167,16 +171,14 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Casts)
-                    .IsRequired()
-                    .HasMaxLength(1000);
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Description).HasMaxLength(1000);
 
                 entity.Property(e => e.Director)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Genre)
                     .IsRequired()
@@ -225,8 +227,7 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdAccountNavigation)
                     .WithMany(p => p.Qa)
                     .HasForeignKey(d => d.IdAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QA_Account");
+                    .HasConstraintName("FK_QaToAccount");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -290,7 +291,6 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdTheaterNavigation)
                     .WithMany(p => p.Screen)
                     .HasForeignKey(d => d.IdTheater)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Screen_Theater");
             });
 
@@ -312,10 +312,11 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Row)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Seat)
@@ -359,18 +360,24 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdMovieNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdMovie)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Movie");
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Show)
                     .HasForeignKey(d => d.IdScreen)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Show_Screen");
             });
 
             modelBuilder.Entity<Theater>(entity =>
             {
+                entity.HasIndex(e => e.Address)
+                    .HasName("U_Address")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("U_Theater")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(10)
                     .IsUnicode(false);
@@ -389,6 +396,21 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(20);
             });
 
+            modelBuilder.Entity<TypeOfMember>(entity =>
+            {
+                entity.HasKey(e => e.IdTypeMember);
+
+                entity.Property(e => e.IdTypeMember)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Content).HasMaxLength(1000);
+
+                entity.Property(e => e.TypeOfMemberName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TypesOfAccount>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -403,6 +425,10 @@ namespace OnlineMoviesBooking.Models.Models
 
             modelBuilder.Entity<TypesOfSeat>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("U_TypesOfSeat")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(10)
                     .IsUnicode(false);

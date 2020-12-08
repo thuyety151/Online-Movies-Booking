@@ -19,7 +19,6 @@ namespace OnlineMoviesBooking.Models.Models
         public string Description { get; set; }
         public string Trailer { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
         public int RunningTime { get; set; }
         public string Poster { get; set; }
 

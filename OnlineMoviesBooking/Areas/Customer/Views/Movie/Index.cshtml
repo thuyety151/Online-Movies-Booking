@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
+}
+<div class="load-list">
+
+</div>
+<div class="card-footer">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" id="load-pagination">
+        </ul>
+    </nav>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            //function load pagination
+            var load = function (page) {
+                $.ajax({
+                    url: '/Customer/movie/getAllPost)',
+                    type: "GET",
+                    data: { page: page },
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (result) {
+                        console.log(result);
+                        var str = "";
+                        $.each(result.data, function (index, value) {
+
+                            ////convert date to string
+                            //var dateCreated = value.Created_at;
+                            //var dateCreated_string = new Date(parseInt(dateCreated.replace("/Date(", "").replace(")/", ""), 10));
+                            //var created_at = dateCreated_string.getFullYear() + "/" + dateCreated_string.getMonth() + "/" + dateCreated_string.getDate();
+
+                            //var dateUpdated = value.Updated_at;
+                            //var dateUpdated_string = new Date(parseInt(dateUpdated.replace("/Date(", "").replace(")/", ""), 10));
+                            //var Updated_at = dateUpdated_string.getFullYear() + "/" + dateUpdated_string.getMonth() + "/" + dateUpdated_string.getDate();
+                            ////
+
+                            //create list post
+                            str += "<a>" + (value.Id) + "</a>";
+
+                            //create pagination
+                            var pagination_string = "";
+                            var pageCurrent = result.pageCurrent;
+                            var numSize = result.numSize;
+
+                            //create button previous
+                            if (pageCurrent > 1) {
+                                var pagePrevious = pageCurrent - 1;
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                            }
+
+                            for (i = 1; i <= numSize; i++) {
+                                if (i == pageCurrent) {
+                                    pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                                } else {
+                                    pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                                }
+                            }
+
+                            //create button next
+                            if (pageCurrent > 0 && pageCurrent < numSize) {
+                                var pageNext = pageCurrent + 1;
+                                pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                            }
+
+                            //load pagination
+                            $("#load-pagination").html(pagination_string);
+                        });
+
+                        //load str to class="load-list"
+                        $(".load-list").html(str);
+                    }
+                });
+            }
+
+            //load init
+            load(null, 1);
+        });
+
+    </script>
+}
+@section Header{
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+    </script>
+}
+

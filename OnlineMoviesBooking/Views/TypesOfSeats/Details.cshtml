@@ -1,0 +1,28 @@
+﻿@model OnlineMoviesBooking.Models.Models.TypesOfSeat
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h4 class="row justify-content-center">Chi tiết loại ghế</h4>
+<br/>
+<div class="row justify-content-center">
+    <dl class="row">
+        <dt class="col-sm-3">
+            Tên loại
+        </dt>
+        <dd class="col-sm-9">
+            <input asp-for="Name" class="form-control" />
+        </dd>
+        <dt class="col-sm-3">
+            Gía
+        </dt>
+        <dd class="col-sm-9">
+            <input class="form-control" value="@Model.Cost.ToString("#,###")" />
+        </dd>
+        <div>
+            <a asp-action="Index">Trở lại</a>
+        </div>
+    </dl>
+    
+</div>

@@ -13,7 +13,7 @@ namespace OnlineMoviesBooking.Models.Models
         public string Id { get; set; }
         public string Languages { get; set; }
         public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
+        public DateTime? TimeEnd { get; set; }
         public string IdMovie { get; set; }
         public string IdScreen { get; set; }
 
