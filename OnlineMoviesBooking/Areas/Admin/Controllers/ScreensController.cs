@@ -49,7 +49,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            
+           
             return View(screen);
         }
 
@@ -110,8 +110,14 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            Screen obj = new Screen
+            {
+                Id = screen.Id,
+                Name = screen.Name,
+                IdTheater = screen.IdTheater
+            };
             ViewBag.Theater = new SelectList(Exec.ExecuteTheaterGetAll(), "Id", "Name");
-            return View(screen);
+            return View(obj);
         }
 
         // POST: Screens/Edit/5

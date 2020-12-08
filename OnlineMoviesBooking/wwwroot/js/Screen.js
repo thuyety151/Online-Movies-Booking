@@ -6,20 +6,24 @@ $(document).ready(function () {
             "url": '/Admin/Screens/getall'
         },
         "columns": [
-            { "data": "name" },
-            { "data": "nameTheater" },
+            {
+                "data": "name", "width": "30%"
+            },
+            {
+                "data": "nameTheater", "width":"30%" },
             {
                 "data": "id",
+                "width":"40%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                                    Sửa
                                 </a>
-                                <a href="/Admin/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
-                                    Detail</a>
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Chi tiết</a>
                                 <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    Delete</a>
+                                    Xóa</a>
                             </div>                           
                             `
                 }
@@ -45,20 +49,23 @@ $('#Search').click(function () {
             "url": "/Admin/Screens/Search/" + value,
         },
         "columns": [
-            { "data": "name" },
-            { "data": "nameTheater" },
             {
-                "data": "id",
+                "data": "name", "width": "30%"
+            },
+            {
+                "data": "nameTheater", "width":"30%" },
+            {
+                "data": "id","width":"40%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                                    Sửa
                                 </a>
-                                <a href="/Admin/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
-                                    Detail</a>
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Chi tiết</a>
                                 <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    Delete</a>
+                                    Xóa</a>
                             </div>                           
                             `
                 }

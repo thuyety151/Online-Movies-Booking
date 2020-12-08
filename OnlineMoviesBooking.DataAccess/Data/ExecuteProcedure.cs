@@ -222,12 +222,12 @@ namespace OnlineMoviesBooking.DataAccess.Data
             var obj = _context.Screen.FromSqlRaw("EXEC USP_CheckSreenName @Name , @Id", sqlParam).ToList();
             return obj.Count();
         }
-        public Screen ExecuteGetDetailScreen_Theater(string id)
+        public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)
         {
             /// Id, Name, Name Theater
             string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
                 "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
-            List<Screen> lst = new List<Screen>();
+            ScreenViewModel lst = new ScreenViewModel();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -238,14 +238,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())
                 {
-                    lst.Add(new Screen
+                    lst=new ScreenViewModel
                     {
                         Id = (rdr["Id"]).ToString(),
                         Name = rdr["Name"].ToString(),
-                        IdTheater = rdr["Id_Theater"].ToString()
-                    });
+                        IdTheater = rdr["Id_Theater"].ToString(),
+                        NameTheater=rdr["Theater"].ToString(),
+                        Address=(rdr["Address"]).ToString()
+                    };
                 }
-                return lst[0];
+                return lst;
             }
         }
         public void ExecuteUpdateScreen(Screen screen)
