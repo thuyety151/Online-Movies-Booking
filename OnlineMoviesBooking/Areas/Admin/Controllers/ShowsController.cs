@@ -9,7 +9,7 @@ using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModels;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ShowsController : Controller
@@ -95,7 +95,7 @@ namespace OnlineMoviesBooking.Controllers
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theaters = new SelectList(theater, "Id", "Name");
 
-            var screen = Exec.ExecuteScreenGetAllwithTheater();
+            var screen = Exec.SearchScreenwithTheater(theater[0].Id);
             ViewBag.Screens = new SelectList(screen, "Id", "Name");
             return View();
         }

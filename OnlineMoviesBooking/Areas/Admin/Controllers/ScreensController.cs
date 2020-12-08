@@ -9,7 +9,7 @@ using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModels;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ScreensController : Controller
@@ -71,7 +71,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             if (ModelState.IsValid)
             {
-                screen.Id = "TestTran11";// Guid.NewGuid().ToString();
+                screen.Id = Guid.NewGuid().ToString();
                 if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
                 {
                     ModelState.AddModelError("Name", "Tên đã tồn tại");

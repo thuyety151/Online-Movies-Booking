@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class DiscountsController : Controller

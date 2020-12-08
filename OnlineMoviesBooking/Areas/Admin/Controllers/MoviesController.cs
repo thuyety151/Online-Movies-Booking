@@ -17,7 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineMoviesBooking.Models.ViewModels;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class MoviesController : Controller

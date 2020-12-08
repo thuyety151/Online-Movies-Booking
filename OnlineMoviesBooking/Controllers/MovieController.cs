@@ -8,9 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnlineMoviesBooking.Areas.Customer.Controllers
+namespace OnlineMoviesBooking.Controllers
 {
-    [Area("Customer")]
     public class MovieController : Controller
     {
         private readonly CinemaContext _context;
@@ -52,6 +51,7 @@ namespace OnlineMoviesBooking.Areas.Customer.Controllers
                 return NotFound();
             }
         }
+        [HttpGet]
         public IActionResult ShowsDetail(string id)
         {
             if (id == null)
