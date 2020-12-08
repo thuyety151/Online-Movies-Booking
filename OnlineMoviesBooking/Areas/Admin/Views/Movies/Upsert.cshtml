@@ -51,11 +51,19 @@ else
             </div>
             <div class="form-group">
                 <label asp-for="Poster" class="control-label"></label>
-                <input  type="file" name="files" accept="image/*" class="form-control-file" />
+
                 @if (ViewBag.Id != "")
                 {
+                    <input type="file" name="files" accept="image/*" class="form-control-file" />
                     <img width="560" src="@Model.Poster" />
                 }
+                else
+                {
+                    <input type="file" name="files" accept="image/*" class="form-control-file" />
+
+                }
+                <input hidden asp-for="Poster" />
+                <span asp-validation-for="Poster" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
