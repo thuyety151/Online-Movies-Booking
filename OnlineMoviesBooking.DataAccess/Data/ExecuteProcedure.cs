@@ -154,7 +154,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             catch(SqlException s)
             {
-                 mess = s.Message;
+                 mess = s.Number.ToString();
             }
             return mess;
         }

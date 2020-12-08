@@ -77,7 +77,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 // chưa đưa ra được trigger execption
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
-                if(s!="")
+                if(s=="2627")       //check unique address
                 {
                     // có error message
                     ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
