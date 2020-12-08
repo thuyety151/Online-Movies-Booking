@@ -191,15 +191,26 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
 
         }
-        public void ExecuteInsertScreen(Screen screen)
+        public string ExecuteInsertScreen(Screen screen)      // EDIT HERE AFTER USE TRANSACTION
         {
-            var sqlParam = new SqlParameter[]
+            string result = "";
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                new SqlParameter("@Id",screen.Id),
-                new SqlParameter("@Name",screen.Name),
-                new SqlParameter("@IdTheater",screen.IdTheater)
-            };
-            _context.Database.ExecuteSqlRaw("EXEC USP_InsertScreen @Id, @Name , @IdTheater ", sqlParam);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("dbo.USP_CreateSeatandScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdScreenIn", screen.Id);
+                com.Parameters.AddWithValue("@NameIn", screen.Name);
+                com.Parameters.AddWithValue("@IdTheaterIn", screen.IdTheater);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    result = (rdr["ErrorNumber"]).ToString();
+                }
+                return result;  // 3609 : trigger
+            }
+
         }
         public int CheckNameScreen(string name, string id)
         {
