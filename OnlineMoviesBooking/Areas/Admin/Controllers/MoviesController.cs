@@ -17,7 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineMoviesBooking.Models.ViewModels;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class MoviesController : Controller
@@ -115,6 +115,13 @@ namespace OnlineMoviesBooking.Controllers
             
             if (ModelState.IsValid)
             {
+                // check image
+                if(movie.Id==null && files == null)
+                {
+                    ModelState.AddModelError("Poster", "Thêm Poster");
+                    
+                    return View(movie);
+                }
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 //var filess = HttpContext.Request.Form.Files;

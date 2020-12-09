@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class TheatersController : Controller
@@ -77,7 +77,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 // chưa đưa ra được trigger execption
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
-                if(s!="")
+                if(s=="2627")       //check unique address
                 {
                     // có error message
                     ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");

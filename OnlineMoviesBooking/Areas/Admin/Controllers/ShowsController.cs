@@ -9,7 +9,7 @@ using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModels;
 
-namespace OnlineMoviesBooking.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ShowsController : Controller
@@ -95,7 +95,7 @@ namespace OnlineMoviesBooking.Controllers
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theaters = new SelectList(theater, "Id", "Name");
 
-            var screen = Exec.ExecuteScreenGetAllwithTheater();
+            var screen = Exec.SearchScreenwithTheater(theater[0].Id);
             ViewBag.Screens = new SelectList(screen, "Id", "Name");
             return View();
         }
@@ -120,9 +120,9 @@ namespace OnlineMoviesBooking.Controllers
                 if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("Screen","Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
                 }
-                else if(s.Contains("Giờ không hợp lệ á"))
+                else if(s.Contains("Giờ không hợp lệ"))
                 {
                     ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
                 } 
@@ -195,7 +195,7 @@ namespace OnlineMoviesBooking.Controllers
                 if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("Screen", "Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
                 }
                 else if (s.Contains("Giờ không hợp lệ á"))
                 {

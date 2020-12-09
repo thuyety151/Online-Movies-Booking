@@ -16,7 +16,7 @@
 
         $.ajax({
             type: 'GET',
-            url: '/customer/movie/getshowbydate/',
+            url: '/movie/getshowbydate/',
             data: {
                 "idMovie": $('#Id').text(),
                 "date": $('#date-hidden').val(),
@@ -42,7 +42,7 @@
                             '<i class="fas fa-map-marker-alt"></i></div></div><div class="movie-schedule">';
 
                         $.each(value.times, function (index, time) {
-                            div = div + '<div class="details-banner-content"><a class="button" data-id="' + time.id + '" href="/customer/movie/seatplan/' + time.id + '" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
+                            div = div + '<div class="details-banner-content"><a class="button" data-id="' + time.id + '" href="/movie/seatplan/' + time.id + '" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
                         })
                         div = div + '</div ></li>';
                         $('#shows-date').append(div);
@@ -67,7 +67,7 @@
                 $('#date-hidden').val(value.text);
                 $.ajax({
                     type: 'GET',
-                    url: '/customer/movie/getshowbydate/',
+                    url: '/movie/getshowbydate/',
                     data: {
                         "idMovie": $('#Id').text(),
                         "date": $('#date-hidden').val()
@@ -91,7 +91,7 @@
                                     '<i class="fas fa-map-marker-alt"></i></div></div><div class="movie-schedule">';
 
                                 $.each(value.times, function (index, time) {
-                                    div = div + '<div class="details-banner-content"><a class="button" data-id="'+time.id+'" href="/customer/movie/seatplan/'+time.id+'" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
+                                    div = div + '<div class="details-banner-content"><a class="button" data-id="'+time.id+'" href="/movie/seatplan/'+time.id+'" style="color: #ffffff;padding: 0.2 1rem;">' + time.times + '</a></div>';
                                 })
                                 div = div + '</div ></li>';
                                 $('#shows-date').append(div);
