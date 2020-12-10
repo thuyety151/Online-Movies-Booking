@@ -72,13 +72,16 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 screen.Id = Guid.NewGuid().ToString();
-                if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
+                string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
+                // check lỗi do nhập
+                if (checkname != "") 
                 {
                     ModelState.AddModelError("Name", "Tên đã tồn tại");
                 }
                 else
                 {
-                    string s=Exec.ExecuteInsertScreen(screen);
+                    // check lỗi do add dưới db
+                    string s = Exec.ExecuteInsertScreen(screen);
                     // transaction
                     if (s == "2627")
                     {
@@ -135,7 +138,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
+                    string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
+                    // check lỗi do nhập
+                    if (checkname != "")
                     {
                         ModelState.AddModelError("Name", "Tên đã tồn tại");
                     }
@@ -157,7 +162,15 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(string id)
         {
-            Exec.ExecuteDeleteScreen(id);
+            string result=Exec.ExecuteDeleteScreen(id);
+            if (result == "2627")
+            {
+                return Json(new { success = false });
+            }
+            else if(result== "Phòng chiếu đang có lịch chiếu")
+            {
+                return Json(new { success = false, message= "Phòng chiếu đang có lịch chiếu" });
+                }
             return Json(new { success = true });
         }
         public IActionResult Search(string id)

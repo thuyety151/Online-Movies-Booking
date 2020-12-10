@@ -24,15 +24,117 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
        
-        public IActionResult ComingSoon()
+        public IActionResult ComingSoon(int? page)
         {
-            var movie = Exec.ExecuteGetMovieComingSoon();
-            return View(movie);
+            List<Movie> lstmovie = new List<Movie>();
+            int num = 2;
+            var movieCount = Exec.GetCountMovieComing();
+            if (movieCount % num == 0)
+            {
+                ViewBag.AllPage = movieCount / num;
+            }
+            else
+            {
+                ViewBag.AllPage = movieCount / num + 1;
+            }
+            // điều kiện để phân trang
+            if (page != null && page > 0 && num < movieCount)
+            {
+
+                /*số trang có thể có:
+                 *TH1: ví dụ có 18 sản phẩm, mỗi trang chứa 9 sản phẩm thì có TỐI ĐA 2 TRANG
+                 *TH2: ví dụ có 20 sản phẩm, vậy có tối đa 3 trang và trang cuối chứa 2 sản phẩm 
+               */
+                int numpage = movieCount % num == 0 ? movieCount / num : (movieCount / num) + 1;
+
+                if (page > numpage)
+                {
+                    ViewBag.page = numpage;
+                }
+                else
+                {
+                    ViewBag.page = page;
+                }
+                // nếu là trang cuối và là rơi vào trường hơp 2
+                if (page >= numpage && movieCount % num != 0)
+                {
+
+                    // lấy số lẻ
+                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
+
+                }
+                //trường hợp 1
+                else
+                {
+
+                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
+                }
+
+
+
+            }
+            else
+            {
+                ViewBag.page = 1;
+                lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(0, num);
+            }
+            return View(lstmovie);
         }
-        public IActionResult Now()
+        public IActionResult Now(int? page)
         {
-            var movie = Exec.ExecuteGetMovieNow();
-            return View("ComingSoon",movie);
+            List<Movie> lstmovie = new List<Movie>();
+            int num = 2;
+            var movieCount = Exec.GetCountMovieNow();
+            if (movieCount % num == 0)
+            {
+                ViewBag.AllPage = movieCount / num;
+            }
+            else
+            {
+                ViewBag.AllPage = movieCount / num + 1;
+            }
+            // điều kiện để phân trang
+            if (page != null && page > 0 && num < movieCount)
+            {
+
+                /*số trang có thể có:
+                 *TH1: ví dụ có 18 sản phẩm, mỗi trang chứa 9 sản phẩm thì có TỐI ĐA 2 TRANG
+                 *TH2: ví dụ có 20 sản phẩm, vậy có tối đa 3 trang và trang cuối chứa 2 sản phẩm 
+               */
+                int numpage = movieCount % num == 0 ? movieCount / num : (movieCount / num) + 1;
+
+                if (page > numpage)
+                {
+                    ViewBag.page = numpage;
+                }
+                else
+                {
+                    ViewBag.page = page;
+                }
+                // nếu là trang cuối và là rơi vào trường hơp 2
+                if (page >= numpage && movieCount % num != 0)
+                {
+
+                    // lấy số lẻ
+                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
+
+                }
+                //trường hợp 1
+                else
+                {
+
+                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
+                }
+
+
+
+            }
+            else
+            {
+                ViewBag.page = 1;
+                 lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(0, num);
+            }
+            return View( lstmovie);
         }
         public IActionResult Detail(string id)
         {
@@ -200,31 +302,7 @@ namespace OnlineMoviesBooking.Controllers
             var show = Exec.ExecuteGetAllShowDate(date);
             return Json(new { data = show });
         }
-        public IActionResult Coming()
-        {
-            var movie = Exec.ExecuteGetMovieComingSoon();
-            return Json(new { data = movie });
-        }
-        public IActionResult NowShowing()
-        {
-            var movie = Exec.ExecuteGetMovieNow();
-            return Json(new { data = movie });
-        }
-        [HttpGet]
-        public JsonResult getAllPost(int? page)
-        {
-            // search
-            //var data = (from s in _db.Posts select s);
-            //if (!String.IsNullOrEmpty(txtSearch))
-            //{
-            //    ViewBag.txtSearch = txtSearch;
-            //    data = data.Where(s => s.Title.Contains(txtSearch));
-            //}
-            var movie = Exec.ExecuteGetMovieComingSoon();
-
-      
-            return Json(new { data = movie });
-        }
+        
 
         [HttpGet]
         public IActionResult getshowbydate(string idMovie, string date)
@@ -245,6 +323,11 @@ namespace OnlineMoviesBooking.Controllers
             //List<TypesOfSeat> price = new List<TypesOfSeat>();
              var price = Exec.GetAllTypesOfSeat();
             return Json(price);
+        }
+        [HttpGet]
+        public IActionResult TimeOut()
+        {
+            return RedirectToAction("Index");
         }
     }
 }

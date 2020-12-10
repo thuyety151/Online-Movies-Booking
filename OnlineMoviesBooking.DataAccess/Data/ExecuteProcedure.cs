@@ -29,6 +29,44 @@ namespace OnlineMoviesBooking.DataAccess.Data
                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
         }
         //-------------------------------MOVIE
+        
+        public int GetCountMovieNow()
+        {
+            // to paging
+            int pos = 0;
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetNumOfMovieNow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    pos = int.Parse((rdr["Num"]).ToString());
+                }
+                return pos;
+            }
+        }
+        public int GetCountMovieComing()
+        {
+            // to paging
+            int pos = 0;
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetNumOfMovieComing", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    pos = int.Parse((rdr["Num"]).ToString());
+                }
+                return pos;
+            }
+        }
         public List<Movie> ExecuteMovieGetAll()
         {
             var obj = _context.Movie.FromSqlRaw($"SELECT * FROM Movie").ToList();
@@ -118,13 +156,14 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return pos;
             }
         }
-        public List<Movie> ExecuteGetMovieNow()
+        public List<Movie> ExecuteGetMovieNow(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieNow").ToList();
+            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieNow @Skip= "+skip +", @Take= "+take).ToList();
+
         }
-        public List<Movie> ExecuteGetMovieComingSoon()
+        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieComingSoon").ToList();
+            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieComing @Skip = "+skip +", @Take = "+take).ToList();
         }
         //----------------------THEATER
         public List<Theater> ExecuteTheaterGetAll()
@@ -212,15 +251,29 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
 
         }
-        public int CheckNameScreen(string name, string id)
+        public string CheckNameScreen(string name, string id)
         {
+            string result = "";
             var sqlParam = new SqlParameter[]
             {
                 new SqlParameter("@Name",name),
                 new SqlParameter("@Id",id)
             };
-            var obj = _context.Screen.FromSqlRaw("EXEC USP_CheckSreenName @Name , @Id", sqlParam).ToList();
-            return obj.Count();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_CheckSreenName", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Name", name);
+                com.Parameters.AddWithValue("@Id_Theater", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    result = (rdr["Result"]).ToString();
+                }
+                return result;  // 3609 : trigger
+            }
         }
         public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)
         {
@@ -260,9 +313,23 @@ namespace OnlineMoviesBooking.DataAccess.Data
             };
             _context.Database.ExecuteSqlRaw("EXEC USP_UpdateScreen @Id ,@Name ,@Id_Theater", sqlParam);
         }
-        public void ExecuteDeleteScreen(string id)
+        public string ExecuteDeleteScreen(string id)
         {
-            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteScreen @Id", new SqlParameter("@Id", id));
+            string result = "";
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("dbo.USP_DeleteSeatandScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdScreenIn", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    result = (rdr["ErrorNumber"]).ToString();
+                }
+                return result;  // 3609 : trigger
+            }
         }
         public List<Screen_Theater> SearchScreenwithTheater(string id)
         {

@@ -116,8 +116,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 TimeSpan ts = TimeSpan.FromMinutes(114);
 
                 string s=Exec.ExecuteInsertShow(showVM);
-
-                if (s.Contains("Trùng lịch chiếu"))
+                if(s.Contains("Ngày giờ không hợp lệ"))
+                {
+                    ModelState.AddModelError("TimeStart", "Ngày giờ không hợp lệ");
+                }
+                else if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
                     ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");

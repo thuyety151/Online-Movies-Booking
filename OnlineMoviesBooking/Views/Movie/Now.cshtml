@@ -213,7 +213,7 @@
 
                 <div class="widget-1 widget-check">
                     <div class="widget-header">
-                        <h5 class="m-title">Filter By</h5> <a  class="clear-check">Clear All</a>
+                        <h5 class="m-title">Filter By</h5> <a class="clear-check">Clear All</a>
                     </div>
                     <div class="widget-1-body">
                         <h6 class="subtitle">Language</h6>
@@ -254,7 +254,7 @@
                             </div>
                         </div>
                         <div class="add-check-area">
-                            <a >view more <i class="plus"></i></a>
+                            <a>view more <i class="plus"></i></a>
                         </div>
                     </div>
                 </div>
@@ -294,13 +294,13 @@
                             </div>
                         </div>
                         <div class="add-check-area">
-                            <a >view more <i class="plus"></i></a>
+                            <a>view more <i class="plus"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="widget-1 widget-banner">
                     <div class="widget-1-body">
-                        <a >
+                        <a>
                             <img src="~/Customer/logo/banner02.jpg" alt="banner">
                         </a>
                     </div>
@@ -347,9 +347,6 @@
                         <div class="tab-item active">
                             <div class="row mb-10 ">
                                 <!-- movie -->
-                                <div id="movie">
-
-                                </div>
                                 @foreach (var item in Model)
                                 {
                                     <div class="col-sm-6 col-lg-4">
@@ -361,7 +358,7 @@
                                             </div>
                                             <!-- movie content-->
                                             <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
+                                                <h5 class="title m-0" style="font-size:large">
                                                     <a href="/Movie/Detail/@item.Id">@item.Name</a>
                                                 </h5>
                                                 <ul class="movie-rating-percent">
@@ -506,7 +503,7 @@
                         </div>
                     </div>
                     <div class="pagination-area text-center">
-                        <a href="/movie/comingsoon?page=@(ViewBag.page-1)"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
+                        <a  href="/movie/now?page=@(ViewBag.page-1)" ><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
                         @for (int i = 1; i <= ViewBag.AllPage; i++)
                         {
                             if (i == ViewBag.page)
@@ -515,10 +512,10 @@
                             }
                             else
                             {
-                                <a href="/movie/comingsoon?page=@i">@i</a>
+                            <a href="/movie/now?page=@i">@i</a>
                             }
                         }
-                        <a href="/movie/comingsoon?page=@(ViewBag.page+1)"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
+                        <a href="/movie/now?page=@(ViewBag.page+1)"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
                     </div>
                 </div>
             </div>
