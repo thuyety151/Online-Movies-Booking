@@ -29,6 +29,44 @@ namespace OnlineMoviesBooking.DataAccess.Data
                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
         }
         //-------------------------------MOVIE
+        
+        public int GetCountMovieNow()
+        {
+            // to paging
+            int pos = 0;
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetNumOfMovieNow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    pos = int.Parse((rdr["Num"]).ToString());
+                }
+                return pos;
+            }
+        }
+        public int GetCountMovieComing()
+        {
+            // to paging
+            int pos = 0;
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_PagingMovieComing", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    pos = int.Parse((rdr["Num"]).ToString());
+                }
+                return pos;
+            }
+        }
         public List<Movie> ExecuteMovieGetAll()
         {
             var obj = _context.Movie.FromSqlRaw($"SELECT * FROM Movie").ToList();
@@ -118,9 +156,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return pos;
             }
         }
-        public List<Movie> ExecuteGetMovieNow()
+        public List<Movie> ExecuteGetMovieNow(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieNow").ToList();
+            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieNow @Skip= "+skip +", @Take= "+take).ToList();
+
         }
         public List<Movie> ExecuteGetMovieComingSoon()
         {
