@@ -35,10 +35,16 @@
                     </li>
                 </ul>
             </div>
-            <div class="proceed-area  text-center">
-                <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
-                <a class="custom-button back-button">proceed</a>
-            </div>
+            <form asp-action="TimeOut">
+                <div class="proceed-area  text-center">
+                    <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
+                    <input id="submit" type="submit" class="custom-button back-button" value="proceed"/>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+@section Scripts{ 
+    <script src="~/Customer/js/checkout.js"></script>
+}

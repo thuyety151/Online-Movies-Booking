@@ -706,9 +706,11 @@
                         <span>Tổng tiền</span>
                         <h3 class="title" id="total-price">0 </h3>
                     </div>
-                    <div class="book-item">
-                        <a id="submit"  class="custom-button">Thanh toán</a>
-                    </div> 
+                    
+                        <div class="book-item">
+                            <input id="submit" class="custom-button" value="Thanh toán" />
+                        </div>
+                    
                 </div>
             </div>
         </div>
@@ -741,10 +743,12 @@
                     </li>
                 </ul>
             </div>
-            <div class="proceed-area  text-center">
-                <h6  class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
-                <a class="custom-button back-button">Thanh toán</a>
-            </div>
+            <form id="form1" asp-action="TimeOut" method="get">
+                <div class="proceed-area  text-center">
+                    <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
+                    <input type="submit" class="custom-button back-button" value="Thanh toán"/>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -752,6 +756,7 @@
 @section Scripts{
 
     <script src="~/Customer/js/seatplan.js"></script>
+<script src="~/Customer/js/checkout.js"></script>
 }
 @section Header{
     <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>

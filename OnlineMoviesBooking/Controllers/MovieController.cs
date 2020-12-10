@@ -246,5 +246,10 @@ namespace OnlineMoviesBooking.Controllers
              var price = Exec.GetAllTypesOfSeat();
             return Json(price);
         }
+        [HttpGet]
+        public IActionResult TimeOut()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }
