@@ -251,15 +251,29 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
 
         }
-        public int CheckNameScreen(string name, string id)
+        public string CheckNameScreen(string name, string id)
         {
+            string result = "";
             var sqlParam = new SqlParameter[]
             {
                 new SqlParameter("@Name",name),
                 new SqlParameter("@Id",id)
             };
-            var obj = _context.Screen.FromSqlRaw("EXEC USP_CheckSreenName @Name , @Id", sqlParam).ToList();
-            return obj.Count();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_CheckSreenName", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Name", name);
+                com.Parameters.AddWithValue("@Id_Theater", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    result = (rdr["Result"]).ToString();
+                }
+                return result;  // 3609 : trigger
+            }
         }
         public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)
         {

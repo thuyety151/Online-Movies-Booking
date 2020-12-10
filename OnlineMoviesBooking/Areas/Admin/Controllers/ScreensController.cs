@@ -72,13 +72,16 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 screen.Id = Guid.NewGuid().ToString();
-                if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
+                string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
+                // check lỗi do nhập
+                if (checkname != "") 
                 {
                     ModelState.AddModelError("Name", "Tên đã tồn tại");
                 }
                 else
                 {
-                    string s=Exec.ExecuteInsertScreen(screen);
+                    // check lỗi do add dưới db
+                    string s = Exec.ExecuteInsertScreen(screen);
                     // transaction
                     if (s == "2627")
                     {
@@ -135,7 +138,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (Exec.CheckNameScreen(screen.Name, screen.IdTheater) > 0)
+                    string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
+                    // check lỗi do nhập
+                    if (checkname != "")
                     {
                         ModelState.AddModelError("Name", "Tên đã tồn tại");
                     }
