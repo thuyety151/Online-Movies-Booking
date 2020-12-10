@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     @*<link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />*@
-    <link href="~/Template/css/all.min.css" rel="stylesheet" />
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
     <link href="~/Template/css/animate.css" rel="stylesheet" />
     <link href="~/Template/css/flaticon.css" rel="stylesheet" />
     <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
@@ -30,263 +30,65 @@
 </head>
 
 <body>
-    
-    <!-- ==========Banner-Section========== -->
-    <section class="speaker-banner bg_img" data-background="./assets/images/banner/banner07.jpg">
-        <div class="container">
-            <div class="speaker-banner-content">
-                <h2 class="title">Speaker Profile</h2>
-                <ul class="breadcrumb">
-                    <li>
-                        <a href="index.html">
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="events.html">
-                            event
-                        </a>
-                    </li>
-                    <li>
-                        speaker profile
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-    <!-- ==========Banner-Section========== -->
+    @{ 
+        string id = TempData["Key"].ToString();
+    }
     <!-- ==========Speaker-Single========== -->
-    <section class="speaker-single padding-top pt-lg-0">
+    <section class="speaker-single" style="margin-top:13rem;margin-bottom:10rem">
         <div class="container">
-            <div class="speaker-wrapper bg-six padding-top padding-bottom">
-                <div class="speaker-thumb">
-                    <img src="./assets/images/speaker/speaker05.jpg" alt="speaker">
-                    <a href="#0">www.website.com</a>
+            <div class="bg-six p" style="padding:2.5rem 5rem;display:grid;grid-template-columns:30% 70%">
+                <div style="grid-column:1;margin-top:5rem">
+                    <div class="event-about-thumb" style="width:90%; max-width:20rem;">
+                        <img src="~/assets/img/harlypic.jpg" class="shadow" />
+                    </div>
                 </div>
-                <div class="speaker-content">
-                    <div class="author">
-                        <h2 class="title">Kelley Valdez </h2>
-                        <div class="info">Independent consultant, coach and executive coach</div>
-                    </div>
-                    <div class="speak-con-wrapper">
-                        <div class="speak-con-area">
-                            <div class="item">
-                                <div class="item-thumb">
-                                    <img src="./assets/images/event/icon/event-icon03.png" alt="event">
-                                </div>
-                                <div class="item-content">
-                                    <span class="up">Drop us a line:</span>
-                                    <a href="MailTo:hello@Boleto .com">hello@Boleto .com</a>
-                                </div>
-                            </div>
-                            <ul class="social-icons">
-                                <li>
-                                    <a href="#0">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#0" class="active">
-                                        <i class="fab fa-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#0">
-                                        <i class="fab fa-linkedin-in"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#0">
-                                        <i class="fab fa-pinterest"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#0">
-                                        <i class="fab fa-behance"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                
+                <div class="container" style="padding-top:2rem;grid-column:2">
+                    <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Thông tin tài khoản</h2>
+                    
+                    
+                    <form class="contact-form" asp-action="Edit" method="get">
+
+                        <div class="form-group ">
+                            <h6>Tên</h6><br />
+                            <input type="text" value="Trần Thanh Toàn" readonly />
                         </div>
-                    </div>
-                    <div class="content">
-                        <h3 class="subtitle">About me</h3>
-                        <p>A successful marketing plan relies heavily on the pulling-power of advertising copy. Writing result-oriented ad copy is difficult, as it must appeal to, entice, and convince consumers to take action. There is no magic formula to write perfect ad copy; it is based on a number of factors, including ad placement, demographic, even the consumer’s mood when they see your ad. </p>
-                        <p>So how is any writer supposed to pen a stunning piece of advertising copy — copy that sizzles and sells? The following tips will jumpstart your creative thinking and help you write a better ad.</p>
-                        <p>Consumers are inundated with ads, so it’s vital that your ad catches the eye and immediately grabs interest. You could do this with a headline or slogan (such as VW’s “Drivers Wanted” campaign), color or layout (Target’s new colorful, simple ads are a testimony to this) or illustration (such as the Red Bull characters or Zoloft’s depressed ball and his ladybug friend).</p>
-                    </div>
+                        <div class="form-group">
+                            <h6>Ngày sinh</h6><br />
+                            <input type="text" value="11-5-200" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Giới tính</h6><br />
+                            <input type="text" value="Nam" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Email</h6><br />
+                            <input type="text" value="thanhtontran115@gmail.com" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Địa chỉ</h6><br />
+                            <input type="text" value="Số 1 Võ văn Ngân, phường Linh Trung, quận Thủ Đức, Tp.Hồ Chí Minh" />
+                        </div>
+                        <div class="form-group">
+                            <h6>Điểm</h6><br />
+                            <input type="text" value="100" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Sửa thông tin" />
+                        </div>
+                    </form>
+
                 </div>
             </div>
+
         </div>
     </section>
     <!-- ==========Speaker-Single========== -->
-    <!-- ==========Speaker-Section========== -->
-    <section class="speaker-section padding-bottom padding-top">
-        <div class="container">
-            <div class="section-header-3">
-                <span class="cate">listen to the</span>
-                <h2 class="title">event speakers</h2>
-                <p>
-                    World is committed to making participation in the event a harassment free experience for
-                    everyone, regardless of level of experience, gender, gender identity and expression
-                </p>
-            </div>
-            <div class="speaker--slider">
-                <div class="speaker-slider owl-carousel owl-theme">
-                    <div class="speaker-item">
-                        <div class="speaker-thumb">
-                            <a href="#0">
-                                <img src="./assets/images/speaker/speaker01.jpg" alt="speaker">
-                            </a>
-                        </div>
-                        <div class="speaker-content">
-                            <h5 class="title">
-                                <a href="#0">
-                                    Gerard Bryan
-                                </a>
-                            </h5>
-                            <span>lead speaker</span>
-                        </div>
-                    </div>
-                    <div class="speaker-item">
-                        <div class="speaker-thumb">
-                            <a href="#0">
-                                <img src="./assets/images/speaker/speaker02.jpg" alt="speaker">
-                            </a>
-                        </div>
-                        <div class="speaker-content">
-                            <h5 class="title">
-                                <a href="#0">
-                                    Raihan Rafuj
-                                </a>
-                            </h5>
-                            <span>lead speaker</span>
-                        </div>
-                    </div>
-                    <div class="speaker-item">
-                        <div class="speaker-thumb">
-                            <a href="#0">
-                                <img src="./assets/images/speaker/speaker03.jpg" alt="speaker">
-                            </a>
-                        </div>
-                        <div class="speaker-content">
-                            <h5 class="title">
-                                <a href="#0">
-                                    Bela Bose
-                                </a>
-                            </h5>
-                            <span>lead speaker</span>
-                        </div>
-                    </div>
-                    <div class="speaker-item">
-                        <div class="speaker-thumb">
-                            <a href="#0">
-                                <img src="./assets/images/speaker/speaker04.jpg" alt="speaker">
-                            </a>
-                        </div>
-                        <div class="speaker-content">
-                            <h5 class="title">
-                                <a href="#0">
-                                    Grass Hopper
-                                </a>
-                            </h5>
-                            <span>lead speaker</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="speaker-prev">
-                    <i class="flaticon-double-right-arrows-angles"></i>
-                </div>
-                <div class="speaker-next">
-                    <i class="flaticon-double-right-arrows-angles"></i>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ==========Speaker-Section========== -->
-    <!-- ==========Newslater-Section========== -->
-    <footer class="footer-section">
-        <div class="newslater-section padding-bottom">
-            <div class="container">
-                <div class="newslater-container bg_img" data-background="./assets/images/newslater/newslater-bg01.jpg">
-                    <div class="newslater-wrapper">
-                        <h5 class="cate">subscribe to Boleto </h5>
-                        <h3 class="title">to get exclusive benifits</h3>
-                        <form class="newslater-form">
-                            <input type="text" placeholder="Your Email Address">
-                            <button type="submit">subscribe</button>
-                        </form>
-                        <p>We respect your privacy, so we never share your info</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="footer-top">
-                <div class="logo">
-                    <a href="index-1.html">
-                        <img src="./assets/images/footer/footer-logo.png" alt="footer">
-                    </a>
-                </div>
-                <ul class="social-icons">
-                    <li>
-                        <a href="#0">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#0" class="active">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#0">
-                            <i class="fab fa-pinterest-p"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#0">
-                            <i class="fab fa-google"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#0">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="footer-bottom">
-                <div class="footer-bottom-area">
-                    <div class="left">
-                        <p>Copyright © 2020.All Rights Reserved By <a href="#0">Boleto </a></p>
-                    </div>
-                    <ul class="links">
-                        <li>
-                            <a href="#0">About</a>
-                        </li>
-                        <li>
-                            <a href="#0">Terms Of Use</a>
-                        </li>
-                        <li>
-                            <a href="#0">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a href="#0">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="#0">Feedback</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
     <!-- ==========Newslater-Section========== -->
 
     <script src="~/Template/js/jquery-3.3.1.min.js"></script>
     <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
     <script src="~/Template/js/plugins.js"></script>
-    <script src="~/Template/js/bootstrap.min.js"></script>
     <script src="~/Template/js/isotope.pkgd.min.js"></script>
     <script src="~/Template/js/magnific-popup.min.js"></script>
     <script src="~/Template/js/owl.carousel.min.js"></script>

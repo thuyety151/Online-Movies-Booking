@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@using OnlineMoviesBooking.Models.Models;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
+@using Microsoft.AspNetCore.Mvc.ViewFeatures.Infrastructure;
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -14,6 +19,25 @@
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 </head>
 <body>
+    @{ 
+        string src;
+        string name;
+
+        if(TempData["Logininf"] == null && TempData["src"] == null)
+        {
+            src = "/image/Account/Avatar_default.png";
+            name = "";
+        }
+        else
+        {
+            if (TempData["src"] == null)
+                src = "/image/Account/Avatar_default.png";
+            else
+                src = TempData["src"].ToString();
+            name = @"Xin Chào " + TempData["Logininf"].ToString();
+        }
+
+    }
     @*TaskBoard*@
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar shadow">
         <div class="navbar-brand animated tada infinite slower">
@@ -21,7 +45,6 @@
                 <img src="~/assets/img/logo2.png" alt="Logo" style="width:4rem;margin-left:3rem" />
                 CINEMA
             </a>
-        </div>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
                 aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,60 +57,59 @@
                         Trang chủ
                     </a>
                 </li>
+                @{
+                    if (TempData["Logininf"] == null)
+                    {
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login/Login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login/Register">Đăng ký</a>
+                        </li>
+                    }
+                }
                 <li class="nav-item">
-                    <a class="nav-link" href="/Login/Login">Đăng nhập</a>
+                    <a class="nav-link" href="/ContactView/Index">Đặt câu hỏi</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Login/Register">Đăng ký</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Qas/ContactView">Đặt câu hỏi</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
+
             </ul>
             <ul class="navbar-nav ml-auto nav-flex-icons">
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light">
-                        <i class="fab fa-google-plus-g"></i>
+                    <a class="nav-link" href="/AccountInfos/Index">
+                        @name
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i>
+                        <img src=@src alt="Avatar" id="avatar" style="width:2rem" />
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-default"
+                    <div class="dropdown-menu dropdown-menu-right dropdown-default bg-transparent shadow"
                          aria-labelledby="navbarDropdownMenuLink-333">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item text-light" href="/AccountInfos/Index">
+                            Thông tin cá nhân
+                        </a>
+                        @{
+                            if (TempData["Logininf"] != null)
+                            {
+                                <a class="dropdown-item text-light" href="/Login/Logout">Đăng xuất</a>
+                            }
+
+                        }
+
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
-    <main style="position:relative;z-index:0;top:0px;width:100%">
+    <main style="position:relative;z-index:0;width:100%;margin:5rem 0px">
         <div>
             @RenderBody()
         </div>
     </main>
     @*Footer*@
-    <footer class="page-footer font-small" style="margin-top:0rem;">
+    <footer class="page-footer font-small" style="margin-top:5rem;">
 
         <div>
             <div class="container">

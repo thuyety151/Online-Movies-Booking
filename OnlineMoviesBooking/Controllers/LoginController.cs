@@ -14,6 +14,7 @@ using OnlineMoviesBooking.Models.Models;
 using System.Net;
 using System.Net.Mail;
 using System.Configuration;
+using Microsoft.AspNetCore.Session;
 namespace OnlineMoviesBooking.Controllers
 {
 
@@ -21,6 +22,7 @@ namespace OnlineMoviesBooking.Controllers
     {
         private readonly CinemaContext _signManager;
         private readonly IWebHostEnvironment _hostEnvironment;
+        
         public LoginController(CinemaContext context, IWebHostEnvironment hostEnvironment)
         {
             _signManager = context;
@@ -29,6 +31,12 @@ namespace OnlineMoviesBooking.Controllers
         public ActionResult ForgotPassword()
         {
             return View();
+        }
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            TempData.Clear();
+            return RedirectToAction("Index","Home");
         }
         [HttpPost]
         public ActionResult ForgotPassword(string Email)
@@ -43,7 +51,7 @@ namespace OnlineMoviesBooking.Controllers
                 _signManager.Database.ExecuteSqlCommand($"EXEC dbo.USP_ResetPassword {acc[0].Email}, {newpass} ");
 
                 //Gửi mật khẩu qua mail
-                MailMessage mm = new MailMessage("thanhtontran115@gmail.com","silentloveinheart@gmail.com");
+                MailMessage mm = new MailMessage("thanhtontran115@gmail.com","quynhkun27@gmail.com");
                 mm.Subject = "new password";
                 mm.Body = string.Format("Hello : <h1>{0}<h1> is your password", newpass);
                 mm.IsBodyHtml = true;
@@ -66,83 +74,108 @@ namespace OnlineMoviesBooking.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(Account account)
-        {
-            var data = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{account.Id}'").ToList();
-            var ID_USER = data[0].Id;
-            if( ID_USER != "")
-            {
-                return RedirectToAction("Dashboard", "Dashboard");
-            }       
-            else
-            {
-                ModelState.AddModelError("", "Email hoặc mật khẩu không đúng");
-                return View(); 
-            }
-
-        }
-
         public IActionResult Register()
         {
             return View();
         }
-        public async Task<IActionResult> Create([Bind("Email", "Password","PasswordConfirm")] RegisterViewModel registerViewModel)
+        [HttpPost]
+        public async Task<IActionResult> Register([Bind("Username", "FullName", "Email", "SDT", "Password", "PasswordConfirm")] RegisterViewModel registerViewModel)
         {
+            //3 mail trùng
+            //1 login trùng
+            //2 user trùng
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var acc = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{registerViewModel.Email}' ").ToList();
+                    if (acc.Count == 1)
+                    {
+                        ModelState.AddModelError("Email", "Email đã tồn tại");
+                        return View(registerViewModel);
+                    }
+
                     Account account = new Account()
                     {
                         Email = registerViewModel.Email,
                         Password = registerViewModel.Password,
                     };
-                    account.Id = Guid.NewGuid().ToString();
+                    account.Name = registerViewModel.FullName;
+                    account.Sdt = registerViewModel.SDT;
+                    account.Id = registerViewModel.Username;
+                    account.IdTypeOfMember = "mobile";
+                    _signManager.Database.ExecuteSqlCommand($"EXEC [dbo].[USP_CreateUser] {account.Id},{account.Id},{account.Password},{"CUSTOMER"}");
 
-                    _signManager.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Insert"} ");
-                    return RedirectToAction(nameof(Index));
+                    _signManager.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {"11-5-2000"},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={"2"},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Insert"} ");
+                    HttpContext.Session.GetString(registerViewModel.Username);
+                    return RedirectToAction("Login", "Login");
                 }
             }
-            catch
+            catch (SqlException e)
             {
-                var modelstateKey = ModelState.Keys;
-                var list = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_CheckEmail '{registerViewModel.Email}' ").ToList();
-                if (list.Count() == 1)
+                if (e.ToString().Contains("User"))
                 {
-                    ModelState.AddModelError("Email", "Email đã tồn tại");
+                    ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
                 }
-                //else if (check_db == 1)
-                //{
-                //    ModelState.AddModelError("Sdt", "Sdt đã tồn tại");
-                //}
-                return View();
+
+
+                return View(registerViewModel);
             }
             return View(registerViewModel);
+
         }
         public IActionResult Login()
         {
             return View();
         }
-        //public async Task<IActionResult> LoginUser(string Email, string password)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var count = _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_getIdAccount @Email = '{Email}',@pass = '{password}'");
-        //            if(count == 1)
-        //            {
-        //                return ()
-        //            }    
-        //        }
-        //    }
-        //    catch
-        //    {
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Username", "Password")] LoginModelView loginModelView)
+        {
+            try
+            {
+                
+                var acc = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_CheckForLogin @Name = '"+loginModelView.Username+ 
+                     "' , @Password = '"+loginModelView.Password + "'").ToList();
+               
 
-        //    }
-        //}
+                if ( acc.Count() != 1)
+                {
+                    ViewData["Error"] = "Ten dang nhap hoac mat khau khong đung";
+                    return View(loginModelView);
+                }
+                
+                HttpContext.Session.SetString("Key", acc[0].Id);
+
+                if (acc[0].IdTypesOfUser == "1")
+                {
+                    HttpContext.Session.SetString("Login", acc[0].Id);
+                    string id = HttpContext.Session.GetString("Login").ToString();
+                    var account = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
+                    TempData["Logininf"] = account[0].Name;
+                    TempData["src"] = account[0].Image;
+                    return RedirectToAction("Index", "Accounts");
+                }
+                else if (acc[0].IdTypesOfUser == "2")
+                {
+
+                    HttpContext.Session.SetString("Login", acc[0].Id);
+                    string id = HttpContext.Session.GetString("Login").ToString();
+                    var account = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
+                    TempData["Logininf"] = account[0].Name;
+                    TempData["src"] = account[0].Image;
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ViewData["Error"] = "Something wrong!!!";
+                return View(loginModelView);
+            }
+            catch (SqlException e)
+            {
+                ModelState.AddModelError("", e.ToString());
+                return View(loginModelView);
+            }
+        }
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Create(Account account)

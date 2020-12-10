@@ -6428,8 +6428,8 @@ input[type="submit"] {
 
 .speaker-wrapper .speaker-thumb img {
   width: 100%;
-  mask: url(./img/team-shape02.png) no-repeat center center;
-  -webkit-mask: url(./img/team-shape02.png) no-repeat center center;
+  mask: url(#) no-repeat center center;
+  -webkit-mask: url(#) no-repeat center center;
   mask-size: cover;
   -webkit-mask-size: cover;
   -webkit-transform: scale(1.02);

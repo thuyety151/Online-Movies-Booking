@@ -12,7 +12,7 @@ namespace OnlineMoviesBooking.Models.Models
             Qa = new HashSet<Qa>();
             UseDiscount = new HashSet<UseDiscount>();
         }
-
+        [Required]
         public string Id { get; set; }
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
         public string Name { get; set; }
@@ -21,7 +21,7 @@ namespace OnlineMoviesBooking.Models.Models
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
         public bool Gender { get; set; }
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
-        public string Address { get; set; }
+        public string Address { get; set; }     
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
         [Phone(ErrorMessage = "Dữ liệu không hợp lệ")]
         [MinLength(9, ErrorMessage = "Dữ liệu không hợp lệ")]

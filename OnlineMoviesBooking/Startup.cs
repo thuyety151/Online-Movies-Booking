@@ -30,10 +30,9 @@ namespace OnlineMoviesBooking
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
-            services.AddSession(cfg => {                    // Đăng ký dịch vụ Session
-                cfg.Cookie.Name = "ThanhTon";               // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
-                cfg.IdleTimeout = new TimeSpan(0, 60, 0);    // Thời gian tồn tại của Session
-            });
+            services.AddMvc();
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
             services.AddDbContext<CinemaContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -64,16 +63,18 @@ namespace OnlineMoviesBooking
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();                               // Đăng ký Middleware Session vào Pipeline
+            
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();                               // Đăng ký Middleware Session vào Pipeline
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
-                   name: "default",
+                   name: "Admin",
                    areaName: "Admin",
                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(

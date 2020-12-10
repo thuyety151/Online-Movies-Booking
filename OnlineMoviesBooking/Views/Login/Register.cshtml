@@ -44,25 +44,40 @@
                         <span class="cate">welcome</span>
                         <h2 class="title">to Boleto </h2>
                     </div>
-                    <form class="account-form">
+                    <form class="account-form" asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label for="email1">Email<span>*</span></label>
-                            <input type="text" placeholder="Enter Your Email" id="email1" required="">
+                            <label>Tên đăng nhập<span>*</span></label>
+                            <input type="text" asp-for="Username" placeholder="Enter Your Email" id="email1" required>
+                            <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="pass1">Password<span>*</span></label>
-                            <input type="password" placeholder="Password" id="pass1" required="">
+                            <label>Họ tên<span>*</span></label>
+                            <input type="text" asp-for="FullName" placeholder="Enter Your Email" id="email1" required>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="pass2">Confirm Password<span>*</span></label>
-                            <input type="password" placeholder="Password" id="pass2" required="">
+                            <label>Email<span>*</span></label>
+                            <input asp-for="Email" type="text" placeholder="Enter Your Email" id="email1" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                        <div class="form-group checkgroup">
-                            <input type="checkbox" id="bal" required="" checked="">
-                            <label for="bal">I agree to the <a href="http://pixner.net/boleto/demo/sign-up.html#0">Terms, Privacy Policy</a> and <a href="http://pixner.net/boleto/demo/sign-up.html#0">Fees</a></label>
+                        <div class="form-group">
+                            <label>Số điện thoại<span>*</span></label>
+                            <input type="text" asp-for="SDT" placeholder="Enter Your Email" id="email1" required>
+                            <span asp-validation-for="SDT" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu<span>*</span></label>
+                            <input asp-for="Password" type="password" placeholder="Password" id="pass1" required>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Nhập lại mật khẩu<span>*</span></label>
+                            <input asp-for="PasswordConfirm" type="password" placeholder="Password" id="pass2" required>
+                            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                         </div>
                         <div class="form-group text-center">
-                            <input type="submit" value="Sign Up">
+                            <input type="submit" value="Đăng ký">
                         </div>
                     </form>
                     <div class="option">
@@ -94,7 +109,6 @@
     <script src="~/Template/js/jquery-3.3.1.min.js"></script>
     <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
     <script src="~/Template/js/plugins.js"></script>
-    <script src="~/Template/js/bootstrap.min.js"></script>
     <script src="~/Template/js/isotope.pkgd.min.js"></script>
     <script src="~/Template/js/magnific-popup.min.js"></script>
     <script src="~/Template/js/owl.carousel.min.js"></script>
@@ -104,7 +118,6 @@
     <script src="~/Template/js/viewport.jquery.js"></script>
     <script src="~/Template/js/nice-select.js"></script>
     <script src="~/Template/js/main.js"></script>
-
 </body>
 </html>
 

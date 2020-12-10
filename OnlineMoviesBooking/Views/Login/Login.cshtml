@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.Models.Account
+﻿@model OnlineMoviesBooking.Models.ViewModel.LoginModelView;
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
@@ -42,22 +42,22 @@
                         <span class="cate">hello</span>
                         <h2 class="title">welcome back</h2>
                     </div>
-                    <form class="account-form">
+                    <form class="account-form" asp-action="Login" method="post">
                         <div class="form-group">
-                            <label for="email2">Email<span>*</span></label>
-                            <input type="text" placeholder="Email" id="email2" required>
+                            <label>Tên đăng nhập<span>*</span></label>
+                            <input type="text" asp-for="Username" placeholder="Tên đăng nhập" required>
                         </div>
                         <div class="form-group">
-                            <label for="pass3">Password<span>*</span></label>
-                            <input type="password" placeholder="Mật khẩu" id="pass3" required>
+                            <label>Mật khẩu<span>*</span></label>
+                            <input type="password" asp-for="Password" placeholder="Mật khẩu" required>
                         </div>
                         <div class="form-group checkgroup">
                             <input type="checkbox" id="bal2" required checked>
                             <label for="bal2">Nhớ mật khẩu</label>
-                            <a href="#0" class="forget-pass">Quên mật khẩu</a>
+                            <a href="/Login/ForgotPassword" class="forget-pass">Quên mật khẩu</a>
                         </div>
                         <div class="form-group text-center">
-                            <input type="submit" value="log in">
+                            <input type="submit" value="Đăng nhập">
                         </div>
                     </form>
                     <div class="option">
@@ -87,7 +87,15 @@
     </section>
     <!-- ==========Sign-In-Section========== -->
 
-
+    @{
+        if (TempData["msg"] != null)
+        {
+            string msg = @"Trước tiên bạn phải đăng nhập!!!";
+            <script>
+                alert('@msg')
+            </script>
+        }
+    }
     <script src="~/Template/js/jquery-3.3.1.min.js"></script>
     <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
     <script src="~/Template/js/plugins.js"></script>
@@ -100,6 +108,8 @@
     <script src="~/Template/js/viewport.jquery.js"></script>
     <script src="~/Template/js/nice-select.js"></script>
     <script src="~/Template/js/main.js"></script>
+    <script>
 
+    </script>
 </body>
 </html>

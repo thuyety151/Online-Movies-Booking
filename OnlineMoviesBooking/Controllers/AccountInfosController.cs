@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.Models.Models;
+using OnlineMoviesBooking.Models.ViewModel;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -19,70 +21,54 @@ namespace OnlineMoviesBooking.Controllers
         }
 
         // GET: AccountInfos
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var cinemaContext = _context.Account.Include(a => a.IdTypesOfUserNavigation);
-            return View(await cinemaContext.ToListAsync());
-        }
-
-        // GET: AccountInfos/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
+            if(HttpContext.Session.GetString("Login") == null)
             {
-                return NotFound();
+                TempData["msg"] = "loginfirst";
+                return RedirectToAction("Login", "Login");
             }
-
-            var account = await _context.Account
-                .Include(a => a.IdTypesOfUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (account == null)
+            if (HttpContext.Session.GetString("Login") != null)
             {
-                return NotFound();
+                string id = HttpContext.Session.GetString("Login").ToString();
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
+                TempData["Logininf"] = account[0].Name;
+                TempData["src"] = account[0].Image;
+                TempData["Key"] = account[0].Id;
             }
-
-            return View(account);
-        }
-
-        // GET: AccountInfos/Create
-        public IActionResult Create()
-        {
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id");
-            return View();
-        }
-
-        // POST: AccountInfos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,IdTypeOfMember,Image")] Account account)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(account);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(account);
+            var acc = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("Key")}'").ToList()[0];
+            return View(acc);
         }
 
         // GET: AccountInfos/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        [HttpGet]
+        public IActionResult Edit(/*string Id*/)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Login") != null)
             {
-                return NotFound();
+                string id = HttpContext.Session.GetString("Login").ToString();
+                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
+                TempData["Logininf"] = account[0].Name;
+                TempData["src"] = account[0].Image;
             }
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var account = await _context.Account.FindAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(account);
+            //var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0];
+            //AccountViewModel accountViewModel = new AccountViewModel()
+            //{
+            //    Id = account.Id,
+            //    Name = account.Name,
+
+            //};
+            //if (account == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
+            return View(/*accountViewModel*/);
         }
 
         // POST: AccountInfos/Edit/5
@@ -99,61 +85,13 @@ namespace OnlineMoviesBooking.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(account);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccountExists(account.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
             return View(account);
         }
 
-        // GET: AccountInfos/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var account = await _context.Account
-                .Include(a => a.IdTypesOfUserNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-
-            return View(account);
-        }
-
-        // POST: AccountInfos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var account = await _context.Account.FindAsync(id);
-            _context.Account.Remove(account);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool AccountExists(string id)
-        {
-            return _context.Account.Any(e => e.Id == id);
-        }
+        
     }
 }
