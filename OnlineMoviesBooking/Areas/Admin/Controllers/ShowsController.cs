@@ -45,6 +45,22 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             var obj = Exec.ExecuteGetAllShowTheater(id);
             return Json(new { data = obj });
         }
+        public IActionResult SearchStatus(string status)
+        {
+            if (status == "true")   // chưa chiếu
+            {
+                var obju = Exec.ExecuteGetAllShowisComing();
+                return Json(new { data = obju });
+            }
+            else if (status == "false")     // đã chiếu
+            {
+                var objn = Exec.ExecuteGetAllShowisUsed();
+                return Json(new { data = objn });
+            }
+            // tìm cáp phòng chiếu theo rạp
+            var obja = Exec.ExecuteGetAllShow();
+            return Json(new { data = obja });
+        }
         public IActionResult Index()
         {
             var theater = Exec.ExecuteTheaterGetAll();
@@ -52,7 +68,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: Shows/Details/5
         public IActionResult Details(string id)
         {
             if (id == null)
@@ -86,7 +101,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json( new { items= obj });
         }
 
-        // GET: Shows/Create
         public IActionResult Create()
         {
             var movies = Exec.ExecuteMovieGetAll();
@@ -150,7 +164,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(showVM);
         }
 
-        // GET: Shows/Edit/5
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -176,9 +189,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(show);
         }
 
-        // POST: Shows/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, ShowViewModel show)
@@ -224,7 +234,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(show);
         }
 
-     
         [HttpDelete]
         public IActionResult Delete(string id)
         {
