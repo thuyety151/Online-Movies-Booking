@@ -56,7 +56,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_PagingMovieComing", con);
+                SqlCommand com = new SqlCommand("USP_GetNumOfMovieComing", con);
                 com.CommandType = CommandType.StoredProcedure;
                 SqlDataReader rdr = com.ExecuteReader();
 
@@ -161,9 +161,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieNow @Skip= "+skip +", @Take= "+take).ToList();
 
         }
-        public List<Movie> ExecuteGetMovieComingSoon()
+        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_GetMovieComingSoon").ToList();
+            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieComing @Skip = "+skip +", @Take = "+take).ToList();
         }
         //----------------------THEATER
         public List<Theater> ExecuteTheaterGetAll()

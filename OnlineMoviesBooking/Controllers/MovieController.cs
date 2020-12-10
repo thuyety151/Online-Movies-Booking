@@ -26,9 +26,17 @@ namespace OnlineMoviesBooking.Controllers
        
         public IActionResult ComingSoon(int? page)
         {
-            List<Movie> lstmovie= new List<Movie>();
-            int num = 9;             
+            List<Movie> lstmovie = new List<Movie>();
+            int num = 2;
             var movieCount = Exec.GetCountMovieComing();
+            if (movieCount % num == 0)
+            {
+                ViewBag.AllPage = movieCount / num;
+            }
+            else
+            {
+                ViewBag.AllPage = movieCount / num + 1;
+            }
             // điều kiện để phân trang
             if (page != null && page > 0 && num < movieCount)
             {
@@ -39,7 +47,7 @@ namespace OnlineMoviesBooking.Controllers
                */
                 int numpage = movieCount % num == 0 ? movieCount / num : (movieCount / num) + 1;
 
-                if (page > numpage )
+                if (page > numpage)
                 {
                     ViewBag.page = numpage;
                 }
@@ -52,14 +60,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon().Skip(num * (numpage - 1));
+                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon().Skip(num * (page.GetValueOrDefault() - 1)).Take(num);
+                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -68,15 +76,7 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                if (movieCount < 9)
-                {
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon();
-                }
-
-                else
-                {
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon().Take(9);
-                }
+                lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(0, num);
             }
             return View(lstmovie);
         }
@@ -302,21 +302,7 @@ namespace OnlineMoviesBooking.Controllers
             var show = Exec.ExecuteGetAllShowDate(date);
             return Json(new { data = show });
         }
-        [HttpGet]
-        public JsonResult getAllPost(int? page)
-        {
-            // search
-            //var data = (from s in _db.Posts select s);
-            //if (!String.IsNullOrEmpty(txtSearch))
-            //{
-            //    ViewBag.txtSearch = txtSearch;
-            //    data = data.Where(s => s.Title.Contains(txtSearch));
-            //}
-            var movie = Exec.ExecuteGetMovieComingSoon();
-
-      
-            return Json(new { data = movie });
-        }
+        
 
         [HttpGet]
         public IActionResult getshowbydate(string idMovie, string date)

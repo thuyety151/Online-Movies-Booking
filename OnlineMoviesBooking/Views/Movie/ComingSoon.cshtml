@@ -505,21 +505,21 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="pagination-area text-center">
-            <a ><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
-            <a >1</a>
-            <a >2</a>
-            <a  class="active">3</a>
-            <a >4</a>
-            <a >5</a>
-            <a ><span>Next</span><i class="fas fa-angle-double-right"></i></a>
-        </div>*@
-                    
-                        <a class="page-link" href="/movie/comingsoon/index?page=@(ViewBag.page - 1)" tabindex="-1" aria-disabled="true">Previous</a>
-                    
-                   <a class="page-link" href="#">@ViewBag.page</a>
-                        <a class="page-link" href="/movie/comingsoon/index?page=@(ViewBag.page + 1)">Next</a>
-
+                    <div class="pagination-area text-center">
+                        <a href="/movie/comingsoon?page=@(ViewBag.page-1)"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
+                        @for (int i = 1; i <= ViewBag.AllPage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <a class="active">@i</a>
+                            }
+                            else
+                            {
+                                <a href="/movie/comingsoon?page=@i">@i</a>
+                            }
+                        }
+                        <a href="/movie/comingsoon?page=@(ViewBag.page+1)"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
