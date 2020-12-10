@@ -501,6 +501,63 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 return lstShow;
             }
         }
+
+        public List<ShowViewModel> ExecuteGetAllShowisUsed()
+        {
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("SELECT * FROM V_GetShowisUsed", con);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new ShowViewModel
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Languages = rdr["Languages"].ToString(),
+                        TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        MovieName = rdr["MovieName"].ToString(),
+                        Poster = rdr["Poster"].ToString(),
+                        ScreenName = rdr["ScreenName"].ToString(),
+                        TheaterName = rdr["TheaterName"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
+        }
+        public List<ShowViewModel> ExecuteGetAllShowisComing()
+        {
+            List<ShowViewModel> lstShow = new List<ShowViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("SELECT * FROM V_GetShowisComing", con);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstShow.Add(new ShowViewModel
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Languages = rdr["Languages"].ToString(),
+                        TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        MovieName = rdr["MovieName"].ToString(),
+                        Poster = rdr["Poster"].ToString(),
+                        ScreenName = rdr["ScreenName"].ToString(),
+                        TheaterName = rdr["TheaterName"].ToString()
+                    });
+
+                }
+                return lstShow;
+            }
+        }
         public string ExecuteInsertShow(Show show)
         {
             string result = "";
