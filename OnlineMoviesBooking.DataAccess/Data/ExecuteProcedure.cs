@@ -299,9 +299,23 @@ namespace OnlineMoviesBooking.DataAccess.Data
             };
             _context.Database.ExecuteSqlRaw("EXEC USP_UpdateScreen @Id ,@Name ,@Id_Theater", sqlParam);
         }
-        public void ExecuteDeleteScreen(string id)
+        public string ExecuteDeleteScreen(string id)
         {
-            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteScreen @Id", new SqlParameter("@Id", id));
+            string result = "";
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("dbo.USP_DeleteSeatandScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdScreenIn", id);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    result = (rdr["ErrorNumber"]).ToString();
+                }
+                return result;  // 3609 : trigger
+            }
         }
         public List<Screen_Theater> SearchScreenwithTheater(string id)
         {

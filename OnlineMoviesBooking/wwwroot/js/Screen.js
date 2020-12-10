@@ -99,7 +99,7 @@ function Delete(url) {
                 type: "DELETE",
                 url: url,
                 success: function (data) {
-                    console.log(data);
+                    console.log(data.message);
                     if (data.success) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
@@ -111,7 +111,7 @@ function Delete(url) {
                     else {
                         swalWithBootstrapButtons.fire(
                             'Error',
-                            'Can not delete this, maybe it not exit or error from sever',
+                            data.message,
                             'error'
                         )
                     }

@@ -347,9 +347,6 @@
                         <div class="tab-item active">
                             <div class="row mb-10 ">
                                 <!-- movie -->
-                                <div id="movie">
-
-                                </div>
                                 @foreach (var item in Model)
                                 {
                                     <div class="col-sm-6 col-lg-4">
@@ -361,7 +358,7 @@
                                             </div>
                                             <!-- movie content-->
                                             <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
+                                                <h5 class="title m-0" style="font-size:large">
                                                     <a href="/Movie/Detail/@item.Id">@item.Name</a>
                                                 </h5>
                                                 <ul class="movie-rating-percent">

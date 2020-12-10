@@ -157,7 +157,15 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(string id)
         {
-            Exec.ExecuteDeleteScreen(id);
+            string result=Exec.ExecuteDeleteScreen(id);
+            if (result == "2627")
+            {
+                return Json(new { success = false });
+            }
+            else if(result== "Phòng chiếu đang có lịch chiếu")
+            {
+                return Json(new { success = false, message= "Phòng chiếu đang có lịch chiếu" });
+                }
             return Json(new { success = true });
         }
         public IActionResult Search(string id)
