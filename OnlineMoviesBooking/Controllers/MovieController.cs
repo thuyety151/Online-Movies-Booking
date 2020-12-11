@@ -329,5 +329,10 @@ namespace OnlineMoviesBooking.Controllers
         {
             return RedirectToAction("Index");
         }
+
+        public IActionResult PayPal()
+        {
+            return View();
+        }
     }
 }

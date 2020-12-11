@@ -1007,5 +1007,34 @@ namespace OnlineMoviesBooking.DataAccess.Data
             int str = int.Parse(dt.Rows[0][0].ToString());
             return str;
         }
+        public List<CheckoutViewModel> TestCheckout()
+        {
+            List<CheckoutViewModel> v = new List<CheckoutViewModel>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_TestCheckout", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    v.Add(new CheckoutViewModel
+                    {
+                        IdMovie = rdr["IdMovie"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Languages = rdr["Languages"].ToString(),
+                        IdShow = rdr["IdShow"].ToString(),
+                        TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TheaterName =rdr["TheaterName"].ToString(),
+                        ScreenName = rdr["ScreenName"].ToString(),
+                        Total = int.Parse(rdr["Total"].ToString()),
+                        No = rdr["No"].ToString()
+                    });
+                }
+                return v;
+            }
+        }
     }
 }
