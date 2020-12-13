@@ -10,11 +10,15 @@ namespace OnlineMoviesBooking.Models.ViewModels
     {
         public string Id { get; set; }
         [Display(Name="Tên phòng chiếu")]
-        [Required]
         public string Name { get; set; }
-        [Display(Name = "Rạp chiếu")]
-        [Required]
+
         public string IdTheater { get; set; }
+        [Display(Name = "Rạp chiếu phim")]
+
+        public string NameTheater { get; set; }
+        [Display(Name = "Địa chỉ")]
+
+        public string Address { get; set; }
 
         public virtual Theater IdTheaterNavigation { get; set; }
         public virtual ICollection<Seat> Seat { get; set; }

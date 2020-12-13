@@ -3,23 +3,27 @@ $(document).ready(function () {
 
     $('#dataTable').DataTable({
         "ajax": {
-            "url": '/Screens/getall'
+            "url": '/Admin/Screens/getall'
         },
         "columns": [
-            { "data": "name" },
-            { "data": "nameTheater" },
+            {
+                "data": "name", "width": "30%"
+            },
+            {
+                "data": "nameTheater", "width":"30%" },
             {
                 "data": "id",
+                "width":"40%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                                    Sửa
                                 </a>
-                                <a href="/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
-                                    Detail</a>
-                                <a onClick=Delete("/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    Delete</a>
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Chi tiết</a>
+                                <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Xóa</a>
                             </div>                           
                             `
                 }
@@ -42,23 +46,26 @@ $('#Search').click(function () {
     table.destroy();
     $('#dataTable').DataTable({
         "ajax": {
-            "url": "/Screens/Search/" + value,
+            "url": "/Admin/Screens/Search/" + value,
         },
         "columns": [
-            { "data": "name" },
-            { "data": "nameTheater" },
             {
-                "data": "id",
+                "data": "name", "width": "30%"
+            },
+            {
+                "data": "nameTheater", "width":"30%" },
+            {
+                "data": "id","width":"40%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Screens/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                <a href="/Admin/Screens/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                                    Sửa
                                 </a>
-                                <a href="/Screens/Details/${data}" class="btn btn-danger text-white" style="cursor:pointer">
-                                    Detail</a>
-                                <a onClick=Delete("/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    Delete</a>
+                                <a href="/Admin/Screens/Details/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                    Chi tiết</a>
+                                <a onClick=Delete("/Admin/Screens/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                    Xóa</a>
                             </div>                           
                             `
                 }
@@ -92,7 +99,7 @@ function Delete(url) {
                 type: "DELETE",
                 url: url,
                 success: function (data) {
-                    console.log(data);
+                    console.log(data.message);
                     if (data.success) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
@@ -104,7 +111,7 @@ function Delete(url) {
                     else {
                         swalWithBootstrapButtons.fire(
                             'Error',
-                            'Can not delete this, maybe it not exit or error from sever',
+                            data.message,
                             'error'
                         )
                     }

@@ -3,7 +3,7 @@
         $.ajax
         ({
             method: 'GET',
-            url: '/Customer/Movie/Coming' ,
+            url: '/Movie/Coming' ,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {

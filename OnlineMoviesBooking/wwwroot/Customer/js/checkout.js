@@ -2,6 +2,10 @@
     console.log("ready");
     $.ajax({
         method: 'GET',
-        url:'/Customer/Movie/getinfo/'
+        url:'/Movie/getinfo/'
     });
 });
+setTimeout(function () {
+    console.log('timeout');
+    $('#form1').submit();
+}, 30000);

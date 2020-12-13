@@ -2,7 +2,7 @@
 $(document).ready(function () {
     $('#dataTable').DataTable({
         "ajax": {
-            "url": '/theaters/getall'
+            "url": '/Admin/theaters/getall'
         },
         "columns": [
             { "data": "name" },
@@ -13,13 +13,13 @@ $(document).ready(function () {
                 "render": function (data) {
                     return `
                              <div class="text-center" >
-                                <a href="/Theaters/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Admin/Theaters/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                     Edit
                                 </a>
-                                <a href="/Theaters/Details/${data}" 
+                                <a href="/Admin/Theaters/Details/${data}" 
                                 class="btn btn-success" style="font-size:small">Details</a> 
 
-                                <a onClick=Delete("/Theaters/Delete/${data}") class="btn btn-danger text-white"
+                                <a onClick=Delete("/Admin/Theaters/Delete/${data}") class="btn btn-danger text-white"
                                 style="cursor:pointer">
                                     Delete</a>
                             </div>                           
