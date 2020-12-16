@@ -69,7 +69,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                screen.Id = Guid.NewGuid().ToString();
+                screen.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
                 // check lỗi do nhập
                 if (checkname != "") 
@@ -80,6 +80,13 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 {
                     // check lỗi do add dưới db
                     string s = Exec.ExecuteInsertScreen(screen);
+
+                    while (s.Contains("PRIMARY"))
+                    {
+                        screen.Id= Guid.NewGuid().ToString("N").Substring(0, 10);
+                        s = Exec.ExecuteInsertScreen(screen);
+                    }
+
                     // transaction
                     if (s == "2627")
                     {

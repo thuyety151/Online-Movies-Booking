@@ -19,6 +19,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public ExecuteProcedure()
         {
             cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
+            CreateTypeOfSeat();
         }
 
         //-------------------------------MOVIE
@@ -431,7 +432,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public string ExecuteInsertScreen(Screen screen)      // EDIT HERE AFTER USE TRANSACTION
         {
-            string result = "";
+            string mess = "";
+            string num = "";
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -444,9 +446,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())
                 {
-                    result = (rdr["ErrorNumber"]).ToString();
+                    num = (rdr["ErrorNumber"]).ToString();
+                    mess = (rdr["ErrorMessage"]).ToString();
                 }
-                return result;  // 3609 : trigger
+                return mess;  // 3609 : trigger
             }
 
         }
@@ -559,6 +562,18 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
         }
         //--------------------TypesOfSeat
+        public void CreateTypeOfSeat()
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_CreateTypeOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.ExecuteScalar();
+
+            }
+        }
         public List<TypesOfSeat> GetAllTypesOfSeat()
         {
             var lst = new List<TypesOfSeat>();
