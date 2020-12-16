@@ -12,12 +12,10 @@ namespace OnlineMoviesBooking.Controllers
 {
     public class MovieController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
-        public MovieController(CinemaContext context)
+        public MovieController()
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
+            Exec = new ExecuteProcedure();
         }
         public IActionResult Index()
         {

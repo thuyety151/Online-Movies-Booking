@@ -14,13 +14,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class ScreensController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
 
         public ScreensController(CinemaContext context)
         {
-            _context = context;
-            Exec = new ExecuteProcedure(_context);
+            Exec = new ExecuteProcedure();
         }
         public IActionResult GetAll()
         {
@@ -184,9 +182,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             var obj = Exec.SearchScreenwithTheater(id);
             return Json(new { data = obj });
         }
-        private bool ScreenExists(string id)
-        {
-            return _context.Screen.Any(e => e.Id == id);
-        }
+
     }
 }

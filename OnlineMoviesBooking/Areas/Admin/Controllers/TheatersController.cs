@@ -13,12 +13,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class TheatersController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
-        public TheatersController(CinemaContext context)
+        public TheatersController()
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
+            Exec = new ExecuteProcedure();
         }
 
         public JsonResult GetAll()
@@ -89,52 +87,52 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Theaters/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var theater = await _context.Theater.FindAsync(id);
-            if (theater == null)
-            {
-                return NotFound();
-            }
-            return View(theater);
-        }
+        //    var theater = await _context.Theater.FindAsync(id);
+        //    if (theater == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(theater);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
-        {
-            if (id != theater.Id)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
+        //{
+        //    if (id != theater.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(theater);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TheaterExists(theater.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(theater);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(theater);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TheaterExists(theater.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(theater);
+        //}
 
         [HttpDelete]
         public IActionResult Delete(string id)
@@ -143,9 +141,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        private bool TheaterExists(string id)
-        {
-            return _context.Theater.Any(e => e.Id == id);
-        }
+
     }
 }

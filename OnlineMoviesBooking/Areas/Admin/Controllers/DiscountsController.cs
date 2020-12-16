@@ -16,14 +16,12 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class DiscountsController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public DiscountsController(CinemaContext context, IWebHostEnvironment hostEnvironment)
+        public DiscountsController( IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
             this._hostEnvironment = hostEnvironment;
+            Exec = new ExecuteProcedure();
         }
 
         public IActionResult GetAll()
@@ -229,9 +227,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        private bool DiscountExists(string id)
-        {
-            return _context.Discount.Any(e => e.Id == id);
-        }
+        
     }
 }

@@ -17,13 +17,12 @@ namespace OnlineMoviesBooking.Controllers
         private readonly string _clientId;
         private readonly string _secretKey;
         private readonly ExecuteProcedure Exec;
-        private readonly CinemaContext _context;
 
         public CheckoutController(IConfiguration config)
         {
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
-            Exec = new ExecuteProcedure(_context);
+            Exec = new ExecuteProcedure();
         }
         public IActionResult Index()
         {
