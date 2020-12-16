@@ -70,69 +70,68 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public  IActionResult Create([Bind("Id,Name,Address,Hotline")] Theater theater)
         {
-            theater.Id = Guid.NewGuid().ToString();
+            theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
                 // chưa đưa ra được trigger execption
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
-                if(s=="2627")       //check unique address
+
+                while (s.Contains("PRIMARY"))   // do check primary key trước
+                {
+                    theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
+                    s = Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
+                }
+                if (s.Contains("UNIQUE"))       //check unique address
                 {
                     // có error message
                     ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
                     return View(theater);
-                }    
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(theater);
         }
 
         // GET: Theaters/Edit/5
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var theater = Exec.ExecuteDetailTheater(id);
 
-        //    var theater = await _context.Theater.FindAsync(id);
-        //    if (theater == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(theater);
-        //}
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
-        //{
-        //    if (id != theater.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            if (theater == null)
+            {
+                return NotFound();
+            }
+            return View(theater);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(theater);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TheaterExists(theater.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(theater);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
+        {
+            if (id != theater.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                string result = Exec.ExecuteUpdateTheater(theater);
+                if (result.Contains("UNIQUE"))       //check unique address
+                {
+                    // có error message
+                    ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
+                    return View(theater);
+                }
+                return RedirectToAction(nameof(Index));
+                
+            }
+            return View(theater);
+        }
 
         [HttpDelete]
         public IActionResult Delete(string id)

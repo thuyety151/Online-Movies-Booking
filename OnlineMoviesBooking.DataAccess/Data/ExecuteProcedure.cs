@@ -358,7 +358,34 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             catch(SqlException s)
             {
-                 mess = s.Number.ToString();
+                 mess = s.Message.ToString();
+            }
+            return mess;
+        }
+        public string ExecuteUpdateTheater(Theater theater)
+        {
+            string mess = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_UpdateTheater", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", theater.Id);
+                    com.Parameters.AddWithValue("@Name", theater.Name);
+                    com.Parameters.AddWithValue("@Address", theater.Address);
+                    com.Parameters.AddWithValue("@Hotline", theater.Hotline);
+
+                    com.ExecuteScalar();
+
+                }
+
+            }
+            catch (SqlException s)
+            {
+                mess = s.Message.ToString();
             }
             return mess;
         }
