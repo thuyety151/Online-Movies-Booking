@@ -103,7 +103,26 @@
             if ($('#lstSeat').val() == "") {
                 alert("Vui lòng chọn vị trí ngồi");
             }
-            checkout.setAttribute("href", "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + $('#lstSeat').val())
+            else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Movie/getinfo/',
+
+                    data: {
+                        "idshow": $('#idshow').val(),
+                        "lstSeat": $('#lstSeat').val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            checkout.setAttribute("href", "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + $('#lstSeat').val())
+                        }
+                        else {
+                            alert("Hello! I am an alert box!");
+                        }
+                    }
+                })
+            }
 
         });
 })(jQuery);

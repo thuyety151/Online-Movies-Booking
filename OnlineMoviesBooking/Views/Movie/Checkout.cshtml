@@ -108,44 +108,46 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="booking-summery bg-one">
-                    <h4 class="title">chi tiết đơn</h4>
-                    <ul>
-                        <li>
-                            <h6 class="subtitle">@Model.MovieName</h6>
-                            <span class="info">@Model.Languages</span>
-                        </li>
-                        <li>
-                            <h6 class="subtitle"><span>@Model.TheaterName</span><span>@Model.No</span></h6>
-                            <div class="info">
-                                <span>@Model.TimeStart.ToString("dd-MM-yyyy HH:mm")</span> 
-                                <span>vé</span>
-                            </div>
-                        </li>
-                        <li>
-                            <h6 class="subtitle mb-0"><span>giá vé</span><span>@Model.TotalPrice.ToString("#,###")</span></h6>
-                        </li>
-                    </ul>
-                    <ul class="side-shape">
-                        <li>
-                            <h6 class="subtitle"><span>combos</span><span>$57</span></h6>
-                            <span class="info"><span>2 Nachos Combo</span></span>
-                        </li>
-                        <li>
-                            <h6 class="subtitle"><span>food &amp; bevarage</span></h6>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <span class="info"><span>price</span><span>$207</span></span>
-                            <span class="info"><span>vat</span><span>$15</span></span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="proceed-area  text-center">
-                    <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
-                    <a class="custom-button back-button">proceed</a>
-                </div>
+                <form id="timeout" action="Index">
+                    <div class="booking-summery bg-one">
+                        <h4 class="title">chi tiết đơn</h4>
+                        <ul>
+                            <li>
+                                <h6 class="subtitle">@Model.MovieName</h6>
+                                <span class="info">@Model.Languages</span>
+                            </li>
+                            <li>
+                                <h6 class="subtitle"><span>@Model.TheaterName</span><span>@Model.No</span></h6>
+                                <div class="info">
+                                    <span>@Model.TimeStart.ToString("dd-MM-yyyy HH:mm")</span>
+                                    <span>vé</span>
+                                </div>
+                            </li>
+                            <li>
+                                <h6 class="subtitle mb-0"><span>giá vé</span><span>@Model.TotalPrice.ToString("#,###")</span></h6>
+                            </li>
+                        </ul>
+                        <ul class="side-shape">
+                            <li>
+                                <h6 class="subtitle"><span>combos</span><span>$57</span></h6>
+                                <span class="info"><span>2 Nachos Combo</span></span>
+                            </li>
+                            <li>
+                                <h6 class="subtitle"><span>food &amp; bevarage</span></h6>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <span class="info"><span>price</span><span>$207</span></span>
+                                <span class="info"><span>vat</span><span>$15</span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="proceed-area  text-center">
+                        <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
+                        <a id="submit" href="/Movie/PaypalCheckout" class="custom-button back-button">Thanh toán</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

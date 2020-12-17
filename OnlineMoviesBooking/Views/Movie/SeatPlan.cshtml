@@ -35,13 +35,13 @@
 <!-- ==========Page-Title========== -->
 <!-- ==========Movie-Section========== -->
 <div class="seat-plan-section padding-bottom ">
-    <form asp-action="Create" >
+    <form  id="form1" asp-action="Now" >
         @Html.AntiForgeryToken()
         <div id="price" hidden>
             <input name="type-1" class="type-1" hidden />
             <input name="type-2" class="type-2" hidden />
             <input name="type_3" class="type-3" hidden />
-            <input name="idShow" id="idshow" value="@ViewBag.IdShow" hidden/>
+            <input name="idShow" id="idshow"  value="@ViewBag.IdShow" hidden/>
             <input id="lstSeat"  hidden/>
         </div>
         <div class="container">
@@ -721,7 +721,6 @@
 @section Scripts{
 
     <script src="~/Customer/js/seatplan.js"></script>
-<script src="~/Customer/js/checkout.js"></script>
 }
 @section Header{
     <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>

@@ -7,5 +7,5 @@
 });
 setTimeout(function () {
     console.log('timeout');
-    $('#form1').submit();
-}, 30000);
+    $('#timeout').submit();
+}, 3000);
