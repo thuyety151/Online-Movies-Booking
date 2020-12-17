@@ -29,38 +29,37 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: TypesOfSeats/Details/5
-        //public async Task<IActionResult> Details(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public IActionResult Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var typesOfSeat = await _context.TypesOfSeat
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (typesOfSeat == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var typesOfSeat = Exec.ExecGetDetailTypeOfSeat(id);
+            if (typesOfSeat == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(typesOfSeat);
-        //}
+            return View(typesOfSeat);
+        }
 
-        
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    var typesOfSeat = await _context.TypesOfSeat.FindAsync(id);
-        //    if (typesOfSeat == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(typesOfSeat);
-        //}
+        public IActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var typesOfSeat = Exec.ExecGetDetailTypeOfSeat(id);
+            if (typesOfSeat == null)
+            {
+                return NotFound();
+            }
+            return View(typesOfSeat);
+        }
 
         // POST: TypesOfSeats/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
