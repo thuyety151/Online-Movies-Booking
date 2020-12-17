@@ -1,4 +1,4 @@
-﻿
+﻿@model OnlineMoviesBooking.Models.ViewModels.BillViewModel
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
@@ -112,15 +112,18 @@
                     <h4 class="title">chi tiết đơn</h4>
                     <ul>
                         <li>
-                            <h6 class="subtitle">ViewBag.MovieName</h6>
-                            <span class="info">English-2d</span>
+                            <h6 class="subtitle">@Model.MovieName</h6>
+                            <span class="info">@Model.Languages</span>
                         </li>
                         <li>
-                            <h6 class="subtitle"><span>City Walk</span><span>02</span></h6>
-                            <div class="info"><span>10 SEP TUE, 11:00 PM</span> <span>Tickets</span></div>
+                            <h6 class="subtitle"><span>@Model.TheaterName</span><span>@Model.No</span></h6>
+                            <div class="info">
+                                <span>@Model.TimeStart.ToString("dd-MM-yyyy HH:mm")</span> 
+                                <span>vé</span>
+                            </div>
                         </li>
                         <li>
-                            <h6 class="subtitle mb-0"><span>giá vé</span><span>$150</span></h6>
+                            <h6 class="subtitle mb-0"><span>giá vé</span><span>@Model.TotalPrice.ToString("#,###")</span></h6>
                         </li>
                     </ul>
                     <ul class="side-shape">

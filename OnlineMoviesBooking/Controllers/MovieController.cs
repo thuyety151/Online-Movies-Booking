@@ -114,14 +114,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
+                     lstmovie =Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
+                     lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -130,9 +130,9 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                 lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(0, num);
+                 lstmovie = Exec.ExecuteGetMovieNow(0, num);
             }
-            return View( lstmovie);
+            return View(lstmovie);
         }
         public IActionResult Detail(string id)
         {
@@ -214,69 +214,70 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-        [HttpGet]
-        public IActionResult getinfo(string idshow,string lstSeat)
-        {
-            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
-            // Kiểm tra ID show hợp lêk
-            var show = Exec.ExecuteGetDetailShow(idshow);
-            List<string> lstseat = lstSeat.Split(' ').ToList();
-            if (show == null)
-            {
-                return Json(new {  success = false });
-            }
-            if (lstSeat == " undefined")
-            {
-                return Json(new { success = false });
-            }
-            foreach (var item in lstseat.ToList())
-            {
-                if(item== "undefined" || item == "")
-                {
-                    lstseat.Remove(item);
-                }
-            }
-            if (lstseat.Count == 0)
-            {
-                return Json(new { success = false });
-            }
-            var seatVM = new List<Seat>();
-            foreach (var item in lstseat)
-            {
-                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow)); 
-            }
+        //[HttpGet]
+        //public IActionResult getinfo(string idshow,string lstSeat)
+        //{
+        //    // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
+        //    // Kiểm tra ID show hợp lêk
+        //    var show = Exec.ExecuteGetDetailShow(idshow);
+        //    List<string> lstseat = lstSeat.Split(' ').ToList();
+        //    if (show == null)
+        //    {
+        //        return Json(new {  success = false });
+        //    }
+        //    if (lstSeat == " undefined")
+        //    {
+        //        return Json(new { success = false });
+        //    }
+        //    foreach (var item in lstseat.ToList())
+        //    {
+        //        if(item== "undefined" || item == "")
+        //        {
+        //            lstseat.Remove(item);
+        //        }
+        //    }
+        //    if (lstseat.Count == 0)
+        //    {
+        //        return Json(new { success = false });
+        //    }
+        //    var seatVM = new List<Seat>();
+        //    foreach (var item in lstseat)
+        //    {
+        //        seatVM.Add(Exec.ExecCheckIdSeat(item, idshow)); 
+        //    }
 
-            foreach (var item in seatVM)
-            {
-                if ( item.Id== null)
-                {
-                    return Json(new { success = false });
-                }
-            }
+        //    foreach (var item in seatVM)
+        //    {
+        //        if ( item.Id== null)
+        //        {
+        //            return Json(new { success = false });
+        //        }
+        //    }
 
-            var totalPrice = 0;
-            foreach (var item in seatVM)
-            {
-                totalPrice+= Exec.FGetPrice(item.Id);
-            }
+        //    var totalPrice = 0;
+        //    foreach (var item in seatVM)
+        //    {
+        //        totalPrice+= Exec.FGetPrice(item.Id);
+        //    }
+            
 
-            var bill = new
-            {
-                idShow = idshow,
-                movieName=show.MovieName,  // movie
-                seats=seatVM,
-                theatername=show.TheaterName, //theater -- show.TheaterName
-                screenname=show.ScreenName, //screen
-                datestart=show.TimeStart.ToString("dd-MM-yyyy"),  //show    --
-                timestart=show.TimeStart.ToString("HH:mm"),  //show    --
-                totalprice=totalPrice, //seat    --
-                languages=show.Languages
+        //    var bill = new
+        //    {
+        //        idShow = idshow,
+        //        movieName=show.MovieName,  // movie
+        //        seats=seatVM,
+        //        theatername=show.TheaterName, //theater -- show.TheaterName
+        //        screenname=show.ScreenName, //screen
+        //        datestart=show.TimeStart.ToString("dd-MM-yyyy"),  //show    --
+        //        timestart=show.TimeStart.ToString("HH:mm"),  //show    --
+        //        totalprice=totalPrice, //seat    --
+        //        languages=show.Languages
 
-            };
-            return Json( bill);
-        }
+        //    };
+        //    return Json( bill);
+        //}
 
-        public IActionResult Checkout( string idshow,string bill)
+        public IActionResult check( string idshow,string bill)
         {
             if (idshow == null)
             {
@@ -331,6 +332,84 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult PayPal()
         {
             return View();
+        }
+        public IActionResult CheckOut(string idshow,string lstSeat)
+        {
+            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
+            // Kiểm tra ID show hợp lêk
+            var show = Exec.ExecuteGetDetailShow(idshow);
+            List<string> lstseat = lstSeat.Split(' ').ToList();
+            if (show == null)
+            {
+                return Json(new { success = false });
+            }
+            if (lstSeat == " undefined")
+            {
+                return Json(new { success = false });
+            }
+            foreach (var item in lstseat.ToList())
+            {
+                if (item == "undefined" || item == "")
+                {
+                    lstseat.Remove(item);
+                }
+            }
+            if (lstseat.Count == 0)
+            {
+                return Json(new { success = false });
+            }
+            var seatVM = new List<Seat>();
+            foreach (var item in lstseat)
+            {
+                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow));
+            }
+
+            foreach (var item in seatVM)
+            {
+                if (item.Id == null)
+                {
+                    return Json(new { success = false });
+                }
+            }
+
+            var totalPrice = 0;
+            foreach (var item in seatVM)
+            {
+                totalPrice += Exec.FGetPrice(item.Id);
+            }
+
+            // tạo bill
+            List<string> seats = new List<string>();
+            for (int i = 0; i < 8; i++)
+            {
+                if (seatVM.Count <= i)
+                {
+                    seats.Add(null);
+                }
+                else
+                {
+                    seats.Add(seatVM[i].Id);
+                }
+            }
+            string result = Exec.ExecInsertBill(seats, "1", idshow, null);
+            // chưa xử lí transaction
+
+            // get bill
+            var bill = Exec.ExecGetBillDetail("1", idshow);
+            //var bill = new
+            //{
+            //    idShow = idshow,
+            //    movieName = show.MovieName,  // movie
+            //    seats = seatVM,
+            //    theatername = show.TheaterName, //theater -- show.TheaterName
+            //    screenname = show.ScreenName, //screen
+            //    datestart = show.TimeStart.ToString("dd-MM-yyyy"),  //show    --
+            //    timestart = show.TimeStart.ToString("HH:mm"),  //show    --
+            //    totalprice = totalPrice, //seat    --
+            //    languages = show.Languages
+
+            //};
+            return View(bill);
         }
     }
 }
