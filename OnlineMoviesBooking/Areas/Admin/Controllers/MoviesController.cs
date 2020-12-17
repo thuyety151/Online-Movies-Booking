@@ -65,27 +65,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            //var obj = new
-            //{
-            //    id = movie.Id,
-            //    name = movie.Name,
-            //    genre = movie.Genre,
-            //    director = movie.Director,
-            //    casts = movie.Casts,
-            //    rated = movie.Rated,
-            //    description = movie.Description,
-            //    trailer = movie.Trailer,
-            //    releaseDate = movie.ReleaseDate.ToShortDateString(),
-            //    runningtime = movie.RunningTime.ToString(),
-            //    poster = movie.Poster
-            //};
-            //return Json(new { data = obj});
-            
         }
 
         // GET: Movies/Create
         [HttpGet]
-        public IActionResult Upsert(string? id)
+        public IActionResult Upsert(string id=null)
         {
             if (id != null)
             {
@@ -102,7 +86,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
             }
             ViewBag.Id = "";
-            id = "";
             return View();
         }
 
@@ -167,7 +150,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     //Theem movie
                     movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
                     string result= Exec.ExecuteInsertMovie(movie);
-                    while(result=="2627")  // trùng primary key do generate id
+                    while(result.Contains("PRIMARY") ) // trùng primary key do generate id
                     {
                         movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
                         result = Exec.ExecuteInsertMovie(movie);
