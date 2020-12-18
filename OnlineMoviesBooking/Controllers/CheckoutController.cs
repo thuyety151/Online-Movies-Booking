@@ -30,7 +30,7 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult Previews()
         {
-            var checkout = Exec.TestCheckout();
+            var checkout = Exec.TestCheckout("1");
 
             return View(checkout[0]);
         }
@@ -39,7 +39,7 @@ namespace OnlineMoviesBooking.Controllers
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
-            var checkout = Exec.TestCheckout();
+            var checkout = Exec.TestCheckout("1");
 
             #region Create Paypal Order
             var itemList = new ItemList()

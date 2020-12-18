@@ -204,7 +204,7 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            Exec.ExecDeleteBillStatus0();
+            Exec.ExecDeleteBillStatus0("1");
 
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
@@ -227,20 +227,7 @@ namespace OnlineMoviesBooking.Controllers
         }
        
 
-        public IActionResult check( string idshow,string bill)
-        {
-            if (idshow == null)
-            {
-                return NotFound();
-            }
-            var show = Exec.ExecuteGetDetailShow(idshow);
-            if (show == null)
-            {
-                return NotFound();
-            }
 
-            return View();
-        }
        // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
@@ -353,7 +340,7 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult TimeOut(string idshow)
         {
-            Exec.ExecDeleteBill("1", idshow);
+            Exec.ExecDeleteBillStatus0("1");
             return View("Index");
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout()
@@ -361,7 +348,7 @@ namespace OnlineMoviesBooking.Controllers
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
-            var checkout = Exec.TestCheckout();
+            var checkout = Exec.TestCheckout("1");
 
             #region Create Paypal Order
             var itemList = new ItemList()
@@ -406,8 +393,8 @@ namespace OnlineMoviesBooking.Controllers
                 },
                 RedirectUrls = new RedirectUrls()
                 {
-                    CancelUrl = $"{hostname}/Checkout/CheckoutFail",
-                    ReturnUrl = $"{hostname}/Checkout/CheckoutSuccess"
+                    CancelUrl = $"{hostname}/Movie/CheckoutFail",
+                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess"
                 },
                 Payer = new Payer()
                 {
@@ -444,21 +431,23 @@ namespace OnlineMoviesBooking.Controllers
                 var debugId = httpException.Headers.GetValues("PayPal-Debug-Id").FirstOrDefault();
 
                 //Process when Checkout with Paypal fails
-                return Redirect("/Checkout/CheckoutFail");
+                return Redirect("/Movie/CheckoutFail");
             }
         }
         public IActionResult CheckoutFail()
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            return View();
+            Exec.ExecUpdateBillStatus("1");
+            return Content("Thanh toán không thành công");
         }
 
         public IActionResult CheckoutSuccess()
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
-            return View();
+            Exec.ExecUpdateBillStatus("1");
+            return Content("Thanh toán thành công");
         }
     }
 }

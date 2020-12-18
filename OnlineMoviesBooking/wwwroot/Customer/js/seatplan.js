@@ -1,6 +1,5 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        
         // get row
         var rows = document.querySelectorAll('.seat-line');
         $.each(rows, function (index, row) {

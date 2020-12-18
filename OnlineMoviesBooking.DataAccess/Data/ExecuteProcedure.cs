@@ -1066,7 +1066,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public List<Discount> ExecuteGetAllDiscount()
         {
             List<Discount> lstDiscount = new List<Discount>();
-            DateTime date;
+
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -1322,30 +1322,34 @@ namespace OnlineMoviesBooking.DataAccess.Data
             int str = int.Parse(dt.Rows[0][0].ToString());
             return str;
         }
-        public List<CheckoutViewModel> TestCheckout()
+        public List<CheckoutViewModel> TestCheckout(string idaccount)
         {
             List<CheckoutViewModel> v = new List<CheckoutViewModel>();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_TestCheckout", con);
+                SqlCommand com = new SqlCommand("USP_Checkout", con);
                 com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())
                 {
                     v.Add(new CheckoutViewModel
                     {
-                        IdMovie = rdr["IdMovie"].ToString(),
-                        Name = rdr["Name"].ToString(),
-                        Languages = rdr["Languages"].ToString(),
-                        IdShow = rdr["IdShow"].ToString(),
+                        IdShow = rdr["Id_Show"].ToString(),
+                        No = rdr["No"].ToString(),
+                        Total = int.Parse(rdr["TotalPrice"].ToString()),
+                        MovieName = rdr["MovieName"].ToString(),
+                        RunningTime = rdr["RunningTime"].ToString(),
                         TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                        TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                        Languages = rdr["Languages"].ToString(),
                         TheaterName =rdr["TheaterName"].ToString(),
                         ScreenName = rdr["ScreenName"].ToString(),
-                        Total = int.Parse(rdr["Total"].ToString()),
-                        No = rdr["No"].ToString()
+                        Address=rdr["Address"].ToString(),
+                        Date = DateTime.Parse(rdr["Date"].ToString())
                     });
                 }
                 return v;
@@ -1433,7 +1437,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
-        public void ExecDeleteBillStatus0()
+        public void ExecDeleteBillStatus0(string idaccount)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1441,6 +1445,19 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 // TêN STORE
                 SqlCommand com = new SqlCommand("USP_DeleteBillStatus0", con);
                 com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount ?? Convert.DBNull);
+                com.ExecuteNonQuery();
+            }
+        }
+        public void ExecUpdateBillStatus(string idaccount)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_ChangeBillStatus", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
                 com.ExecuteNonQuery();
             }
         }

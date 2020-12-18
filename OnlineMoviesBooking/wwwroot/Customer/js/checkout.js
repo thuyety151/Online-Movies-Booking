@@ -8,4 +8,6 @@
 setTimeout(function () {
     console.log('timeout');
     $('#timeout').submit();
-}, 6000);
+}, 60000);
+
+
