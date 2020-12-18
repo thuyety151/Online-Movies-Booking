@@ -1,0 +1,81 @@
+﻿@model OnlineMoviesBooking.Models.Models.Movie
+
+
+<div class="modal fade" id="Detail">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Chi tiết phim</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <dl class="row">
+                        <dt class="col-sm-3">
+                            Tên
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Name" id="Name" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Loại
+                        </dt>
+                        <dd class="col-sm-9">
+                            <textarea asp-for="Genre" id="Genre" class="form-control" disabled></textarea>
+                        </dd>
+                        <dt class="col-sm-3">
+                            Director
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Director" id="Director" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Casts
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Casts" id="Casts" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Rated
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Rated" id="Rated" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Description
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Description" id="Description" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Trailer
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Trailer" id="Trailer" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            ReleaseDate
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="ReleaseDate" id="ReleaseDate" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            RunningTime
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="RunningTime" id="RunningTime" class="form-control" disabled />
+                        </dd>
+                        <dt class="col-sm-3">
+                            Poster
+                        </dt>
+                        <dd class="col-sm-9">
+                            <input asp-for="Poster" id="Poster" class="form-control" disabled />
+                        </dd>
+                    </dl>
+                </form>
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

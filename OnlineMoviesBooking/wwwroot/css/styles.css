@@ -1,4 +1,4 @@
-
+﻿
 @charset "UTF-8";
 /*!
 * Start Bootstrap - SB Admin v6.0.2 (https://startbootstrap.com/template/sb-admin)
@@ -10252,4 +10252,17 @@ body {
 
 .view {
     background-image: url("../assets/Img_aventure/tải xuống (3).jfif")
+}
+.seat-plan-wrapper li .movie-schedule .item {
+    color: #ffffff;
+    padding: 5px;
+    width: 70px;
+    /* background: #162f5f; */
+    position: relative;
+    text-align: center;
+    -webkit-mask-repeat: no-repeat;
+    cursor: pointer;
+    -webkit-transition: all ease 0.3s;
+    transition: all ease 0.3s;
+    margin: 5px;
 }

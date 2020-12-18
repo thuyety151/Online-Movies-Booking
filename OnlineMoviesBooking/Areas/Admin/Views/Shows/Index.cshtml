@@ -1,0 +1,83 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Show>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron" style="padding: 1rem;">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="theater-tab" data-bs-toggle="tab" href="#theater" role="tab" aria-controls="theater" aria-selected="true">Rạp</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="status-tab" data-bs-toggle="tab" href="#status" role="tab" aria-controls="status" aria-selected="false">Trạng thái</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="theater" role="tabpanel" aria-labelledby="theater-tab">
+            <div style="display: flex; margin-top:2rem">
+                <select id="select" class="form-control col-md-6" asp-items="ViewBag.Theater">
+                    <option value="">Tất cả</option>
+                </select>
+
+                <button id="Search" class="btn btn-primary" style="margin-left: 2rem;">Lọc</button>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="status" role="tabpanel" aria-labelledby="status-tab">
+            <div class="tab-pane fade show active" id="theater" role="tabpanel" aria-labelledby="theater-tab">
+                <div style="display: flex; margin-top:2rem">
+                    <select id="select-status" class="form-control col-md-6">
+                        <option value="">Tất cả</option>
+                        <option value="true">Chưa chiếu</option>
+                        <option value="false">Đã chiếu</option>
+                    </select>
+
+                    <button id="Search-Status" class="btn btn-primary" style="margin-left: 2rem;">Lọc</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p>
+    <a asp-action="Create">Thêm lịch chiếu</a>
+</p>
+<div class="card shadow mb-4 ">
+    <div class="card-header py-3">
+        Lịch chiếu phim
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tên phim</th>
+                        <th>Poster</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Phòng chiếu</th>
+                        <th>Rạp chiếu phim</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
+
+@section Scripts{
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="~/js/Show.js"></script>
+}

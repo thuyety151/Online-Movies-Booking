@@ -37,7 +37,6 @@ namespace OnlineMoviesBooking.Models.Models
         public int Point { get; set; }
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
         public string IdTypesOfUser { get; set; }
-        [Required(ErrorMessage = "Dữ liệu không được để trống")]
         public string IdTypeOfMember { get; set; }
         public string Image { get; set; }
 

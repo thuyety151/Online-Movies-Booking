@@ -1,0 +1,113 @@
+﻿@model OnlineMoviesBooking.Models.Models.Movie;
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- ==========Preloader========== -->
+<div class="preloader" style="display: none;">
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ==========Preloader========== -->
+<!-- ==========Overlay========== -->
+<div class="overlay"></div>
+<a href="http://pixner.net/boleto/demo/movie-ticket-plan.html#0" class="scrollToTop">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- ==========Overlay========== -->
+<!-- ==========Window-Warning-Section========== -->
+<section class="window-warning inActive">
+    <div class="lay"></div>
+    <div class="warning-item">
+        <h6 class="subtitle">Welcome! </h6>
+        <h4 class="title">Select Your Seats</h4>
+        <div class="thumb">
+            <img src="~/Customer/logo/seat-plan.png" alt="movie">
+        </div>
+        <a href="http://pixner.net/boleto/demo/movie-seat-plan.html" class="custom-button seatPlanButton">Seat Plans<i class="fas fa-angle-right"></i></a>
+    </div>
+</section>
+<div>
+    <h1 id="Id" hidden>@ViewBag.Id</h1>
+</div>
+<!-- ==========Window-Warning-Section========== -->
+<!-- ==========Banner-Section========== -->
+<section class="details-banner hero-area bg_img" data-background="@Model.Poster" style="background-image: url(&quot;./assets/images/banner/banner03.jpg&quot;);">
+    <div class="container">
+        <div class="details-banner-wrapper">
+            <div class="details-banner-content">
+                <!--TÊN MOVIE-->
+                <h3 id="nameMovie" class="title">@Model.Name</h3>
+                <div class="tags">
+                    <a>English</a>
+                    <a>Hindi</a>
+                    <a>Telegu</a>
+                    <a>Tamil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ==========Banner-Section========== -->
+<!-- ============ date==================-->
+
+<section id="date" class="book-section bg-one" style=" margin-bottom: 2rem;">
+    <div class="container">
+        <div class=" ticket-search-form two row justify-content-center" style="font-size: 25px;margin-bottom: 2rem;">
+            Chọn ngày
+        </div>
+        
+        <form class="ticket-search-form two" style=" display: inline-flex;">
+            
+            <div id="dates" class="details-banner-content" role="group" aria-label="Basic example">
+                <input id="date-hidden" value="text" type="text" hidden />
+                <a id="date-a" href="#shows-date" class="button clickcolor">@ViewBag.Date[0]</a>
+                @for(int i=1;i<ViewBag.Date.Count;i++)
+                {
+                    <a id="date-a" href="#shows-date"  class="button">@ViewBag.Date[i]</a>
+                }
+            </div>
+        </form>
+    </div>
+</section>
+<!-- ===========Theater================-->
+
+<!-- ===========Languages================-->
+
+
+<!-- ==========Book-Section========== -->
+<!-- ==========Movie-Section========== -->
+<div class="ticket-plan-section padding-bottom ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- lịch chiếu-->
+            <div class="col-lg-9 mb-5 mb-lg-0">
+                <ul id="shows-date" class="seat-plan-wrapper bg-five">
+                    <!--- DÙNG AJAX Ở ĐÂY-->
+                    
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ==========Movie-Section========== -->
+<!-- ==========Newslater-Section========== -->
+<!-- ==========Newslater-Section========== -->
+@section Scripts{
+    <script src="~/Customer/js/ShowDetail.js"></script>
+}
+
+@section Header
+{
+    <link href="~/Customer/css/_showdetail.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
+
+}

@@ -2,25 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace OnlineMoviesBooking.Areas.Controllers
+namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class DashBoardController : Controller
     {
-       
-        public IActionResult DashBoard()
+        public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Key") == null)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
-            }
             return View();
         }
     }

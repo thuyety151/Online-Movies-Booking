@@ -1,0 +1,47 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Discount>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<p>
+    <a asp-action="Create">Tạo khuyến mãi</a>
+</p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        Khuyến mãi
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Tên</th>
+                        <th>Hình ảnh</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Số lượng đã dùng</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
+@section Scripts {
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="~/js/Discount.js"></script>
+
+}

@@ -171,8 +171,8 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Casts)
-                    .IsRequired()
-                    .HasMaxLength(1000);
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Description).HasMaxLength(1000);
 
@@ -227,8 +227,7 @@ namespace OnlineMoviesBooking.Models.Models
                 entity.HasOne(d => d.IdAccountNavigation)
                     .WithMany(p => p.Qa)
                     .HasForeignKey(d => d.IdAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_QA_Account");
+                    .HasConstraintName("FK_QaToAccount");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -313,10 +312,11 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Row)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.IdScreenNavigation)
                     .WithMany(p => p.Seat)
