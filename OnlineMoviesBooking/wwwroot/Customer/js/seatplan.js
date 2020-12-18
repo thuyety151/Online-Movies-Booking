@@ -123,8 +123,6 @@
                             console.log(data)
                             window.location.href = "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + data;
                             console.log("redirect")
-                            //console.log("/Movie/CheckOut?idshow=" + data + "&lstSeat=" + $('#lstSeat').val())
-                            //checkout.setAttribute("href", "/Movie/CheckOut?idshow=" + data + "&lstSeat=" + $('#lstSeat').val())
                         }
                     }
                 })

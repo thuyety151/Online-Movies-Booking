@@ -345,8 +345,13 @@ namespace OnlineMoviesBooking.Controllers
 
             // get bill
             var bill = Exec.ExecGetBillDetail("1", idshow);
-
+            ViewBag.Show = idshow;
             return View(bill);
+        }
+        public IActionResult TimeOut(string idshow)
+        {
+            Exec.ExecDeleteBill("1", idshow);
+            return View("Index");
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout()
         {

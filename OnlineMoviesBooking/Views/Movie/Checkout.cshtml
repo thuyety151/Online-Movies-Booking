@@ -108,7 +108,8 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <form id="timeout" action="Index">
+                <form id="timeout" asp-action="TimeOut" >
+                    <input name="idshow" hidden value="@ViewBag.Show"/>
                     <div class="booking-summery bg-one">
                         <h4 class="title">chi tiết đơn</h4>
                         <ul>
