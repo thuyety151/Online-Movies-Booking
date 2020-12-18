@@ -203,6 +203,9 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
+
+            Exec.ExecDeleteBillStatus0();
+
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
             ViewBag.ScreenName = plan.ScreenName;

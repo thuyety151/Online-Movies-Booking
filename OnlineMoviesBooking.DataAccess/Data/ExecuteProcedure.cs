@@ -1433,5 +1433,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
+        public void ExecDeleteBillStatus0()
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteBillStatus0", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.ExecuteNonQuery();
+            }
+        }
     }
 }
