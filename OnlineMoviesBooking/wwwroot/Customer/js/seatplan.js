@@ -114,11 +114,17 @@
                     },
                     dataType: "json",
                     success: function (data) {
-                        if (data.success) {
-                            checkout.setAttribute("href", "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + $('#lstSeat').val())
+                        console.log(data)
+                        if (data.success==false) {
+                            alert("Hello! I am an alert box!");
+                            console.log(data);
                         }
                         else {
-                            alert("Hello! I am an alert box!");
+                            console.log(data)
+                            window.location.href = "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + data;
+                            console.log("redirect")
+                            //console.log("/Movie/CheckOut?idshow=" + data + "&lstSeat=" + $('#lstSeat').val())
+                            //checkout.setAttribute("href", "/Movie/CheckOut?idshow=" + data + "&lstSeat=" + $('#lstSeat').val())
                         }
                     }
                 })

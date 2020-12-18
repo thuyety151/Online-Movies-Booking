@@ -9,7 +9,7 @@
     <div class="container">
         <div class="details-banner-wrapper">
             <div class="details-banner-content style-two">
-               
+
                 <h3 class="title">@ViewBag.MovieName</h3>
                 <div class="tags">
                     <a>@ViewBag.ScreenName</a>
@@ -28,21 +28,21 @@
                 <h5 class="date">@ViewBag.TimeStart</h5>
                 <p style="padding: 0.5rem;">@ViewBag.Date</p>
             </div>
-            
+
         </div>
     </div>
 </section>
 <!-- ==========Page-Title========== -->
 <!-- ==========Movie-Section========== -->
 <div class="seat-plan-section padding-bottom ">
-    <form  id="form1" asp-action="Now" >
+    <form id="form1" asp-action="Now">
         @Html.AntiForgeryToken()
         <div id="price" hidden>
             <input name="type-1" class="type-1" hidden />
             <input name="type-2" class="type-2" hidden />
             <input name="type_3" class="type-3" hidden />
-            <input name="idShow" id="idshow"  value="@ViewBag.IdShow" hidden/>
-            <input id="lstSeat"  hidden/>
+            <input name="idShow" id="idshow" value="@ViewBag.IdShow" hidden />
+            <input id="lstSeat" hidden />
         </div>
         <div class="container">
             <div class="screen-area">
@@ -63,7 +63,7 @@
                                             @if (ViewBag.RowA[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowA[i].Id" hidden />
+                                                    <input value="@ViewBag.RowA[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -71,7 +71,7 @@
                                             else
                                             {
                                                 <li class="single-seat">
-                                                    <input  hidden />
+                                                    <input hidden />
                                                     <img src="~/Customer/logo/seat01.png" alt="seat">
                                                 </li>
                                             }
@@ -88,7 +88,7 @@
                                             @if (ViewBag.RowA[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowA[i].Id" hidden />
+                                                    <input value="@ViewBag.RowA[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -96,7 +96,7 @@
                                             else
                                             {
                                                 <li class="single-seat">
-                                                    <input  hidden />
+                                                    <input hidden />
                                                     <img src="~/Customer/logo/seat01.png" alt="seat">
                                                 </li>
                                             }
@@ -111,7 +111,7 @@
                                             @if (ViewBag.RowA[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowA[i].Id" hidden />
+                                                    <input value="@ViewBag.RowA[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -142,7 +142,7 @@
                                             @if (ViewBag.RowB[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowB[i].Id" hidden />
+                                                    <input value="@ViewBag.RowB[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -167,7 +167,7 @@
                                             @if (ViewBag.RowB[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowB[i].Id" hidden />
+                                                    <input value="@ViewBag.RowB[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -190,7 +190,7 @@
                                             @if (ViewBag.RowB[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowB[i].Id" hidden />
+                                                    <input value="@ViewBag.RowB[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -226,7 +226,7 @@
                                             @if (ViewBag.RowC[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowC[i].Id" hidden />
+                                                    <input value="@ViewBag.RowC[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -251,7 +251,7 @@
                                             @if (ViewBag.RowC[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowC[i].Id" hidden />
+                                                    <input value="@ViewBag.RowC[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -274,7 +274,7 @@
                                             @if (ViewBag.RowC[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowC[i].Id" hidden />
+                                                    <input value="@ViewBag.RowC[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -304,7 +304,7 @@
                                             @if (ViewBag.RowD[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="ViewBag.RowD[i].Id" hidden />
+                                                    <input value="ViewBag.RowD[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -328,11 +328,11 @@
                                         {
                                             @if (ViewBag.RowD[i].Status == "")
                                             {
-                                        <li class="single-seat seat-free">
-                                            <input  value="@ViewBag.RowD[i].Id" hidden />
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num"></span>
-                                        </li>
+                                                <li class="single-seat seat-free">
+                                                    <input value="@ViewBag.RowD[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
                                             }
                                             else
                                             {
@@ -352,7 +352,7 @@
                                             @if (ViewBag.RowD[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowD[i].Id" hidden />
+                                                    <input value="@ViewBag.RowD[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -381,11 +381,11 @@
                                         {
                                             @if (ViewBag.RowE[i].Status == "")
                                             {
-                                        <li class="single-seat seat-free">
-                                            <input  value="@ViewBag.RowE[i].Id" hidden />
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num"></span>
-                                        </li>
+                                                <li class="single-seat seat-free">
+                                                    <input value="@ViewBag.RowE[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
                                             }
                                             else
                                             {
@@ -407,7 +407,7 @@
                                             @if (ViewBag.RowE[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowE[i].Id" hidden />
+                                                    <input value="@ViewBag.RowE[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -429,11 +429,11 @@
                                         {
                                             @if (ViewBag.RowE[i].Status == "")
                                             {
-                                        <li class="single-seat seat-free">
-                                            <input  value="@ViewBag.RowE[i].Id" hidden />
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num"></span>
-                                        </li>
+                                                <li class="single-seat seat-free">
+                                                    <input value="@ViewBag.RowE[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
                                             }
                                             else
                                             {
@@ -459,11 +459,11 @@
                                         {
                                             @if (ViewBag.RowF[i].Status == "")
                                             {
-                                        <li class="single-seat seat-free">
-                                            <input  value="@ViewBag.RowF[i].Id" hidden />
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num"></span>
-                                        </li>
+                                                <li class="single-seat seat-free">
+                                                    <input value="@ViewBag.RowF[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
                                             }
                                             else
                                             {
@@ -485,7 +485,7 @@
                                             @if (ViewBag.RowF[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free">
-                                                    <input  value="@ViewBag.RowF[i].Id" hidden />
+                                                    <input value="@ViewBag.RowF[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat01-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -507,11 +507,11 @@
                                         {
                                             @if (ViewBag.RowF[i].Status == "")
                                             {
-                                        <li class="single-seat seat-free">
-                                            <input  value="@ViewBag.RowF[i].Id" hidden />
-                                            <img src="~/Customer/logo/seat01-free.png" alt="seat">
-                                            <span class="sit-num"></span>
-                                        </li>
+                                                <li class="single-seat seat-free">
+                                                    <input value="@ViewBag.RowF[i].Id" hidden />
+                                                    <img src="~/Customer/logo/seat01-free.png" alt="seat">
+                                                    <span class="sit-num"></span>
+                                                </li>
                                             }
                                             else
                                             {
@@ -545,7 +545,7 @@
                                             @if (ViewBag.RowG[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowG[i].Id" hidden />
+                                                    <input value="@ViewBag.RowG[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -569,7 +569,7 @@
                                             @if (ViewBag.RowG[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowG[i].Id" hidden />
+                                                    <input value="@ViewBag.RowG[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -592,7 +592,7 @@
                                             @if (ViewBag.RowG[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowG[i].Id" hidden />
+                                                    <input value="@ViewBag.RowG[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -624,7 +624,7 @@
                                             @if (ViewBag.RowH[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowH[i].Id" hidden />
+                                                    <input value="@ViewBag.RowH[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -648,7 +648,7 @@
                                             @if (ViewBag.RowH[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowH[i].Id" hidden />
+                                                    <input value="@ViewBag.RowH[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -672,7 +672,7 @@
                                             @if (ViewBag.RowH[i].Status == "")
                                             {
                                                 <li class="single-seat seat-free-two">
-                                                    <input  value="@ViewBag.RowH[i].Id" hidden />
+                                                    <input value="@ViewBag.RowH[i].Id" hidden />
                                                     <img src="~/Customer/logo/seat02-free.png" alt="seat">
                                                     <span class="sit-num"></span>
                                                 </li>
@@ -706,16 +706,17 @@
                         <span>Tổng tiền</span>
                         <h3 class="title" id="total-price">0 </h3>
                     </div>
-                    
-                        <div class="book-item">
-                            <a id="submit" class="custom-button">Thanh toán</a>
-                        </div>
-                    
+
+                    <div class="book-item">
+                        <a id="submit" class="custom-button">Thanh toán</a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </form>
 </div>
+
 <!-- ==========Movie-Section========== -->
 
 @section Scripts{

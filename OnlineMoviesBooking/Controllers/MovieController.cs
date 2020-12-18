@@ -222,55 +222,7 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-        [HttpGet]
-        public IActionResult getinfo(string idshow, string lstSeat)
-        {
-            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
-            // Kiểm tra ID show hợp lêk
-            var show = Exec.ExecuteGetDetailShow(idshow);
-            List<string> lstseat = lstSeat.Split(' ').ToList();
-            if (show == null)
-            {
-                return Json(new { success = false });
-            }
-            if (lstSeat == " undefined")
-            {
-                return Json(new { success = false });
-            }
-            foreach (var item in lstseat.ToList())
-            {
-                if (item == "undefined" || item == "")
-                {
-                    lstseat.Remove(item);
-                }
-            }
-            if (lstseat.Count == 0)
-            {
-                return Json(new { success = false });
-            }
-            var seatVM = new List<Seat>();
-            foreach (var item in lstseat)
-            {
-                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow));
-            }
-
-            foreach (var item in seatVM)
-            {
-                if (item.Id == null)
-                {
-                    return Json(new { success = false });
-                }
-            }
-
-            var totalPrice = 0;
-            foreach (var item in seatVM)
-            {
-                totalPrice += Exec.FGetPrice(item.Id);
-            }
-
-
-            return Json(new { success = true });
-        }
+       
 
         public IActionResult check( string idshow,string bill)
         {
@@ -328,8 +280,8 @@ namespace OnlineMoviesBooking.Controllers
         {
             return View();
         }
-
-        public IActionResult CheckOut(string idshow,string lstSeat)
+        [HttpGet]
+        public IActionResult getinfo(string idshow, string lstSeat)
         {
             // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
             // Kiểm tra ID show hợp lêk
@@ -354,37 +306,38 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return Json(new { success = false });
             }
-            var seatVM = new List<Seat>();
+            var seatVM = new List<string>();
             foreach (var item in lstseat)
             {
-                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow));
+                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow).Id);
             }
 
             foreach (var item in seatVM)
             {
-                if (item.Id == null)
+                if (item == null)
                 {
-                    return Json(new { success = false });
+                    return Json(false);
                 }
             }
-
-            var totalPrice = 0;
-            foreach (var item in seatVM)
-            {
-                totalPrice += Exec.FGetPrice(item.Id);
-            }
+           
+            return Json(seatVM );
+        }
+        [HttpGet]
+        public IActionResult CheckOut(string idshow,string lstSeat)
+        {
+            List<string> lst = lstSeat.Split(',').ToList();
 
             // tạo bill
             List<string> seats = new List<string>();
             for (int i = 0; i < 8; i++)
             {
-                if (seatVM.Count <= i)
+                if (lst.Count <= i)
                 {
                     seats.Add(null);
                 }
                 else
                 {
-                    seats.Add(seatVM[i].Id);
+                    seats.Add(lst[i]);
                 }
             }
             string result = Exec.ExecInsertBill(seats, "1", idshow, null);
