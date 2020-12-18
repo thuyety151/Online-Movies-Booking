@@ -1,4 +1,4 @@
-(function ($) {
+﻿(function ($) {
   "user strict";
   // Preloader Js
   $(window).on('load', function () {
@@ -347,6 +347,8 @@
       // price : dung de chuyen vao bill
       var totalPrice = 0;
       var seatName = "";
+      $('#lstSeat').val("")
+      
       var idseat = $('#lstSeat').val();
       $('#total-price').val(0);
       $(".seat-free img").on('click', function (e) {

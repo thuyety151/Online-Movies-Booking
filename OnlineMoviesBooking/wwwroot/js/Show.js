@@ -1,25 +1,26 @@
-﻿$('#dataTable').DataTable({
-    "ajax": {
-        "url": '/Admin/shows/getall'
-    },
-    "columns": [
-        { "data": "movieName" },
-        {
-            "data": "poster",
-            "render": function (data) {
-                return `
+﻿(function ($) {
+    $('#dataTable').DataTable({
+        "ajax": {
+            "url": '/Admin/shows/getall'
+        },
+        "columns": [
+            { "data": "movieName" },
+            {
+                "data": "poster",
+                "render": function (data) {
+                    return `
                                 <img src="${data}" style="width: 150px;"/>
                             `;
-            }
-        },
-        { "data": "timeStart" },
-        { "data": "screenName" },
-        { "data": "theaterName" },
+                }
+            },
+            { "data": "timeStart" },
+            { "data": "screenName" },
+            { "data": "theaterName" },
 
-        {
-            "data": "id",
-            "render": function (data) {
-                return `
+            {
+                "data": "id",
+                "render": function (data) {
+                    return `
                                  <div class="text-center" style="display:grid" >
                                     <a href="/Admin/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
                                         Edit
@@ -31,10 +32,13 @@
                                         Delete</a>
                                 </div>
                                 `
+                }
             }
-        }
-    ]
-});
+        ]
+    });
+    
+})(jQuery);
+
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
         confirmButton: 'btn btn-success',
@@ -177,12 +181,15 @@ $('#Search-Status').click(function () {
         ]
     });
 });
-var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
-triggerTabList.forEach(function (triggerEl) {
-    var tabTrigger = new bootstrap.Tab(triggerEl)
 
-    triggerEl.addEventListener('click', function (event) {
-        event.preventDefault()
-        tabTrigger.show()
-    })
-})
+
+
+//var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+//triggerTabList.forEach(function (triggerEl) {
+//    var tabTrigger = new bootstrap.Tab(triggerEl)
+
+//    triggerEl.addEventListener('click', function (event) {
+//        event.preventDefault()
+//        tabTrigger.show()
+//    })
+//})

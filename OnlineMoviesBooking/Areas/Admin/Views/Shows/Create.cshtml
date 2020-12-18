@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdScreen" class="control-label"></label>
-                <select  asp-for="IdScreen" id="screen" class="form-control" asp-items="ViewBag.Screens"></select>
+                <select asp-for="IdScreen" id="screen" class="form-control" asp-items="ViewBag.Screens"></select>
                 <span asp-validation-for="IdScreen" class="text-danger"></span>
             </div>
 
@@ -51,13 +51,24 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <!-- select 2-->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <!-- thư viện jquery-->
+    <script>
+        $('#theater').on('click', function () {
+            var value = $('#theater').val();
+            console.log(value);
+            $.ajax({
+                method: 'GET',
+                url: '/Admin/Shows/GetScreen/' + value,
+                success: function (data) {
+                    $('#screen').empty();
+                    $.each(data.items, function (index, value) {
 
-    <script src="~/js/Show.js"></script>
-}
-@section Header{
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+                        console.log('<option value="' + value.id + '">' + value.text + '</option>');
+                        $('#screen').append('<option value="' + value.id + '">' + value.text + '</option>');
+                    });
+                }
 
+            });
 
+        });
+    </script>
 }
