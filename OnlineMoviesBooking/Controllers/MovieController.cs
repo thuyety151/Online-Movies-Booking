@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModels;
+using PayPal.Core;
+using PayPal.v1.Payments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +16,14 @@ namespace OnlineMoviesBooking.Controllers
 {
     public class MovieController : Controller
     {
-        private readonly CinemaContext _context;
+        private readonly string _clientId;
+        private readonly string _secretKey;
         private ExecuteProcedure Exec;
-        public MovieController(CinemaContext context)
+        public MovieController(IConfiguration config)
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
+            Exec = new ExecuteProcedure();
+            _clientId = config["PaypalSettings:ClientId"];
+            _secretKey = config["PaypalSettings:SecretKey"];
         }
         public IActionResult Index()
         {
@@ -116,14 +122,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
+                     lstmovie =Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                     lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
+                     lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -132,9 +138,9 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                 lstmovie = (List<Movie>)Exec.ExecuteGetMovieNow(0, num);
+                 lstmovie = Exec.ExecuteGetMovieNow(0, num);
             }
-            return View( lstmovie);
+            return View(lstmovie);
         }
         public IActionResult Detail(string id)
         {
@@ -197,6 +203,9 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
+
+            Exec.ExecDeleteBillStatus0("1");
+
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
             ViewBag.ScreenName = plan.ScreenName;
@@ -216,82 +225,9 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-        [HttpGet]
-        public IActionResult getinfo(string idshow,string lstSeat)
-        {
-            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
-            // Kiểm tra ID show hợp lêk
-            var show = Exec.ExecuteGetDetailShow(idshow);
-            List<string> lstseat = lstSeat.Split(' ').ToList();
-            if (show == null)
-            {
-                return Json(new {  success = false });
-            }
-            if (lstSeat == " undefined")
-            {
-                return Json(new { success = false });
-            }
-            foreach (var item in lstseat.ToList())
-            {
-                if(item== "undefined" || item == "")
-                {
-                    lstseat.Remove(item);
-                }
-            }
-            if (lstseat.Count == 0)
-            {
-                return Json(new { success = false });
-            }
-            var seatVM = new List<Seat>();
-            foreach (var item in lstseat)
-            {
-                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow)); 
-            }
+       
 
-            foreach (var item in seatVM)
-            {
-                if ( item.Id== null)
-                {
-                    return Json(new { success = false });
-                }
-            }
 
-            var totalPrice = 0;
-            foreach (var item in seatVM)
-            {
-                totalPrice+= Exec.FGetPrice(item.Id);
-            }
-
-            var bill = new
-            {
-                idShow = idshow,
-                movieName=show.MovieName,  // movie
-                seats=seatVM,
-                theatername=show.TheaterName, //theater -- show.TheaterName
-                screenname=show.ScreenName, //screen
-                datestart=show.TimeStart.ToString("dd-MM-yyyy"),  //show    --
-                timestart=show.TimeStart.ToString("HH:mm"),  //show    --
-                totalprice=totalPrice, //seat    --
-                languages=show.Languages
-
-            };
-            return Json( bill);
-        }
-
-        public IActionResult Checkout( string idshow,string bill)
-        {
-            if (idshow == null)
-            {
-                return NotFound();
-            }
-            var show = Exec.ExecuteGetDetailShow(idshow);
-            if (show == null)
-            {
-                return NotFound();
-            }
-
-            return View();
-        }
        // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
@@ -328,6 +264,190 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult TimeOut()
         {
             return RedirectToAction("Index");
+        }
+
+        public IActionResult PayPal()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult getinfo(string idshow, string lstSeat)
+        {
+            // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
+            // Kiểm tra ID show hợp lêk
+            var show = Exec.ExecuteGetDetailShow(idshow);
+            List<string> lstseat = lstSeat.Split(' ').ToList();
+            if (show == null)
+            {
+                return Json(new { success = false });
+            }
+            if (lstSeat == " undefined")
+            {
+                return Json(new { success = false });
+            }
+            foreach (var item in lstseat.ToList())
+            {
+                if (item == "undefined" || item == "")
+                {
+                    lstseat.Remove(item);
+                }
+            }
+            if (lstseat.Count == 0)
+            {
+                return Json(new { success = false });
+            }
+            var seatVM = new List<string>();
+            foreach (var item in lstseat)
+            {
+                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow).Id);
+            }
+
+            foreach (var item in seatVM)
+            {
+                if (item == null)
+                {
+                    return Json(false);
+                }
+            }
+           
+            return Json(seatVM );
+        }
+        [HttpGet]
+        public IActionResult CheckOut(string idshow,string lstSeat)
+        {
+            List<string> lst = lstSeat.Split(',').ToList();
+
+            // tạo bill
+            List<string> seats = new List<string>();
+            for (int i = 0; i < 8; i++)
+            {
+                if (lst.Count <= i)
+                {
+                    seats.Add(null);
+                }
+                else
+                {
+                    seats.Add(lst[i]);
+                }
+            }
+            string result = Exec.ExecInsertBill(seats, "1", idshow, null);
+            // chưa xử lí transaction
+
+            // get bill
+            var bill = Exec.ExecGetBillDetail("1", idshow);
+            ViewBag.Show = idshow;
+            return View(bill);
+        }
+        public IActionResult TimeOut(string idshow)
+        {
+            Exec.ExecDeleteBillStatus0("1");
+            return View("Index");
+        }
+        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout()
+        {
+            var environment = new SandboxEnvironment(_clientId, _secretKey);
+            var client = new PayPalHttpClient(environment);
+
+            var checkout = Exec.TestCheckout("1");
+
+            #region Create Paypal Order
+            var itemList = new ItemList()
+            {
+                Items = new List<Item>()
+            };
+            var total = Math.Round(double.Parse(checkout.Sum(p => p.Total).ToString()) / 23000, 2);
+            foreach (var item in checkout)
+            {
+                itemList.Items.Add(new Item()
+                {
+                    Name = item.Name,
+                    Currency = "USD",
+                    Price = Math.Round(double.Parse(item.Total.ToString()) / 23000, 2).ToString(),
+                    Quantity = "1",
+                    Description = "No: " + item.No
+                });
+            }
+            #endregion
+
+            //var total = Math.Round(double.Parse(checkout[0].Total.ToString()) / 23000, 2) *itemList.Items.Count;
+
+            var paypalOrderId = DateTime.Now.Ticks;
+            var hostname = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+            var payment = new Payment()
+            {
+                Intent = "sale",
+                Transactions = new List<Transaction>()
+                {
+                    new Transaction()
+                    {
+                        Amount = new Amount()
+                        {
+                            Total = total.ToString(),
+                            Currency = "USD",
+
+                        },
+                        ItemList = itemList,
+                        Description = $"Invoice #{paypalOrderId}",
+                        InvoiceNumber = paypalOrderId.ToString()
+                    }
+                },
+                RedirectUrls = new RedirectUrls()
+                {
+                    CancelUrl = $"{hostname}/Movie/CheckoutFail",
+                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess"
+                },
+                Payer = new Payer()
+                {
+                    PaymentMethod = "paypal"
+                }
+            };
+
+            PaymentCreateRequest request = new PaymentCreateRequest();
+            request.RequestBody(payment);
+
+            try
+            {
+                var response = await client.Execute(request);
+                var statusCode = response.StatusCode;
+                Payment result = response.Result<Payment>();
+
+                var links = result.Links.GetEnumerator();
+                string paypalRedirectUrl = null;
+                while (links.MoveNext())
+                {
+                    LinkDescriptionObject lnk = links.Current;
+                    if (lnk.Rel.ToLower().Trim().Equals("approval_url"))
+                    {
+                        //saving the payapalredirect URL to which user will be redirected for payment  
+                        paypalRedirectUrl = lnk.Href;
+                    }
+                }
+
+                return Redirect(paypalRedirectUrl);
+            }
+            catch (HttpException httpException)
+            {
+                var statusCode = httpException.StatusCode;
+                var debugId = httpException.Headers.GetValues("PayPal-Debug-Id").FirstOrDefault();
+
+                //Process when Checkout with Paypal fails
+                return Redirect("/Movie/CheckoutFail");
+            }
+        }
+        public IActionResult CheckoutFail()
+        {
+            //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
+            //Xóa session
+            Exec.ExecUpdateBillStatus("1");
+            return Content("Thanh toán không thành công");
+        }
+
+        public IActionResult CheckoutSuccess()
+        {
+            //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
+            //Xóa session
+            Exec.ExecUpdateBillStatus("1");
+            return Content("Thanh toán thành công");
         }
     }
 }

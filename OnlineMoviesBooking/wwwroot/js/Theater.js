@@ -14,14 +14,14 @@ $(document).ready(function () {
                     return `
                              <div class="text-center" >
                                 <a href="/Admin/Theaters/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                    Sửa
                                 </a>
                                 <a href="/Admin/Theaters/Details/${data}" 
-                                class="btn btn-success" style="font-size:small">Details</a> 
+                                class="btn btn-success" style="font-size:small">Chi tiết</a> 
 
                                 <a onClick=Delete("/Admin/Theaters/Delete/${data}") class="btn btn-danger text-white"
                                 style="cursor:pointer">
-                                    Delete</a>
+                                    Xóa</a>
                             </div>                           
                             `
                 }
@@ -69,8 +69,8 @@ const swalWithBootstrapButtons = Swal.mixin({
 })
 function Delete(url) {
     swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Bạn có chắc muốn xóa dữ liệu này?',
+        text: "Dữ liệu sau khi xóa không thể khôi phục được!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete it!',

@@ -22,15 +22,15 @@
                     return `
                              <div class="text-center" >
                                 <a href="/Admin/Movies/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                    Edit
+                                    Sửa
                                 </a>
                                  <a href="/Admin/Movies/Details/${data}"
-                                    class="btn btn-success" style="font-size:small">Details</a> 
+                                    class="btn btn-success" style="font-size:small">Chi tiết</a> 
 
                                 </a>
 
                                 <a onClick=Delete("/Admin/Movies/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    Delete</a>
+                                    Xóa</a>
                             </div>                           
                             `
                 }
@@ -73,12 +73,12 @@ const swalWithBootstrapButtons = Swal.mixin({
 function Delete(url) {
 
     swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Bạn có chắc muốn xóa phim này?',
+        text: "Dữ liệu sau khi xóa sẽ không thể khôi phục lại!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
@@ -89,7 +89,7 @@ function Delete(url) {
                     console.log(data);
                     if (data.success) {
                         swalWithBootstrapButtons.fire(
-                            'Deleted!',
+                            'Đã xóa!',
                             'Your file has been deleted.',
                             'success'
                         );
@@ -97,8 +97,8 @@ function Delete(url) {
                     }
                     else {
                         swalWithBootstrapButtons.fire(
-                            'Error',
-                            'Can not delete this, maybe it not exit or error from sever',
+                            'Lỗi',
+                            'Không thể xóa dữ liệu, có lỗi xảy ra',
                             'error'
                         )
                     }
@@ -109,8 +109,7 @@ function Delete(url) {
         }
         else if (result.dismiss === Swal.DismissReason.cancel) {
             swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'Your record is safe :)',
+                'Đã hủy thao tác xóa',
                 'error'
             )
         }

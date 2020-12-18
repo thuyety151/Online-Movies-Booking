@@ -16,14 +16,12 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class DiscountsController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public DiscountsController(CinemaContext context, IWebHostEnvironment hostEnvironment)
+        public DiscountsController( IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
             this._hostEnvironment = hostEnvironment;
+            Exec = new ExecuteProcedure();
         }
 
         public IActionResult GetAll()
@@ -32,8 +30,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id=x.Id,
                 name=x.Name,
-                dateStart=x.DateStart.GetValueOrDefault().ToShortTimeString() +"\n"+ x.DateStart.GetValueOrDefault().ToShortDateString(),
-                dateEnd= x.DateEnd.GetValueOrDefault().ToShortTimeString() + "\n" + x.DateEnd.GetValueOrDefault().ToShortDateString(),
+                dateStart=x.DateStart,
+                dateEnd= x.DateEnd,
                 imageDiscount = x.ImageDiscount,
                 used=x.Used
 
@@ -104,18 +102,15 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
 
                 // gán các giá trị null để insert vào db
-                discount.Id = Guid.NewGuid().ToString();
+                discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 discount.Used = 0;
-                if(discount.MaxCost==null)
-                {
-                    discount.MaxCost = 0;
-                }    
-                if(discount.Point==null)
-                {
-                    discount.Point = 0;
-                }
 
                 string result = Exec.ExecuteInsertDiscount(discount);
+                while (result.Contains("PRIMARY"))
+                {
+                    discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
+                    result = Exec.ExecuteInsertDiscount(discount);
+                }
                 if(result=="")
                 {
                     return RedirectToAction(nameof(Index));
@@ -215,7 +210,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         { 
             // xóa hình trong file
             var image = Exec.ExecuteGetImageDiscount(id);
-            System.IO.File.Delete(image);
 
             string wwwRootPath = _hostEnvironment.WebRootPath;
             var imagePath = Path.Combine(wwwRootPath, image.TrimStart('\\'));
@@ -229,9 +223,5 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        private bool DiscountExists(string id)
-        {
-            return _context.Discount.Any(e => e.Id == id);
-        }
     }
 }

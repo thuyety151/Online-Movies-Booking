@@ -1,11 +1,47 @@
-﻿@model OnlineMoviesBooking.Models.ViewModels.BillViewModel
+﻿@model OnlineMoviesBooking.Models.ViewModels.CheckoutViewModel;
+
 @{
-    ViewData["Title"] = "Checkout";
+    ViewData["Title"] = "Previews";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
 }
 
+<!-- ==========Banner-Section========== -->
+<section class="details-banner hero-area bg_img seat-plan-banner" data-background="./assets/images/banner/banner04.jpg" style="background-image: url(&quot;./assets/images/banner/banner04.jpg&quot;);">
+    <div class="container">
+        <div class="details-banner-wrapper">
+            
+            <div class="details-banner-content style-two">
+                <h3 class="title">@Model.Name</h3>
+                <div class="tags">
+                    <a>@Model.TheaterName</a>
+                    <a>@Model.Languages</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ==========Banner-Section========== -->
+<!-- ==========Page-Title========== -->
+<section class="page-title bg-one">
+    <div class="container">
+        <div class="page-title-area">
+            <div class="item md-order-1">
+                <a href="http://pixner.net/boleto/demo/movie-ticket-plan.html" class="custom-button back-button">
+                    <i class="flaticon-double-right-arrows-angles"></i>back
+                </a>
+            </div>
 
-
+            <div class="item date-item">
+                <span class="date">@Model.TimeStart.ToString("dd-MM-yyyy") @Model.TimeStart.ToString("HH:mm")</span>
+            </div>
+            <div class="item">
+                <h5 class="title">05:00</h5>
+                <p>Mins Left</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ==========Page-Title========== -->
 <!-- ==========Movie-Section========== -->
 <div class="movie-facility padding-bottom padding-top">
     <div class="container">
@@ -16,7 +52,7 @@
                         <h5 class="title">Already a Boleto  Member?</h5>
                         <p>Sign in to earn points and make booking easier!</p>
                     </div>
-                    <a class="sign-in-area">
+                    <a href="http://pixner.net/boleto/demo/movie-checkout.html#0" class="sign-in-area">
                         <i class="fas fa-user"></i><span>Sign in</span>
                     </a>
                 </div>
@@ -52,20 +88,20 @@
                     <h5 class="title">Payment Option </h5>
                     <ul class="payment-option">
                         <li class="active">
-                            <a>
-                                <img src="~/Customer/logo/card.png" alt="payment">
+                            <a href="http://pixner.net/boleto/demo/movie-checkout.html#0">
+                                <img src="./Boleto - Online Ticket Booking Website HTML Template_files/card.png" alt="payment">
                                 <span>Credit Card</span>
                             </a>
                         </li>
                         <li>
-                            <a>
-                                <img src="~/Customer/logo/card.png" alt="payment">
+                            <a href="http://pixner.net/boleto/demo/movie-checkout.html#0">
+                                <img src="./Boleto - Online Ticket Booking Website HTML Template_files/card.png" alt="payment">
                                 <span>Debit Card</span>
                             </a>
                         </li>
                         <li>
-                            <a>
-                                <img src="~/Customer/logo/paypal.png" alt="payment">
+                            <a href="http://pixner.net/boleto/demo/movie-checkout.html#0">
+                                <img src="./Boleto - Online Ticket Booking Website HTML Template_files/paypal.png" alt="payment">
                                 <span>paypal</span>
                             </a>
                         </li>
@@ -103,61 +139,60 @@
                         </div>
                     </form>
                     <p class="notice">
-                        By Clicking "Make Payment" you agree to the <a>terms and conditions</a>
+                        By Clicking "Make Payment" you agree to the <a href="http://pixner.net/boleto/demo/movie-checkout.html#0">terms and conditions</a>
                     </p>
                 </div>
             </div>
             <div class="col-lg-4">
-                <form id="timeout" asp-action="TimeOut" >
-                    <input name="idshow" hidden value="@ViewBag.Show"/>
-                    <div class="booking-summery bg-one">
-                        <h4 class="title">chi tiết đơn</h4>
-                        <ul>
-                            <li>
-                                <h6 class="subtitle">@Model.MovieName</h6>
-                                <span class="info">@Model.Languages</span>
-                            </li>
-                            <li>
-                                <h6 class="subtitle"><span>@Model.TheaterName</span><span>@Model.No</span></h6>
-                                <div class="info">
-                                    <span>@Model.TimeStart.ToString("dd-MM-yyyy HH:mm")</span>
-                                    <span>vé</span>
-                                </div>
-                            </li>
-                            <li>
-                                <h6 class="subtitle mb-0"><span>giá vé</span><span>@Model.TotalPrice.ToString("#,###")</span></h6>
-                            </li>
-                        </ul>
-                        <ul class="side-shape">
-                            <li>
-                                <h6 class="subtitle"><span>combos</span><span>$57</span></h6>
-                                <span class="info"><span>2 Nachos Combo</span></span>
-                            </li>
-                            <li>
-                                <h6 class="subtitle"><span>food &amp; bevarage</span></h6>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <span class="info"><span>price</span><span>$207</span></span>
-                                <span class="info"><span>vat</span><span>$15</span></span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="proceed-area  text-center">
-                        <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
-                        <a id="submit" href="/Movie/PaypalCheckout" class="custom-button back-button">Thanh toán</a>
-                    </div>
-                </form>
+                <div class="booking-summery bg-one">
+                    <h4 class="title">booking summery</h4>
+                    <ul>
+                        <li>
+                            <h6 class="subtitle">@Model.Name</h6>
+                            <span class="info">@Model.Languages</span>
+                        </li>
+                        <li>
+                            <h6 class="subtitle"><span>@Model.TheaterName</span><span>@Model.No</span></h6>
+                            <div class="info">
+                                <span>@Model.TimeStart.ToString("dd-MM-yyyy") @Model.TimeStart.ToString("HH:mm")</span>
+                                <span>Tickets</span>
+                            </div>
+                        </li>
+                        <li>
+                            <h6 class="subtitle mb-0"><span>Tickets  Price</span><span>@Model.Total.ToString("#,###")</span></h6>
+                        </li>
+                    </ul>
+                    <ul class="side-shape">
+                        <li>
+                            <h6 class="subtitle"><span>combos</span><span>$57</span></h6>
+                            <span class="info"><span>2 Nachos Combo</span></span>
+                        </li>
+                        <li>
+                            <h6 class="subtitle"><span>food &amp; bevarage</span></h6>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <span class="info"><span>price</span><span>$207</span></span>
+                            <span class="info"><span>vat</span><span>$15</span></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="proceed-area  text-center">
+                    <h6 class="subtitle"><span>Amount Payable</span><span>$222</span></h6>
+                    <a href="/Checkout/PaypalCheckout" class="custom-button back-button">Thanh Toán</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <!-- ==========Movie-Section========== -->
 @section Scripts{
-    <script src="~/Customer/js/checkout.js"></script>
-
-}
-@section Header{
-    <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
+    <script type="text/javascript">
+        console.log("a");
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+    </script>
 }

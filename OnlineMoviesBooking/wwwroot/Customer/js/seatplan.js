@@ -1,6 +1,5 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        
         // get row
         var rows = document.querySelectorAll('.seat-line');
         $.each(rows, function (index, row) {
@@ -34,40 +33,40 @@
         });
 
         // thanh toasn
-        var checkout = document.getElementById("submit");
-        checkout.addEventListener("click", function () {
-            console.log($('#lstSeat').val());
-            if ($('#lstSeat').val() == "") {
-                alert("Vui lòng chọn vị trí ngồi");
-            }
-            $.ajax({
-                type: 'GET',
-                url: '/Movie/getinfo/',
+        //var checkout = document.getElementById("submit");
+        //checkout.addEventListener("click", function () {
+        //    console.log($('#lstSeat').val());
+        //    if ($('#lstSeat').val() == "") {
+        //        alert("Vui lòng chọn vị trí ngồi");
+        //    }
+        //    $.ajax({
+        //        type: 'GET',
+        //        url: '/Movie/getinfo/',
                 
-                data: {
-                    "idshow": $('#idshow').val(),
-                    "lstSeat": $('#lstSeat').val(),
-                },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.success == false) {
-                        alert("Hello! I am an alert box!");
-                    }
-                    else {
-                        $("#Checkout").modal();
-                        var vnd = data.totalprice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+        //        data: {
+        //            "idshow": $('#idshow').val(),
+        //            "lstSeat": $('#lstSeat').val(),
+        //        },
+        //        dataType: "json",
+        //        success: function (data) {
+        //            console.log(data);
+        //            if (data.success == false) {
+        //                alert("Hello! I am an alert box!");
+        //            }
+        //            else {
+        //                $("#Checkout").modal();
+        //                var vnd = data.totalprice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
                         
-                        $("#Checkout").find('#modal-movie').text(data.movieName);
-                        $("#Checkout").find('#modal-languages').text(data.languages);
-                        $("#Checkout").find('#modal-time').text(data.datestart + ' ' + data.timestart);
-                        $("#Checkout").find('#modal-total').text(vnd);
-                        $("#Checkout").find('#modal-count').text(data.seats.length);
-                        $("#Checkout").find('#modal-theater').text(data.theatername);
-                    }
-                }
-            });
-        });
+        //                $("#Checkout").find('#modal-movie').text(data.movieName);
+        //                $("#Checkout").find('#modal-languages').text(data.languages);
+        //                $("#Checkout").find('#modal-time').text(data.datestart + ' ' + data.timestart);
+        //                $("#Checkout").find('#modal-total').text(vnd);
+        //                $("#Checkout").find('#modal-count').text(data.seats.length);
+        //                $("#Checkout").find('#modal-theater').text(data.theatername);
+        //            }
+        //        }
+        //    });
+        //});
 
         
         var cost = 0;
@@ -97,5 +96,36 @@
 
     });
 
-    
+        var checkout = document.getElementById("submit");
+        checkout.addEventListener("click", function () {
+            console.log($('#lstSeat').val());
+            if ($('#lstSeat').val() == "") {
+                alert("Vui lòng chọn vị trí ngồi");
+            }
+            else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Movie/getinfo/',
+
+                    data: {
+                        "idshow": $('#idshow').val(),
+                        "lstSeat": $('#lstSeat').val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data)
+                        if (data.success==false) {
+                            alert("Hello! I am an alert box!");
+                            console.log(data);
+                        }
+                        else {
+                            console.log(data)
+                            window.location.href = "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + data;
+                            console.log("redirect")
+                        }
+                    }
+                })
+            }
+
+        });
 })(jQuery);

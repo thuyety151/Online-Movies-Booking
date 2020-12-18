@@ -13,13 +13,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class TypesOfSeatsController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
 
-        public TypesOfSeatsController(CinemaContext context)
+        public TypesOfSeatsController()
         {
-            _context = context;
-            Exec = new ExecuteProcedure(_context);
+            Exec = new ExecuteProcedure();
         }
 
 
@@ -31,15 +29,14 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: TypesOfSeats/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var typesOfSeat = await _context.TypesOfSeat
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var typesOfSeat = Exec.ExecGetDetailTypeOfSeat(id);
             if (typesOfSeat == null)
             {
                 return NotFound();
@@ -48,15 +45,15 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(typesOfSeat);
         }
 
-        
-        public async Task<IActionResult> Edit(string id)
+
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var typesOfSeat = await _context.TypesOfSeat.FindAsync(id);
+            var typesOfSeat = Exec.ExecGetDetailTypeOfSeat(id);
             if (typesOfSeat == null)
             {
                 return NotFound();
@@ -88,9 +85,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(typesOfSeat);
         }
         
-        private bool TypesOfSeatExists(string id)
-        {
-            return _context.TypesOfSeat.Any(e => e.Id == id);
-        }
+       
     }
 }

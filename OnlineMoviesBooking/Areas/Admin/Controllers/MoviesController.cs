@@ -22,13 +22,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class MoviesController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public MoviesController(CinemaContext context, IWebHostEnvironment hostEnvironment)
+        public MoviesController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
+            Exec = new ExecuteProcedure();
             this._hostEnvironment = hostEnvironment;
         }
 
@@ -39,7 +37,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id = x.Id,
                 name = x.Name,
-                releaseDate = x.ReleaseDate.ToShortDateString(),
+                releaseDate = x.ReleaseDate.ToString("dd-MM-yyyy"),
                 runningtime = x.RunningTime.ToString(),
                 poster = x.Poster
             });
@@ -67,27 +65,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            //var obj = new
-            //{
-            //    id = movie.Id,
-            //    name = movie.Name,
-            //    genre = movie.Genre,
-            //    director = movie.Director,
-            //    casts = movie.Casts,
-            //    rated = movie.Rated,
-            //    description = movie.Description,
-            //    trailer = movie.Trailer,
-            //    releaseDate = movie.ReleaseDate.ToShortDateString(),
-            //    runningtime = movie.RunningTime.ToString(),
-            //    poster = movie.Poster
-            //};
-            //return Json(new { data = obj});
-            
         }
 
         // GET: Movies/Create
         [HttpGet]
-        public IActionResult Upsert(string? id)
+        public IActionResult Upsert(string id=null)
         {
             if (id != null)
             {
@@ -104,7 +86,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
             }
             ViewBag.Id = "";
-            id = "";
             return View();
         }
 
@@ -167,8 +148,13 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (movie.Id == null)
                 {
                     //Theem movie
-                    movie.Id = Guid.NewGuid().ToString();
-                    Exec.ExecuteInsertMovie(movie);
+                    movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                    string result= Exec.ExecuteInsertMovie(movie);
+                    while(result.Contains("PRIMARY") ) // trùng primary key do generate id
+                    {
+                        movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                        result = Exec.ExecuteInsertMovie(movie);
+                    }    
 
                     return RedirectToAction(nameof(Index));
                 }
