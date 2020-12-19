@@ -10,59 +10,152 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.Data.SqlClient;
 using OnlineMoviesBooking.Models.Models;
+using OnlineMoviesBooking.Models.ViewModel;
 
 namespace OnlineMoviesBooking.Areas.Controllers
 {
     [Area("Admin")]
     public class AccountsController : Controller
     {
+
         private readonly CinemaContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public AccountsController(CinemaContext context, IWebHostEnvironment hostEnvironment)
+        public AccountsController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
             this._hostEnvironment = hostEnvironment;
         }
 
         // GET: Accounts
         public IActionResult Index()
         {
-            //var cinemaContext = _context.Account.Include(a => a.IdTypesOfUserNavigation);
-            if(HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
-            else if(HttpContext.Session.GetString("Key") != "Admin")
+            List<Account> listacc = new List<Account>();
+            string connectionString = HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                return RedirectToAction("Error", "Home");
-            }    
-            var list = _context.Account.FromSqlRaw("EXEC dbo.USP_SelectAllAccount").ToList();
-            return View(list) ;
+                connection.Open();
+                string commandText = "EXEC dbo.USP_SelectAllAccount";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Account acc = new Account();
+                            acc.Id = Convert.ToString(reader[0]);
+                            acc.Name = Convert.ToString(reader[1]);
+                            acc.Birthdate = Convert.ToDateTime(reader[2]);
+                            acc.Gender = Convert.ToBoolean(reader[3]);
+                            acc.Address = Convert.ToString(reader[4]);
+                            acc.Sdt = Convert.ToString(reader[5]);
+                            acc.Email = Convert.ToString(reader[6]);
+                            acc.Password = Convert.ToString(reader[7]);
+                            acc.Point = Convert.ToInt32(reader[8]);
+                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                            acc.Image = Convert.ToString(reader[11]);
+                            listacc.Add(acc);
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                    }
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    return RedirectToAction("HomeAdmin", "HomeAdmin");
+                }
+                connection.Close();
+
+            }
+
+            return View(listacc);
         }
 
-        
-        //public IActionResult GetAll()
-        //{
-        //    var list = _context.Account.FromSqlRaw("EXEC dbo.SelectAccount").ToList();
-        //    return Json(new { data = list });
-        //}
-        // GET: Accounts/Details/5
 
         public IActionResult Get(string id)
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
             try
             {
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();    // 
-                return Json(new { data = account });
+
+                Account acc = new Account();
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                acc.Id = Convert.ToString(reader[0]);
+                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Birthdate = Convert.ToDateTime(reader[2]);
+                                acc.Gender = Convert.ToBoolean(reader[3]);
+                                acc.Address = Convert.ToString(reader[4]);
+                                acc.Sdt = Convert.ToString(reader[5]);
+                                acc.Email = Convert.ToString(reader[6]);
+                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Point = Convert.ToInt32(reader[8]);
+                                acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                                acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                                acc.Image = Convert.ToString(reader[11]);
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return Json(new { success = false, message = "Lỗi!" });
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        return Json(new { success = false, message = e.Message });
+                    }
+                    connection.Close();
+                }
+                //if(acc.Image == "" || acc.Image == null)
+                //{
+                //    acc.Image = "/image/Account/Avatar_default.png";
+                //}    
+                return Json(new { data = acc });
             }
             catch (Exception e)
             {
@@ -75,16 +168,21 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // GET: Accounts/Create
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Key") == null)
+
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Name");
+
+            //List<TypeOfMember> listmember = DataforView.listMember();
+            //List<TypesOfAccount> listaccount = DataforView.listAccount();
+            //ViewData["IdTypeOfMember"] = 
+            //ViewData["IdTypesOfUser"] = listaccount;
             return View();
         }
 
@@ -93,108 +191,13 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id","Name","Birthdate","Gender","Address","Sdt","Email","Password","Point", "IdTypesOfUser", "IdTypeOfMember","Image")] Account account, IFormFile files)
+        public IActionResult Create([Bind("Id", "Name", "Birthdate", "Gender", "Address", "Sdt", "Email", "Password", "Point", "IdTypesOfUser", "IdTypeOfMember", "Image")] Account account, IFormFile files)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     // save image to wwwroot/image
-                    string wwwRootPath = _hostEnvironment.WebRootPath;
-                    
-                    if(files != null)
-                    {
-                        string fileName = Guid.NewGuid().ToString();
-                        var uploads = Path.Combine(wwwRootPath, @"image\Account\");
-                        var extension = Path.GetExtension(files.FileName);
-
-                        if (account.Image != null)
-                        {
-                            // edit 
-                            var imagePath = Path.Combine(wwwRootPath, account.Image.TrimStart('\\'));
-                            if (System.IO.File.Exists(imagePath))
-                            {
-                                System.IO.File.Delete(imagePath);
-                            }
-
-                        }
-                        using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                        {
-                            files.CopyTo(filesStreams);
-                        }
-                        account.Image = @"\image\Account\" + fileName + extension;
-                    }    
-                        
-
-                    account.Id = Guid.NewGuid().ToString();
-                    
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Insert"} ");
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-            catch
-            {
-                var modelstateKey = ModelState.Keys;
-                var list = _context.Account.FromSqlRaw($"EXEC dbo.USP_CheckEmail '{account.Email}' ").ToList();
-                if (list.Count() == 1)
-                {
-                    ModelState.AddModelError("Email", "Email đã tồn tại");
-                }
-                //else if (check_db == 1)
-                //{
-                //    ModelState.AddModelError("Sdt", "Sdt đã tồn tại");
-                //}
-                ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
-                ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-                return View();
-            }
-            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(account);
-        }
-
-        // GET: Accounts/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (HttpContext.Session.GetString("Key") == null)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var account = await _context.Account.FindAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Name", account.IdTypesOfUser);
-            return View(account);
-        }
-
-        // POST: Accounts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Edit(string id, IFormFile files, [Bind("Id", "Name", "Birthdate", "Gender", "Address", "Sdt", "Email", "Password", "Point", "IdTypesOfUser", "IdTypeOfMember", "Image")] Account account)
-        {
-            if (id != account.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
                     string wwwRootPath = _hostEnvironment.WebRootPath;
 
                     if (files != null)
@@ -219,54 +222,258 @@ namespace OnlineMoviesBooking.Areas.Controllers
                         }
                         account.Image = @"\image\Account\" + fileName + extension;
                     }
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {account.Birthdate},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={account.IdTypesOfUser},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Update"} ");
+
+                    try
+                    {
+                        if (ModelState.IsValid)
+                        {
+                            string connectionString = HttpContext.Session.GetString("connectString");
+
+                            using (var connection = new SqlConnection(connectionString))
+                            {
+                                connection.Open();
+                                string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                                + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
+                                + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = '{account.IdTypeOfMember}',"
+                                + $"@image = '{account.Image}',@action = 'Insert'";
+
+                                var command = new SqlCommand(commandText, connection);
+                                try
+                                {
+                                    command.ExecuteNonQuery();
+                                }
+                                catch (SqlException e)
+                                {
+                                    connection.Close();
+                                    if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
+                                        ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
+                                    return View(account);
+                                }
+                                connection.Close();
+                            }
+
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+
+                        if (e.ToString().Contains("User"))
+                        {
+                            ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+                        }
+
+
+                        return View(account);
+                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+            }
+            catch
+            {
+                return View();
+            }
+
+            return View(account);
+        }
+
+        // GET: Accounts/Edit/5
+        public IActionResult Edit(string id)
+        {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            {
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
+            }
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Account acc = new Account();
+            try
+            {
+
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    if (!AccountExists(account.Id))
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
                     {
-                        return NotFound();
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                acc.Id = Convert.ToString(reader[0]);
+                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Birthdate = Convert.ToDateTime(reader[2]);
+                                acc.Gender = Convert.ToBoolean(reader[3]);
+                                acc.Address = Convert.ToString(reader[4]);
+                                acc.Sdt = Convert.ToString(reader[5]);
+                                acc.Email = Convert.ToString(reader[6]);
+                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Point = Convert.ToInt32(reader[8]);
+                                acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                                acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                                acc.Image = Convert.ToString(reader[11]);
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
-                    else
+                    catch (SqlException e)
                     {
-                        throw;
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return RedirectToAction(nameof(Index));
                     }
+                    connection.Close();
                 }
+
+                return View(acc);
+            }
+            catch (Exception e)
+            {
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTypeOfMember"] = new SelectList(_context.TypeOfMember, "IdTypeMember", "TypeOfMemberName");
+
+
+        }
+
+        // POST: Accounts/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Edit(string id, IFormFile files, [Bind("Id", "Name", "Birthdate", "Gender", "Address", "Sdt", "Email", "Password", "Point", "IdTypesOfUser", "IdTypeOfMember", "Image")] Account account)
+        {
+
+            if (id != account.Id)
+            {
+                return NotFound();
+            }
+
+            
+                try
+                {
+
+                    string connectionString = HttpContext.Session.GetString("connectString");
+
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                        + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
+                        + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
+                        + $"@image = '{account.Image}',@action = 'Update'";
+
+                        var command = new SqlCommand(commandText, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException e)
+                        {
+                            connection.Close();
+                            if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
+                                ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
+                            return View(account);
+                        }
+                        connection.Close();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+
+                }
+                catch (SqlException e)
+                {
+                    if (e.ToString().Contains("User"))
+                    {
+                        ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+                    }
+
+
+                    return View(account);
+                }
+
             //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(account);
+            
+
         }
         [HttpDelete]
         // GET: Accounts/Delete/5
         public IActionResult Delete(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            {
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
+            }
             try
             {
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                if(account.Count() == 0)
-                    return Json(new { success = false, message = "Tài khoản không tồn tại! Vui lòng tải lại trang" });
                 string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                var image = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0].Image;
+                var image = HttpContext.Session.GetString("imgLogin");
                 if (image != null)
                 {
                     var imageUrl = wwwRootPath + image;
                     System.IO.File.Delete(imageUrl);
-                }    
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteAccount @id = {id} ");
-                return Json(new { success = true, message = "Xóa mục thành công" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
+                }
+                string connectionString = HttpContext.Session.GetString("connectString");
 
-        private bool AccountExists(string id)
-        {
-            return _context.Account.Any(e => e.Id == id);
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_DeleteAccount @id = '{id}' ";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+
+                        return Json(new { success = false, message = "Tài khoản không tồn tại! Vui lòng tải lại trang" });
+                    }
+                    connection.Close();
+                }
+
+                return Json(new { success = true, message = "Xóa mục thành công" });
+
+            }
+            catch (SqlException e)
+            {
+                if (e.ToString().Contains("User"))
+                {
+                    ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+                }
+
+
+                return Json(new { success = false, message = "Tài khoản không tồn tại! Vui lòng tải lại trang" });
+            }
+
         }
     }
 }

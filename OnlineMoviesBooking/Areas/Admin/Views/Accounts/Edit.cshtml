@@ -64,12 +64,16 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Loài tài khoản</label>
-                <select class="form-control" asp-for="IdTypesOfUser" asp-items="ViewBag.IdTypesOfUser">
+                <select class="form-control" id="userid" name="userid" asp-for="IdTypesOfUser">
+                    <option value="1">Admin</option>
+                    <option value="2">Customer</option>
                 </select>
             </div>
+            
             <div class="form-group">
                 <label class="control-label">Loài tài khoản thành viên</label>
-                <select class="form-control" asp-for="IdTypeOfMember" asp-items="ViewBag.IdTypeOfMember">
+                <select class="form-control" asp-for="IdTypeOfMember">
+                    <option value="mobile">Mobile</option>
                 </select>
             </div>
             <div class="form-group">

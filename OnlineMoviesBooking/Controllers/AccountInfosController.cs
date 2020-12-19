@@ -22,7 +22,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             this._hostEnvironment = hostEnvironment;
         }
-        // GET: AccountInfos
+        // GET: AccountInfos    // tắt debug giùm t
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("idLogin") == null)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.Models.Models;
 
@@ -23,30 +24,85 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // GET: TypeOfMembers
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
+            List<TypeOfMember> listmember = new List<TypeOfMember>();
+            try
             {
-                return RedirectToAction("Error", "Home");
+
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetAllMemberType";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                TypeOfMember member = new TypeOfMember();
+                                member.IdTypeMember = Convert.ToString(reader[0]);
+                                member.TypeOfMemberName = Convert.ToString(reader[1]);
+                                member.Content = Convert.ToString(reader[2]);
+                                member.Point = Convert.ToInt32(reader[3]);
+                                member.Money = Convert.ToDouble(reader[4]);
+                                listmember.Add(member);
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    connection.Close();
+                }
+
+                return View(listmember);
             }
-            var list = _context.TypeOfMember.FromSqlRaw($"EXEC dbo.USP_GetAllMemberType");
-            return View(list);
+            catch (Exception e)
+            {
+
+                return RedirectToAction(nameof(Index));
+            }
+
+
         }
 
-        
+
 
         // GET: TypeOfMembers/Create
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
             return View();
         }
@@ -60,8 +116,28 @@ namespace OnlineMoviesBooking.Areas.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content},@money={typeOfMember.Money}, @point = {typeOfMember.Point}");
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_InsertMemberType @id = '{typeOfMember.IdTypeMember}',  @Name = '{typeOfMember.TypeOfMemberName}', @content = N'{typeOfMember.Content}',@money={typeOfMember.Money}, @point = {typeOfMember.Point}";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    connection.Close();
+                }
+
                 return RedirectToAction(nameof(Index));
+
             }
             return View(typeOfMember);
         }
@@ -69,17 +145,73 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // GET: TypeOfMembers/Edit/5
         public IActionResult Edit(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            {
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
+            }
             if (id == null)
             {
                 return NotFound();
             }
-
-            var typeOfMember =  _context.TypeOfMember.FromSqlRaw($"EXEC dbo.USP_GetMemberType @id = '{id}'").ToList();
-            if (typeOfMember == null)
+            TypeOfMember member = new TypeOfMember();
+            try
             {
-                return NotFound();
+
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetMemberType @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                member.IdTypeMember = Convert.ToString(reader[0]);
+                                member.TypeOfMemberName = Convert.ToString(reader[1]);
+                                member.Content = Convert.ToString(reader[2]);
+                                member.Point = Convert.ToInt32(reader[3]);
+                                member.Money = Convert.ToDouble(reader[4]);
+
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    connection.Close();
+                }
+
+                return View(member);
             }
-            return View(typeOfMember[0]);
+            catch (Exception e)
+            {
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(member);
         }
 
         // POST: TypeOfMembers/Edit/5
@@ -87,7 +219,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id,TypeOfMember typeOfMember)
+        public async Task<IActionResult> Edit(string id, TypeOfMember typeOfMember)
         {
             if (id != typeOfMember.IdTypeMember)
             {
@@ -96,33 +228,75 @@ namespace OnlineMoviesBooking.Areas.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_UpdateMemberType @id = {typeOfMember.IdTypeMember},  @Name = {typeOfMember.TypeOfMemberName}, @content = {typeOfMember.Content},@money = {typeOfMember.Money}, @point = {typeOfMember.Point}");
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TypeOfMemberExists(typeOfMember.IdTypeMember))
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_UpdateMemberType @id = '{typeOfMember.IdTypeMember}',  @Name = '{typeOfMember.TypeOfMemberName}', @content = '{typeOfMember.Content}',@money = {typeOfMember.Money}, @point = {typeOfMember.Point}";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
                     {
-                        return NotFound();
+                        command.ExecuteNonQuery();
                     }
-                    else
+                    catch (SqlException e)
                     {
-                        throw;
+                        connection.Close();
+                        return RedirectToAction(nameof(Index));
                     }
+                    connection.Close();
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(typeOfMember);
         }
         // POST: TypeOfMembers/Delete/5
         [HttpDelete]
-        
+
         public IActionResult Delete(string id)
         {
-            _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteMemberType @id = {id}");
-            return Json(new { success = true,  mesage = "Xóa thành công"});
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            {
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
+            }
+            try
+            {
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_DeleteMemberType @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        return Json(new { success = false, mesage = "Xóa không thành công" });
+                    }
+                    connection.Close();
+                }
+
+                return Json(new { success = true, message = "Xóa mục thành công" });
+
+            }
+            catch (SqlException e)
+            {
+                return Json(new { success = false, mesage = "Xóa không thành công" });
+            }
+
         }
 
         private bool TypeOfMemberExists(string id)

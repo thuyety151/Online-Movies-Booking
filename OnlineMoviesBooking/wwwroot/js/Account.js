@@ -9,19 +9,19 @@ function showModal(id) {
     console.log(1);
     $.ajax({
         method: "GET",
-        url: '/Accounts/Get/' + id,
+        url: '/Admin/Accounts/Get/' + id,
         success: function (data) {
             console.log(data);
-            modal.find(imageUrl).val(data.data[0].image)
-            modal.find('#name_detail_account').val(data.data[0].name)
-            modal.find('#birthdate_detail_account').val(data.data[0].birthdate)
-            modal.find('#gender_detail_account').val(data.data[0].gender)
-            modal.find('#address_detail_account').val(data.data[0].address)
-            modal.find('#sdt_detail_account').val(data.data[0].sdt)
-            modal.find('#email_detail_account').val(data.data[0].email)
-            modal.find('#password_detail_account').val(data.data[0].password)
-            modal.find('#point_detail_account').val(data.data[0].point)
-            modal.find('#image_detail_account').attr('src', data.data[0].image)
+           // modal.find(imageUrl).val(data.data[0].image)
+            modal.find('#name_detail_account').val(data.data.name)
+            modal.find('#birthdate_detail_account').val(data.data.birthdate)
+            modal.find('#gender_detail_account').val(data.data.gender)
+            modal.find('#address_detail_account').val(data.data.address)
+            modal.find('#sdt_detail_account').val(data.data.sdt)
+            modal.find('#email_detail_account').val(data.data.email)
+            modal.find('#password_detail_account').val(data.data.password)
+            modal.find('#point_detail_account').val(data.data.point)
+            modal.find('#image_detail_account').attr('src', data.data.image)
             //modal.find().val(data.data[0].id)
         }
     })

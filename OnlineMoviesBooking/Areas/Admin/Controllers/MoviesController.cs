@@ -24,9 +24,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     {
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public MoviesController(IWebHostEnvironment hostEnvironment)
+        public MoviesController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
             this._hostEnvironment = hostEnvironment;
         }
 

@@ -191,7 +191,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             try
             {
-
+                
                 Account acc = new Account();
                 List<TypeOfMember> listmember = new List<TypeOfMember>();
                 List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
@@ -248,7 +248,6 @@ namespace OnlineMoviesBooking.Controllers
                 HttpContext.Session.SetString("pwLogin", acc.Password);
                 HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
                 HttpContext.Session.SetString("connectString", $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
-                ExecuteProcedure ex = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
                 TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
                 TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
                 TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");

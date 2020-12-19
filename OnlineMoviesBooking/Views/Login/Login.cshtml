@@ -88,20 +88,21 @@
     <!-- ==========Sign-In-Section========== -->
 
     @{
-        if (TempData["msg"] == "error")
-        {
-            string msg = "Tai khoan hoac mat khau khong dung!!";
-            <script>
+
+    if (TempData["idLogin"] == null)
+    {
+        string msg = "truoc tien phai dang nhap!!!";
+        <script>
                 alert('@msg')
-            </script>
-        }
-        else if (TempData["msg"] != null)
-        {
-            string msg = "truoc tien phai dang nhap!!!";
-            <script>
+        </script>
+    }
+    else if (TempData["msg"] == "error")
+    {
+        string msg = "Tai khoan hoac mat khau khong dung!!";
+        <script>
                 alert('@msg')
-            </script>
-        }
+        </script>
+    }
     }
     <script src="~/Template/js/jquery-3.3.1.min.js"></script>
     <script src="~/Template/js/modernizr-3.6.0.min.js"></script>

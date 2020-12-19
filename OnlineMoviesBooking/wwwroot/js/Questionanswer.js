@@ -8,7 +8,7 @@ $('#QaSubmitContectView').click(function () {
     console.log(1);
     $.ajax({
         method: 'POST',
-        url: "/Qas/CreateContactView",
+        url: "/Admin/Qas/CreateContactView",
         data: { email: Email, content: Content },
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success: function (data) {

@@ -90,7 +90,7 @@
             <td style="width:15rem;text-align:right">
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
                 <a href="#" data-toggle="modal" data-target="#DetailAccountModal" onclick=showModal("@item.Id") @*id="detailbtn" *@ class="btn btn-secondary" style="cursor:pointer">Details</a> |
-                <a onclick=DeleteAccount("/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
+                <a onclick=DeleteAccount("/Admin/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
             </td>
         </tr>
                 }

@@ -21,10 +21,9 @@ namespace OnlineMoviesBooking.Controllers
         private readonly string _clientId;
         private readonly string _secretKey;
         private ExecuteProcedure Exec;
-        public MovieController(IConfiguration config)
-        {
-            string s = HttpContext.Session.GetString("connectString");
-            Exec = new ExecuteProcedure("Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+        public MovieController(IHttpContextAccessor httpContextAccessor,IConfiguration config)
+        { 
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
         }

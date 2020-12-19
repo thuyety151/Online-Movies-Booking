@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.Models.Models;
 
@@ -23,32 +24,117 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // GET: Qas
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
+            List<Qa> listqa = new List<Qa>();
+            string connectionString = HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                return RedirectToAction("Error", "Home");
+                connection.Open();
+                string commandText = "EXEC dbo.USP_GetAllQa";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Qa qa = new Qa();
+                            qa.Id = Convert.ToString(reader[0]);
+                            qa.IdAccount = Convert.ToString(reader[1]);
+                            qa.Email = Convert.ToString(reader[2]);
+                            qa.Time = Convert.ToDateTime(reader[3]);
+                            qa.Content = Convert.ToString(reader[4]);
+                            listqa.Add(qa);
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                    }
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    return RedirectToAction("HomeAdmin", "HomeAdmin");
+                }
+                connection.Close();
+
             }
-            var cinemaContext = _context.Qa.FromSqlRaw("EXEC dbo.USP_GetAllQa");
-            return View(cinemaContext);
+
+            return View(listqa);
         }
 
 
         public IActionResult Get(string id)
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
             try
             {
-                var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id = '{id}'");    // 
+
+                Qa qa = new Qa();
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetQa @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                qa.Id = Convert.ToString(reader[0]);
+                                qa.IdAccount = Convert.ToString(reader[1]);
+                                qa.Email = Convert.ToString(reader[2]);
+                                qa.Time = Convert.ToDateTime(reader[3]);
+                                qa.Content = Convert.ToString(reader[4]);
+
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return Json(new { success = false, message = "Lỗi!" });
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return Json(new { success = false, message = e.Message });
+                    }
+                    connection.Close();
+
+                }
+
                 return Json(new { data = qa });
             }
             catch (Exception e)
@@ -58,18 +144,20 @@ namespace OnlineMoviesBooking.Areas.Controllers
 
 
             }
+
         }
 
         // GET: Qas/Create
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
             //ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id");
             return View();
@@ -82,14 +170,45 @@ namespace OnlineMoviesBooking.Areas.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Email,Content")] Qa qa)
         {
+            TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
             if (ModelState.IsValid)
             {
                 qa.Id = Guid.NewGuid().ToString();
                 qa.Time = DateTime.Now;
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{qa.Email}'").ToList();
-                qa.IdAccount = account[0].Id;
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
-                return RedirectToAction(nameof(Index));
+                try
+                {
+
+
+                    string connectionString = HttpContext.Session.GetString("connectString");
+
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @time = '{qa.Time}', @content = N'{qa.Content}' ";
+
+                        var command = new SqlCommand(commandText, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException e)
+                        {
+                            connection.Close();
+                            TempData["msg"] = "error";
+                            return RedirectToAction(nameof(Index));
+                        }
+                        connection.Close();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+
+                    return View(qa);
+                }
             }
             return View(qa);
         }
@@ -97,26 +216,73 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // GET: Qas/Edit/5
         public IActionResult Edit(string id)
         {
-            if (HttpContext.Session.GetString("Key") == null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
             {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (HttpContext.Session.GetString("Key") != "Admin")
-            {
-                return RedirectToAction("Error", "Home");
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
             }
             if (id == null)
             {
                 return NotFound();
             }
-
-            var qa = _context.Qa.FromSqlRaw($"EXEC dbo.USP_GetQa @id = '{id}'").ToList();
-            if (qa == null)
+            Qa qa = new Qa();
+            try
             {
-                return NotFound();
+
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetQa @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                qa.Id = Convert.ToString(reader[0]);
+                                qa.IdAccount = Convert.ToString(reader[1]);
+                                qa.Email = Convert.ToString(reader[2]);
+                                qa.Time = Convert.ToDateTime(reader[3]);
+                                qa.Content = Convert.ToString(reader[4]);
+
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    connection.Close();
+                }
+
+                return View(qa);
             }
-            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa[0].IdAccount);
-            return View(qa[0]);
+            catch (Exception e)
+            {
+
+                return View(qa);
+            }
+
+
         }
 
         // POST: Qas/Edit/5
@@ -126,52 +292,91 @@ namespace OnlineMoviesBooking.Areas.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, [Bind("Id,IdAccount,Email,Time,Content")] Qa qa)
         {
-            if (id != qa.Id)
+
+            if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            TypeOfMember member = new TypeOfMember();
+            try
             {
-                try
+
+
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_UpdateQA @id = {qa.Id}, @time = {qa.Time}, @content = {qa.Content}");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!QaExists(qa.Id))
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_UpdateQA @id = '{qa.Id}', @time = '{qa.Time}', @content = N'{qa.Content}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
                     {
-                        return NotFound();
+                        command.ExecuteNonQuery();
                     }
-                    else
+                    catch (SqlException e)
                     {
-                        throw;
+                        connection.Close();
+                        TempData["msg"] = "error";
+                        return RedirectToAction(nameof(Index));
                     }
+                    connection.Close();
                 }
-                return RedirectToAction(nameof(Index));
+
+                return View(member);
             }
-            ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id", qa.IdAccount);
-            return View(qa);
+            catch (Exception e)
+            {
+
+                return View(qa);
+            }
+
         }
 
         // POST: Qas/Delete/5
         [HttpDelete]
         public IActionResult Delete(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            {
+
+                TempData["msg"] = "Error";
+                return Redirect("/Home/Index");
+            }
             try
             {
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_DeleteQuestionAnswer @id = {id}");
-                return Json(new { success = true, message = "Xóa mục thành công" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
 
-        private bool QaExists(string id)
-        {
-            return _context.Qa.Any(e => e.Id == id);
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_DeleteQuestionAnswer @id = '{id}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException e)
+                    {
+                        connection.Close();
+                        return Json(new { success = false, mesage = "Xóa không thành công" });
+                    }
+                    connection.Close();
+                }
+
+                return Json(new { success = true, message = "Xóa mục thành công" });
+
+            }
+            catch (SqlException e)
+            {
+                return Json(new { success = false, mesage = "Xóa không thành công" });
+            }
+
         }
 
 

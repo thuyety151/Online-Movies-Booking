@@ -17,9 +17,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     {
         private ExecuteProcedure Exec;
 
-        public ScreensController(CinemaContext context)
+        public ScreensController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
         }
         public IActionResult GetAll()
         {

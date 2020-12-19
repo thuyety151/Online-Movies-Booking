@@ -32,6 +32,10 @@ namespace OnlineMoviesBooking.Controllers
                 TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
                 TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             }
+            else
+            {
+                HttpContext.Session.SetString("connectString", "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+            }
             return View();
         }
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
