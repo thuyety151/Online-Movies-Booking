@@ -1,4 +1,5 @@
 ﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OnlineMoviesBooking.DataAccess.Data;
@@ -20,6 +21,7 @@ namespace OnlineMoviesBooking.Controllers
 
         public CheckoutController(IConfiguration config)
         {
+
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
             Exec = new ExecuteProcedure();

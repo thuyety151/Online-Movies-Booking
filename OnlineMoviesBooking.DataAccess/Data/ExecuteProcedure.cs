@@ -19,7 +19,6 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public ExecuteProcedure()
         {
             cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
-            CreateTypeOfSeat();
         }
 
         //-------------------------------MOVIE
