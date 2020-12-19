@@ -1,4 +1,4 @@
-﻿@*@model OnlineMoviesBooking.Models.ViewModel.AccountViewModel*@
+﻿@model OnlineMoviesBooking.Models.ViewModel.AccountViewModel;
 
 @{
     ViewData["Title"] = "Edit";
@@ -27,86 +27,98 @@
 </head>
 
 <body>
+    @{
+        string img;
+        if (TempData["idLogin"] == null && TempData["imgLogin"] == null)
+        {
+            img = "/image/Account/Avatar_default.png";
+
+        }
+        else
+        {
+            if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
+                img = "/image/Account/Avatar_default.png";
+            else
+                img = TempData["imgLogin"].ToString();
+
+        }
+    }
     <!-- ==========Contact-Section========== -->
     <section class="contact-section padding-top">
         <div class="contact-container">
 
             <div class="container">
-                <div style="display:grid;grid-template-columns:30% 70%;padding:2.5rem 2rem">
-                    <div style="grid-column:1;padding-top:2rem">
-                        <div style="grid-column:1;margin-top:5rem" class="text-center">
-                            <div class="event-about-thumb" style="width:90%; max-width:20rem;">
-                                <img src="~/assets/img/harlypic.jpg" class="shadow" />
-                            </div>
+
+                <div class="container">
+                    <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Chỉnh sửa thông tin</h2>
+                    <form class="contact-form" id="contact_form_submit" asp-action="Edit" enctype="multipart/form-data">
+                        <div style="margin-top:5rem;max-width:20rem" class="container">
+                            @{
+                                if (TempData["idLogin"] == null && TempData["imgLogin"] == null)
+                                {
+                                    <div style="width:90%; max-width:10rem;">
+                                        <img src="@img" class="shadow" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="event-about-thumb" style="width:100%; max-width:20rem;">
+                                        <img src="@img" class="shadow text-center" />
+                                    </div>
+                                }
+                            }
+
                         </div>
                         <br />
-                        <div class="form-group text-center" >
-                            <a asp-action="Index">
-                                <input type="button" value="Đổi hình ảnh" />
-                            </a>
+                        <div class="form-group">
+                            <label for="exampleInputFile">File input</label>
+                            <input asp-for="Image" type="file" class="form-control-file"
+                                   id="exampleInputFile" aria-describedby="fileHelp" multiple>
                         </div>
-                    </div>
-                    
-
-                    <div class="container" style="grid-column:2;">
-                        <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Chỉnh sửa thông tin</h2>
-                        <form class="contact-form" id="contact_form_submit" asp-action="Edit">
-                            
-                            @*<div class="form-group ">
-            <h6>Tên</h6>
-            <label>Trần Thanh Toàn</label>
-        </div>*@
-                            <div class="form-group">
-                                <label>Tên<span>*</span></label>
-                                <input type="text" @*asp-for="Name"*@ required value="Trần Thanh Toàn">
-                            </div>
-                            @*<div class="form-group">
-            <h6>Ngày sinh</h6>
-            <label>11 - 5 - 2000</label>
-        </div>*@
-                            <div class="form-group">
-                                <label>Ngày sinh<span>*</span></label>
-                                <input type="text" @*asp-for="Birthdate"*@ required value="11 - 5 - 2000" />
-                            </div>
-                            @*<div class="form-group">
-            <h6>Giới tính</h6>
-            <label>Nam</label>
-        </div>*@
-                            <div class="form-group">
-                                <label>Giới tính<span>*</span></label>
-                                <select style="background-color:transparent" @*asp-for="Gender"*@ required>
-                                    <option value="True">Nam</option>
-                                    <option value="False">Nữ</option>
-                                </select>
-                            </div>
-                            @*<div class="form-group">
-            <h6>Email</h6>
-            <label>thanhtontran115@gmail.com</label>
-        </div>*@
-                            <div class="form-group">
-                                <label>Email<span>*</span></label>
-                                <input type="text" @*asp-for="Email"*@ required value="thanhtontran115@gmail.com" />
-                            </div>
-                            @*<div class="form-group">
-            <h6>Địa chỉ</h6>
-            <label>Số 1 Võ văn Ngân, phường Linh Trung, quận Thủ Đức, Tp.Hồ Chí Minh</label>
-        </div>*@
-                            <div class="form-group">
-                                <label>Địa chỉ<span>*</span></label>
-                                <input type="text" @*asp-for="Address"*@ required value="Số 1 Võ văn Ngân, phường Linh Trung, quận Thủ Đức, Tp.Hồ Chí Minh" />
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="Lưu">
-                            </div>
-
-                        </form>
-                        <br />
-                        <div class="form-group container-fluid">
-                                <input type="button" value="Quay lại" />
+                        <input type="text" asp-for="Id" hidden />
+                        <input type="text" asp-for="Sdt" hidden />
+                        <input type="text" asp-for="Password" hidden />
+                        <input type="text" asp-for="IdTypesOfUser" hidden />
+                        <input type="text" asp-for="IdTypeOfMember" hidden />
+                        <div class="form-group">
+                            <label>Tên<span>*</span></label>
+                            <input type="text" asp-for="Name" required>
                         </div>
-                    </div>
 
+                        <div class="form-group">
+                            <label>Ngày sinh<span>*</span></label>
+                            <input type="text" asp-for="Birthdate" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giới tính<span>*</span></label>
+                            <select style="background-color:transparent" asp-for="Gender" required>
+                                <option value="True">Nam</option>
+                                <option value="False">Nữ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email<span>*</span></label>
+                            <input type="text" asp-for="Email" required readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ<span>*</span></label>
+                            <input type="text" asp-for="Address" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Lưu">
+                        </div>
+
+                    </form>
+                    <br />
+                    <div class="form-group container-fluid">
+                        <input type="button" value="Quay lại" />
+                    </div>
                 </div>
+
+
             </div>
         </div>
     </section>

@@ -88,9 +88,16 @@
     <!-- ==========Sign-In-Section========== -->
 
     @{
-        if (TempData["msg"] != null)
+        if (TempData["msg"] == "error")
         {
-            string msg = @"Trước tiên bạn phải đăng nhập!!!";
+            string msg = "Tai khoan hoac mat khau khong dung!!";
+            <script>
+                alert('@msg')
+            </script>
+        }
+        else if (TempData["msg"] != null)
+        {
+            string msg = "truoc tien phai dang nhap!!!";
             <script>
                 alert('@msg')
             </script>

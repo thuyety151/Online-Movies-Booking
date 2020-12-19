@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -33,6 +34,6 @@ namespace OnlineMoviesBooking.Models.ViewModel
         public string IdTypesOfUser { get; set; }
         [Required(ErrorMessage = "Dữ liệu không được để trống")]
         public string IdTypeOfMember { get; set; }
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

@@ -9,17 +9,18 @@ using System.Linq;
 using System.Data;
 using OnlineMoviesBooking.Models.ViewModels;
 using Microsoft.IdentityModel.Protocols;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Session;
 
 namespace OnlineMoviesBooking.DataAccess.Data
 {
     public class ExecuteProcedure
     {
-        private string cs;
 
-        public ExecuteProcedure()
+        private string cs;
+        public ExecuteProcedure(string _cs)
         {
-            cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
-            CreateTypeOfSeat();
+            cs = _cs;
         }
 
         //-------------------------------MOVIE

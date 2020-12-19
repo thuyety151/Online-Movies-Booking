@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -21,7 +23,8 @@ namespace OnlineMoviesBooking.Controllers
         private ExecuteProcedure Exec;
         public MovieController(IConfiguration config)
         {
-            Exec = new ExecuteProcedure();
+            string s = HttpContext.Session.GetString("connectString");
+            Exec = new ExecuteProcedure("Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
         }
@@ -29,7 +32,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             return View();
         }
-       
+
         public IActionResult ComingSoon(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
@@ -122,14 +125,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                     lstmovie =Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
+                    lstmovie = Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount % num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                     lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
+                    lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -138,13 +141,13 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                 lstmovie = Exec.ExecuteGetMovieNow(0, num);
+                lstmovie = Exec.ExecuteGetMovieNow(0, num);
             }
             return View(lstmovie);
         }
         public IActionResult Detail(string id)
         {
-           
+
             if (id == null)
             {
                 return NotFound();
@@ -179,19 +182,19 @@ namespace OnlineMoviesBooking.Controllers
             DateTime now = DateTime.Now;
             int temp = 0;
             List<string> dateshow = new List<string>();
-             while(temp!=7)
+            while (temp != 7)
             {
-               
+
                 dateshow.Add(now.Date.ToString("dd/MM/yyyy"));
                 // now.Date.ToString("") + "/" + now.Date.ToString("MM") + "/" + now.Date.ToString("yyyy")
                 now = now.AddDays(1);
                 temp++;
             }
             ViewBag.Date = dateshow;
-            
+
             return View(movie);
         }
-        
+
         public IActionResult SeatPlan(string id)
         {
             if (id == null)
@@ -225,25 +228,25 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-       
 
 
-       // ============================ Json
+
+        // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
-            if(date==null)
+            if (date == null)
             {
                 return NotFound();
             }
             var show = Exec.ExecuteGetAllShowDate(date);
             return Json(new { data = show });
         }
-        
+
 
         [HttpGet]
         public IActionResult getshowbydate(string idMovie, string date)
         {
-            if(idMovie==null || date == null)
+            if (idMovie == null || date == null)
             {
                 return NotFound();
             }
@@ -251,13 +254,13 @@ namespace OnlineMoviesBooking.Controllers
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện
-            return Json(  theater );
+            return Json(theater);
         }
         [HttpGet]
         public IActionResult getprice()
         {
             //List<TypesOfSeat> price = new List<TypesOfSeat>();
-             var price = Exec.GetAllTypesOfSeat();
+            var price = Exec.GetAllTypesOfSeat();
             return Json(price);
         }
         [HttpGet]
@@ -309,11 +312,11 @@ namespace OnlineMoviesBooking.Controllers
                     return Json(false);
                 }
             }
-           
-            return Json(seatVM );
+
+            return Json(seatVM);
         }
         [HttpGet]
-        public IActionResult CheckOut(string idshow,string lstSeat)
+        public IActionResult CheckOut(string idshow, string lstSeat)
         {
             List<string> lst = lstSeat.Split(',').ToList();
 

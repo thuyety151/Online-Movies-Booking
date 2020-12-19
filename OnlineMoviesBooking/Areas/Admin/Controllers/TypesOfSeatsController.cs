@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         public TypesOfSeatsController()
         {
-            Exec = new ExecuteProcedure();
+            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
         }
 
 

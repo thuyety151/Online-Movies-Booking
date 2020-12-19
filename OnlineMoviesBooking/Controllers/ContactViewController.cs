@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModel;
@@ -19,31 +20,36 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult AllQuestion()
         {
-            if (HttpContext.Session.GetString("Login") != null)
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
-                string id = HttpContext.Session.GetString("Login").ToString();
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                TempData["Logininf"] = account[0].Name;
-                TempData["src"] = account[0].Image;
+                TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             }
-            var list = _context.Qa.FromSqlRaw("EXEC dbo.USP_GetAllQa").ToList();
-            return View(list);
+            //var list = _context.Qa.FromSqlRaw("EXEC dbo.USP_GetAllQa").ToList();
+            return View();
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("Login") != null)
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
-                string id = HttpContext.Session.GetString("Login").ToString();
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                TempData["Logininf"] = account[0].Name;
-                TempData["src"] = account[0].Image;
+                TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             }
+            //var list = _context.Qa.FromSqlRaw("EXEC dbo.USP_GetAllQa").ToList();
             return View();
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateContactView([Bind("Email,Content")] ContactViewModel contactView)
         {
+            TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             if (ModelState.IsValid)
             {
                 Qa qa = new Qa()
@@ -53,12 +59,38 @@ namespace OnlineMoviesBooking.Controllers
                 };
                 qa.Id = Guid.NewGuid().ToString();
                 qa.Time = DateTime.Now;
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{contactView.Email}'").ToList();
-                qa.IdAccount = account[0].Id;
-                _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertQa @id = {qa.Id}, @idaccount = {qa.IdAccount},@email = {qa.Email}, @time = {qa.Time}, @content ={qa.Content} ");
+                string newpass = Guid.NewGuid().ToString().Substring(26);
+
+                string connectionString;
+                if (HttpContext.Session.GetString("idLogin") != null)
+                {
+                    string username = HttpContext.Session.GetString("idLogin");
+                    string pw = HttpContext.Session.GetString("pwLogin");
+                    connectionString = $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={pw}";
+                }
+                else
+                    connectionString = "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @time = '{qa.Time}', @content = N'{qa.Content}' ";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch
+                    {
+                        TempData["msg"] = "error";
+                        return View(contactView);
+                    }
+                    connection.Close();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            return RedirectToActionPermanent("Index", contactView);
+            return RedirectToActionPermanent("Index", "contactView");
         }
     }
 }

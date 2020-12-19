@@ -1,74 +1,149 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModel;
 
 namespace OnlineMoviesBooking.Controllers
 {
+
     public class AccountInfosController : Controller
     {
-        private readonly CinemaContext _context;
-
-        public AccountInfosController(CinemaContext context)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public AccountInfosController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
+            this._hostEnvironment = hostEnvironment;
         }
-
         // GET: AccountInfos
         public IActionResult Index()
         {
-            if(HttpContext.Session.GetString("Login") == null)
+            if (HttpContext.Session.GetString("idLogin") == null)
             {
                 TempData["msg"] = "loginfirst";
                 return RedirectToAction("Login", "Login");
             }
-            if (HttpContext.Session.GetString("Login") != null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            Account acc = new Account();
+            string connectionString = HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
             {
-                string id = HttpContext.Session.GetString("Login").ToString();
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                TempData["Logininf"] = account[0].Name;
-                TempData["src"] = account[0].Image;
-                TempData["Key"] = account[0].Id;
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("idLogin")}'";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            acc.Id = Convert.ToString(reader[0]);
+                            acc.Name = Convert.ToString(reader[1]);
+                            acc.Birthdate = Convert.ToDateTime(reader[2]);
+                            acc.Gender = Convert.ToBoolean(reader[3]);
+                            acc.Address = Convert.ToString(reader[4]);
+                            acc.Sdt = Convert.ToString(reader[5]);
+                            acc.Email = Convert.ToString(reader[6]);
+                            acc.Password = Convert.ToString(reader[7]);
+                            acc.Point = Convert.ToInt32(reader[8]);
+                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                            acc.Image = Convert.ToString(reader[11]);
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                catch
+                {
+
+                    TempData["msg"] = "error";
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
             }
-            var acc = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("Key")}'").ToList()[0];
+
             return View(acc);
         }
 
         // GET: AccountInfos/Edit/5
         [HttpGet]
-        public IActionResult Edit(/*string Id*/)
+        public IActionResult Edit()
         {
-            if (HttpContext.Session.GetString("Login") != null)
+            if (HttpContext.Session.GetString("idLogin") == null)
             {
-                string id = HttpContext.Session.GetString("Login").ToString();
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                TempData["Logininf"] = account[0].Name;
-                TempData["src"] = account[0].Image;
+                TempData["msg"] = "loginfirst";
+                return RedirectToAction("Login", "Login");
             }
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            AccountViewModel acc = new AccountViewModel();
 
-            //var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList()[0];
-            //AccountViewModel accountViewModel = new AccountViewModel()
-            //{
-            //    Id = account.Id,
-            //    Name = account.Name,
+            string connectionString = HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("idLogin")}'";
 
-            //};
-            //if (account == null)
-            //{
-            //    return NotFound();
-            //}
-            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(/*accountViewModel*/);
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            acc.Id = Convert.ToString(reader[0]);
+                            acc.Name = Convert.ToString(reader[1]);
+                            acc.Birthdate = Convert.ToDateTime(reader[2]);
+                            acc.Gender = Convert.ToBoolean(reader[3]);
+                            acc.Address = Convert.ToString(reader[4]);
+                            acc.Sdt = Convert.ToString(reader[5]);
+                            acc.Email = Convert.ToString(reader[6]);
+                            acc.Password = Convert.ToString(reader[7]);
+                            acc.Point = Convert.ToInt32(reader[8]);
+                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
+
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                catch
+                {
+
+                    TempData["msg"] = "error";
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
+            }
+
+            return View(acc);
         }
 
         // POST: AccountInfos/Edit/5
@@ -76,22 +151,84 @@ namespace OnlineMoviesBooking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,IdTypeOfMember,Image")] Account account)
+        public IActionResult Edit(string id, [Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,IdTypeOfMember,Image")] AccountViewModel account)
         {
             if (id != account.Id)
             {
                 return NotFound();
             }
-
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             if (ModelState.IsValid)
             {
-                
-                return RedirectToAction(nameof(Index));
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string img = "";
+                if (account.Image != null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"image\Account\");
+                    var extension = Path.GetExtension(account.Image.FileName);
+
+                    using (var filesStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        account.Image.CopyTo(filesStreams);
+                    }
+                    img = @"\image\Account\" + fileName + extension;
+                }
+                else
+                {
+                    img = HttpContext.Session.GetString("imgLogin");
+                }
+                try
+                {
+
+                    string connectionString = HttpContext.Session.GetString("connectString");
+
+                    using (var connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                        + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
+                        + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
+                        + $"@image = '{img}',@action = 'Update'";
+
+                        var command = new SqlCommand(commandText, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException e)
+                        {
+                            if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
+                                ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
+                            return View(account);
+                        }
+                        connection.Close();
+                    }
+                    HttpContext.Session.SetString("nameLogin", account.Name);
+
+                    HttpContext.Session.SetString("imgLogin", img);
+                    return RedirectToAction("Index", "AccountInfos");
+
+                }
+                catch (SqlException e)
+                {
+                    if (e.ToString().Contains("User"))
+                    {
+                        ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
+                    }
+
+
+                    return View(account);
+                }
+
             }
-            ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            return View(account);
+            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
+            return RedirectToAction("Index", "AccountInfos");
         }
 
-        
+
     }
 }

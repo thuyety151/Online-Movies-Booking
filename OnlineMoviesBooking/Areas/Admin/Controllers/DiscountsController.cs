@@ -21,7 +21,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         public DiscountsController( IWebHostEnvironment hostEnvironment)
         {
             this._hostEnvironment = hostEnvironment;
-            Exec = new ExecuteProcedure();
+            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
         }
 
         public IActionResult GetAll()

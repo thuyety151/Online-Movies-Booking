@@ -1,4 +1,5 @@
 ﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OnlineMoviesBooking.DataAccess.Data;
@@ -22,7 +23,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
-            Exec = new ExecuteProcedure();
+            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
         }
         public IActionResult Index()
         {

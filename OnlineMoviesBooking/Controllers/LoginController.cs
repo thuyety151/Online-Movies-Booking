@@ -15,63 +15,109 @@ using System.Net;
 using System.Net.Mail;
 using System.Configuration;
 using Microsoft.AspNetCore.Session;
+using OnlineMoviesBooking.DataAccess.Data;
 namespace OnlineMoviesBooking.Controllers
 {
 
     public class LoginController : Controller
     {
-        private readonly CinemaContext _signManager;
+
         private readonly IWebHostEnvironment _hostEnvironment;
-        
-        public LoginController(CinemaContext context, IWebHostEnvironment hostEnvironment)
+
+        public LoginController(IWebHostEnvironment hostEnvironment)
         {
-            _signManager = context;
+
             this._hostEnvironment = hostEnvironment;
         }
         public ActionResult ForgotPassword()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             return View();
         }
         public ActionResult Logout()
         {
             HttpContext.Session.Clear();
             TempData.Clear();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
         [HttpPost]
         public ActionResult ForgotPassword(string Email)
         {
-            
-            var acc = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{Email}'").ToList();
-            if (acc.Count() == 1)
-            {
-                //đặt lại mật khẩu
-                string newpass = Guid.NewGuid().ToString().Substring(26);
 
-                _signManager.Database.ExecuteSqlCommand($"EXEC dbo.USP_ResetPassword {acc[0].Email}, {newpass} ");
+            string connectionString = "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-                //Gửi mật khẩu qua mail
-                MailMessage mm = new MailMessage("thanhtontran115@gmail.com","quynhkun27@gmail.com");
-                mm.Subject = "new password";
-                mm.Body = string.Format("Hello : <h1>{0}<h1> is your password", newpass);
-                mm.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";
-                smtp.EnableSsl = true;
-                NetworkCredential nc = new NetworkCredential();
-                nc.UserName = "thanhtontran115@gmail.com";
-                nc.Password = "1152000toan";
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = nc;
-                smtp.Port = 587;
-                smtp.Send(mm);
-                return RedirectToAction("Login");
-            }
-            else
+            //đặt lại mật khẩu
+            string newpass = Guid.NewGuid().ToString().Substring(26);
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                TempData["msg"] = "Gmail không tồn tại";
-                return View();
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_ResetPassword @email = '{Email}',@pw = '{newpass}'";
+                string conmandText2 = $"EXEC dbo.USP_GetAccountForEmail @Email = '{Email}'";
+                string loginname = "";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        //Gửi mật khẩu qua mail
+                        MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
+                        mm.Subject = "new password";
+                        mm.Body = string.Format("Hello : <h1>{0}<h1> is your password", newpass);
+                        mm.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient();
+                        smtp.Host = "smtp.gmail.com";
+                        smtp.EnableSsl = true;
+                        NetworkCredential nc = new NetworkCredential();
+                        nc.UserName = "thanhtontran115@gmail.com";
+                        nc.Password = "1152000toan";
+                        smtp.UseDefaultCredentials = true;
+                        smtp.Credentials = nc;
+                        smtp.Port = 587;
+                        smtp.Send(mm);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    TempData["msg"] = "error";
+                    return View();
+                }
+                command = new SqlCommand(conmandText2, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        loginname = Convert.ToString(reader[0]);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    TempData["msg"] = "error";
+                    return View();
+                }
+                string conmandText3 = $"ALTER LOGIN {loginname} WITH PASSWORD = '{newpass}'";
+                command = new SqlCommand(conmandText3, connection);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException e)
+                {
+                    TempData["msg"] = "error";
+                    return View();
+                }
+                connection.Close();
             }
+
+
+            return RedirectToAction("Login");
+
+
         }
 
         public IActionResult Register()
@@ -79,7 +125,7 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("Username", "FullName", "Email", "SDT", "Password", "PasswordConfirm")] RegisterViewModel registerViewModel)
+        public IActionResult Register([Bind("Username", "FullName", "Email", "SDT", "Password", "PasswordConfirm")] RegisterViewModel registerViewModel)
         {
             //3 mail trùng
             //1 login trùng
@@ -88,26 +134,29 @@ namespace OnlineMoviesBooking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var acc = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetAccountForEmail @Email = '{registerViewModel.Email}' ").ToList();
-                    if (acc.Count == 1)
+                    string connectionString = "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+
+                    using (var connection = new SqlConnection(connectionString))
                     {
-                        ModelState.AddModelError("Email", "Email đã tồn tại");
-                        return View(registerViewModel);
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{registerViewModel.Username}',@name = N'{registerViewModel.FullName}',@birthdate = {DateTime.Now.Day},"
+                        + $"@gender = {1},@address = '{""}',@SDT = '{registerViewModel.SDT}',@Email = '{registerViewModel.Email}',"
+                        + $"@password = '{registerViewModel.Password}',@point = {0},@usertypeid = '{2}',@membertypeid = 'mobile',"
+                        + $"@image = '{""}',@action = 'Insert'";
+
+                        var command = new SqlCommand(commandText, connection);
+                        try
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException e)
+                        {
+                            if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
+                                ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
+                            return View(registerViewModel);
+                        }
+                        connection.Close();
                     }
-
-                    Account account = new Account()
-                    {
-                        Email = registerViewModel.Email,
-                        Password = registerViewModel.Password,
-                    };
-                    account.Name = registerViewModel.FullName;
-                    account.Sdt = registerViewModel.SDT;
-                    account.Id = registerViewModel.Username;
-                    account.IdTypeOfMember = "mobile";
-                    _signManager.Database.ExecuteSqlCommand($"EXEC [dbo].[USP_CreateUser] {account.Id},{account.Id},{account.Password},{"CUSTOMER"}");
-
-                    _signManager.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@birthdate = {"11-5-2000"},@gender={account.Gender},@address={account.Address},@SDT={account.Sdt},@Email={account.Email},@password={account.Password},@point ={account.Point},@usertypeid={"2"},@membertypeid = {account.IdTypeOfMember}, @image={account.Image},@action ={"Insert"} ");
-                    HttpContext.Session.GetString(registerViewModel.Username);
                     return RedirectToAction("Login", "Login");
                 }
             }
@@ -126,49 +175,86 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult Login()
         {
-            return View();
+            if (HttpContext.Session.GetString("idLogin") == null)
+                return View();
+            else
+            {
+                TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+                return RedirectToAction("Index", "Home");
+            }
         }
         [HttpPost]
-        public async Task<IActionResult> Login([Bind("Username", "Password")] LoginModelView loginModelView)
+        public IActionResult Login([Bind("Username", "Password")] LoginModelView loginModelView)
         {
             try
             {
-                
-                var acc = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_CheckForLogin @Name = '"+loginModelView.Username+ 
-                     "' , @Password = '"+loginModelView.Password + "'").ToList();
-               
 
-                if ( acc.Count() != 1)
+                Account acc = new Account();
+                List<TypeOfMember> listmember = new List<TypeOfMember>();
+                List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
+                string connectionString = "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+
+                using (var connection = new SqlConnection(connectionString))
                 {
-                    ViewData["Error"] = "Ten dang nhap hoac mat khau khong đung";
-                    return View(loginModelView);
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_CheckForLogin @username = '{loginModelView.Username}' , @password = '{loginModelView.Password}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                acc.Id = Convert.ToString(reader[0]);
+                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Birthdate = Convert.ToDateTime(reader[2]);
+                                acc.Gender = Convert.ToBoolean(reader[3]);
+                                acc.Address = Convert.ToString(reader[4]);
+                                acc.Sdt = Convert.ToString(reader[5]);
+                                acc.Email = Convert.ToString(reader[6]);
+                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Point = Convert.ToInt32(reader[8]);
+                                acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                                acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                                acc.Image = Convert.ToString(reader[11]);
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return View(loginModelView);
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+
+                        ModelState.AddModelError("", e.ToString());
+                        return View(loginModelView);
+                    }
+                    connection.Close();
+
                 }
-                
-                HttpContext.Session.SetString("Key", acc[0].Id);
 
-                if (acc[0].IdTypesOfUser == "1")
-                {
-                    HttpContext.Session.SetString("Login", acc[0].Id);
-                    string id = HttpContext.Session.GetString("Login").ToString();
-                    var account = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                    TempData["Logininf"] = account[0].Name;
-                    TempData["src"] = account[0].Image;
-                    return RedirectToAction("Index", "Accounts");
-                }
-                else if (acc[0].IdTypesOfUser == "2")
-                {
-
-                    HttpContext.Session.SetString("Login", acc[0].Id);
-                    string id = HttpContext.Session.GetString("Login").ToString();
-                    var account = _signManager.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                    TempData["Logininf"] = account[0].Name;
-                    TempData["src"] = account[0].Image;
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ViewData["Error"] = "Something wrong!!!";
-                return View(loginModelView);
+                HttpContext.Session.SetString("idLogin", acc.Id);
+                HttpContext.Session.SetString("nameLogin", acc.Name);
+                HttpContext.Session.SetString("imgLogin", acc.Image);
+                HttpContext.Session.SetString("pwLogin", acc.Password);
+                HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
+                HttpContext.Session.SetString("connectString", $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
+                ExecuteProcedure ex = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+                TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                TempData["pwLogin"] = HttpContext.Session.GetString("pwLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+                return RedirectToAction("Index", "Home");
             }
             catch (SqlException e)
             {
@@ -176,35 +262,8 @@ namespace OnlineMoviesBooking.Controllers
                 return View(loginModelView);
             }
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Account account)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            account.Id = Guid.NewGuid().ToString();
 
-        //            _context.Database.ExecuteSqlCommand($"EXEC dbo.USP_InsertUpdateAccount @id = {account.Id},@name = {account.Name},@Email={account.Email},@password={account.Password},@usertypeid={2},@action ={"Insert"} ");
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        var modelstateKey = ModelState.Keys;
-        //        var list = _context.Account.FromSqlRaw($"EXEC dbo.USP_CheckEmail '{account.Email}' ").ToList();
-        //        if (list.Count() == 1)
-        //        {
-        //            ModelState.AddModelError("Email", "Email đã tồn tại");
-        //        }
-        //        //else if (check_db == 1)
-        //        //{
-        //        //    ModelState.AddModelError("Sdt", "Sdt đã tồn tại");
-        //        //}
-        //        return View();
-        //    }
 
     }
-    
+
 }

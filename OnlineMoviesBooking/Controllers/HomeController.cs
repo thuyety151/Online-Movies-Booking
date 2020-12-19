@@ -12,27 +12,26 @@ using OnlineMoviesBooking.Models.Models;
 
 namespace OnlineMoviesBooking.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CinemaContext _context;
-       
-        public HomeController(ILogger<HomeController> logger, CinemaContext context)
+
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _context = context;
+
         }
-        
+
         public IActionResult Index()
         {
-            if(HttpContext.Session.GetString("Login") != null)
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
-                string id = HttpContext.Session.GetString("Login").ToString();
-                var account = _context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{id}'").ToList();
-                TempData["Logininf"] = account[0].Name;
-                TempData["src"] = account[0].Image;
-            }    
+                TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            }
             return View();
         }
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -31,8 +31,10 @@ namespace OnlineMoviesBooking
         {
             services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
             services.AddMvc();
-            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
-            services.AddSession();
+            //services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromHours(60);
+            });
             services.AddDbContext<CinemaContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -70,6 +72,7 @@ namespace OnlineMoviesBooking
             app.UseAuthorization();
 
             app.UseSession();                               // Đăng ký Middleware Session vào Pipeline
+            //app.UseMvc();
 
             app.UseEndpoints(endpoints =>
             {
