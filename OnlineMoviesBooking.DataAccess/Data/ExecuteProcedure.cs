@@ -1460,5 +1460,33 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
+        public object ExecUseDiscount(string idaccount, string idshow, string iddiscount)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UseDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@IdShow", idshow);
+                com.Parameters.AddWithValue("@IdDiscount", iddiscount);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return  new 
+                    {
+                        IdAccount = rdr["Id_Account"].ToString(),
+                        TotalPrice = double.Parse(rdr["Price"].ToString()),
+                        No = int.Parse(rdr["No"].ToString()),
+                        NameDiscount = rdr["Name"].ToString(),
+                        PercentDiscount=rdr["PercentDiscount"].ToString(),
+                        MaxCost=int.Parse(rdr["MaxCost"].ToString())
+                    };
+                }
+            }
+            return null;
+        }
     }
 }

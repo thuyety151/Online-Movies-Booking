@@ -338,6 +338,12 @@ namespace OnlineMoviesBooking.Controllers
             ViewBag.Show = idshow;
             return View(bill);
         }
+        [HttpGet]
+        public IActionResult UseDiscount(string idshow, string iddiscount)
+        {
+            var obj = Exec.ExecUseDiscount("1", idshow, iddiscount);
+            return Json(obj);
+        }
         public IActionResult TimeOut(string idshow)
         {
             Exec.ExecDeleteBillStatus0("1");
