@@ -66,14 +66,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
+                    lstmovie = Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
+                    lstmovie = Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -82,7 +82,7 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(0, num);
+                lstmovie = Exec.ExecuteGetMovieComingSoon(0, num);
             }
             return View(lstmovie);
         }
@@ -339,10 +339,10 @@ namespace OnlineMoviesBooking.Controllers
             return View(bill);
         }
         [HttpGet]
-        public IActionResult UseDiscount(string idshow, string iddiscount)
+        public IActionResult UseDiscount( string code)
         {
             
-            var obj = Exec.ExecUseDiscount("1", iddiscount);
+            var obj = Exec.ExecUseDiscount("1", code);
 
             return Json(obj);
         }

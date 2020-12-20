@@ -1182,26 +1182,23 @@ namespace OnlineMoviesBooking.DataAccess.Data
             string result = "";
             try
             {
-                using (SqlConnection con = new SqlConnection(cs))
-                {
-                    con.Open();
-                    // TêN STORE
-                    SqlCommand com = new SqlCommand("USP_UpdateDiscount", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.AddWithValue("@Id", discount.Id);
-                    com.Parameters.AddWithValue("@Name", discount.Name);
-                    com.Parameters.AddWithValue("@Code", discount.Code);
-                    com.Parameters.AddWithValue("@Description", discount.Description);
-                    com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@DateStart", discount.DateStart );
-                    com.Parameters.AddWithValue("@DateEnd", discount.DateEnd );
-                    com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
-                    com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Used", discount.Used);
-                    com.ExecuteNonQuery();
-
-                }
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", discount.Id);
+                com.Parameters.AddWithValue("@Name", discount.Name);
+                com.Parameters.AddWithValue("@Code", discount.Code);
+                com.Parameters.AddWithValue("@Description", discount.Description);
+                com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@DateStart", discount.DateStart);
+                com.Parameters.AddWithValue("@DateEnd", discount.DateEnd);
+                com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
+                com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Used", discount.Used);
+                com.ExecuteNonQuery();
             }
             catch (SqlException s)
             {
@@ -1450,7 +1447,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
-        public object ExecUseDiscount(string idaccount, string iddiscount)
+        public object ExecUseDiscount(string idaccount, string code)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1459,7 +1456,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_UseDiscount", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
-                com.Parameters.AddWithValue("@IdDiscount", iddiscount);
+                com.Parameters.AddWithValue("@Code", code);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())

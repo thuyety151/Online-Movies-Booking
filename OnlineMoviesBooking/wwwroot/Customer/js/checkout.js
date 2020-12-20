@@ -19,8 +19,7 @@
                 method: 'GET',
                 url: "/Movie/UseDiscount",
                 data: {
-                    idshow: $('#idshow').val(),
-                    iddiscount: $('#code-discount').val()
+                    code: $('#code-discount').val()
                 },
                 success: function (data) {
                     console.log(data);

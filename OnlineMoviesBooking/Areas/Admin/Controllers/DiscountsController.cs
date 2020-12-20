@@ -144,7 +144,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if(result.Contains("Ngày không hợp lệ"))
                 {
                     ModelState.AddModelError("DateEnd", "Ngày không hợp lệ");
-                }      
+                } 
+                else if (result.Contains("UNIQUE"))
+                {
+                    ModelState.AddModelError("Code", "Code đã tồn tại");
+                }
             }
 
             return View(discount);
@@ -244,6 +248,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
                 else if(results.Contains("Không được chỉnh sửa")){
                     ModelState.AddModelError("", "Không thể chỉnh sửa khuyến mãi đang được dùng");
+                }
+                else if (results.Contains("UNIQUE"))
+                {
+                    ModelState.AddModelError("Code", "Code đã tồn tại");
                 }
             }
             discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
