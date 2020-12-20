@@ -15,9 +15,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     public class TheatersController : Controller
     {
         private ExecuteProcedure Exec;
-        public TheatersController()
+        public TheatersController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
         }
 
         public JsonResult GetAll()

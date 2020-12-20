@@ -18,10 +18,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     {
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public DiscountsController( IWebHostEnvironment hostEnvironment)
+        public DiscountsController( IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             this._hostEnvironment = hostEnvironment;
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
         }
 
         public IActionResult GetAll()

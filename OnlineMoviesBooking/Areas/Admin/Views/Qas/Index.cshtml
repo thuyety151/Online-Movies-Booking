@@ -9,9 +9,6 @@
 <link href="~/css/build/toastr.css" rel="stylesheet" />
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Tạo mới</a>
-</p>
 <table class="table" id="QaTable">
     <thead class="bg-secondary text-light">
         <tr>
@@ -44,10 +41,9 @@
                     @Html.DisplayFor(modelItem => item.Content)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelitem => item.IdAccountNavigation.Name)
+                    @item.IdAccount
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Sửa</a> |
                     <a onclick=DeleteQa("/Admin/Qas/Delete/@item.Id") class="btn btn-danger">Xóa</a>
                 </td>
             </tr>

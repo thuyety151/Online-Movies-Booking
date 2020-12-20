@@ -228,7 +228,7 @@ namespace OnlineMoviesBooking.Controllers
                         }
                         else
                         {
-                            TempData["msg"] = "error";
+                            TempData["msg"] = "wrong";
                             return View(loginModelView);
                         }
                     }

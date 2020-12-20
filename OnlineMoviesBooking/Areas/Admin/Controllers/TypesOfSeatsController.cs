@@ -16,9 +16,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     {
         private ExecuteProcedure Exec;
 
-        public TypesOfSeatsController()
+        public TypesOfSeatsController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
         }
 
 

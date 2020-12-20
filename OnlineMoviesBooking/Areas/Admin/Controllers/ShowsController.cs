@@ -16,9 +16,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     public class ShowsController : Controller
     {
         private readonly ExecuteProcedure Exec;
-        public ShowsController()
+        public ShowsController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
         }
         [HttpGet]
         public IActionResult GetAll()

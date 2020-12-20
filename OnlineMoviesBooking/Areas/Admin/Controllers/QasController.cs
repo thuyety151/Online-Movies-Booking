@@ -147,191 +147,191 @@ namespace OnlineMoviesBooking.Areas.Controllers
 
         }
 
-        // GET: Qas/Create
-        public IActionResult Create()
-        {
-            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
-            {
+        //// GET: Qas/Create
+        //public IActionResult Create()
+        //{
+        //    TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+        //    TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+        //    TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+        //    if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+        //    {
 
-                TempData["msg"] = "Error";
-                return Redirect("/Home/Index");
-            }
-            //ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id");
-            return View();
-        }
+        //        TempData["msg"] = "Error";
+        //        return Redirect("/Home/Index");
+        //    }
+        //    //ViewData["IdAccount"] = new SelectList(_context.Account, "Id", "Id");
+        //    return View();
+        //}
 
-        // POST: Qas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //// POST: Qas/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        ////[ValidateAntiForgeryToken]
+        //public IActionResult Create([Bind("Email,Content")] Qa qa)
+        //{
+        //    TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+        //    TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+        //    TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+        //    if (ModelState.IsValid)
+        //    {
+        //        qa.Id = Guid.NewGuid().ToString();
+        //        qa.Time = DateTime.Now;
+        //        try
+        //        {
+
+
+        //            string connectionString = HttpContext.Session.GetString("connectString");
+
+        //            using (var connection = new SqlConnection(connectionString))
+        //            {
+        //                connection.Open();
+        //                string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @time = '{qa.Time}', @content = N'{qa.Content}' ";
+
+        //                var command = new SqlCommand(commandText, connection);
+        //                try
+        //                {
+        //                    command.ExecuteNonQuery();
+        //                }
+        //                catch (SqlException e)
+        //                {
+        //                    connection.Close();
+        //                    TempData["msg"] = "error";
+        //                    return RedirectToAction(nameof(Index));
+        //                }
+        //                connection.Close();
+        //            }
+
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        catch (Exception e)
+        //        {
+
+        //            return View(qa);
+        //        }
+        //    }
+        //    return View(qa);
+        //}
+
+        //// GET: Qas/Edit/5
+        //public IActionResult Edit(string id)
+        //{
+        //    TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+        //    TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+        //    TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+        //    if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+        //    {
+
+        //        TempData["msg"] = "Error";
+        //        return Redirect("/Home/Index");
+        //    }
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    Qa qa = new Qa();
+        //    try
+        //    {
+
+
+        //        string connectionString = HttpContext.Session.GetString("connectString");
+
+        //        using (var connection = new SqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+        //            string commandText = $"EXEC dbo.USP_GetQa @id = '{id}'";
+
+        //            var command = new SqlCommand(commandText, connection);
+        //            try
+        //            {
+        //                SqlDataReader reader = command.ExecuteReader();
+
+        //                if (reader.HasRows)
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        qa.Id = Convert.ToString(reader[0]);
+        //                        qa.IdAccount = Convert.ToString(reader[1]);
+        //                        qa.Email = Convert.ToString(reader[2]);
+        //                        qa.Time = Convert.ToDateTime(reader[3]);
+        //                        qa.Content = Convert.ToString(reader[4]);
+
+        //                    }
+
+        //                }
+        //                else
+        //                {
+        //                    TempData["msg"] = "error";
+        //                    return RedirectToAction(nameof(Index));
+        //                }
+        //            }
+        //            catch (SqlException e)
+        //            {
+        //                connection.Close();
+        //                TempData["msg"] = "error";
+        //                return RedirectToAction(nameof(Index));
+        //            }
+        //            connection.Close();
+        //        }
+
+        //        return View(qa);
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        return View(qa);
+        //    }
+
+
+        //}
+
+        //// POST: Qas/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Email,Content")] Qa qa)
-        {
-            TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (ModelState.IsValid)
-            {
-                qa.Id = Guid.NewGuid().ToString();
-                qa.Time = DateTime.Now;
-                try
-                {
+        //public IActionResult Edit(string id, [Bind("Id,IdAccount,Email,Time,Content")] Qa qa)
+        //{
+
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    TypeOfMember member = new TypeOfMember();
+        //    try
+        //    {
 
 
-                    string connectionString = HttpContext.Session.GetString("connectString");
+        //        string connectionString = HttpContext.Session.GetString("connectString");
 
-                    using (var connection = new SqlConnection(connectionString))
-                    {
-                        connection.Open();
-                        string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @time = '{qa.Time}', @content = N'{qa.Content}' ";
+        //        using (var connection = new SqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+        //            string commandText = $"EXEC dbo.USP_UpdateQA @id = '{qa.Id}', @time = '{qa.Time}', @content = N'{qa.Content}'";
 
-                        var command = new SqlCommand(commandText, connection);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (SqlException e)
-                        {
-                            connection.Close();
-                            TempData["msg"] = "error";
-                            return RedirectToAction(nameof(Index));
-                        }
-                        connection.Close();
-                    }
+        //            var command = new SqlCommand(commandText, connection);
+        //            try
+        //            {
+        //                command.ExecuteNonQuery();
+        //            }
+        //            catch (SqlException e)
+        //            {
+        //                connection.Close();
+        //                TempData["msg"] = "error";
+        //                return RedirectToAction(nameof(Index));
+        //            }
+        //            connection.Close();
+        //        }
 
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception e)
-                {
+        //        return View(member);
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                    return View(qa);
-                }
-            }
-            return View(qa);
-        }
+        //        return View(qa);
+        //    }
 
-        // GET: Qas/Edit/5
-        public IActionResult Edit(string id)
-        {
-            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
-            {
-
-                TempData["msg"] = "Error";
-                return Redirect("/Home/Index");
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-            Qa qa = new Qa();
-            try
-            {
-
-
-                string connectionString = HttpContext.Session.GetString("connectString");
-
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    string commandText = $"EXEC dbo.USP_GetQa @id = '{id}'";
-
-                    var command = new SqlCommand(commandText, connection);
-                    try
-                    {
-                        SqlDataReader reader = command.ExecuteReader();
-
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                qa.Id = Convert.ToString(reader[0]);
-                                qa.IdAccount = Convert.ToString(reader[1]);
-                                qa.Email = Convert.ToString(reader[2]);
-                                qa.Time = Convert.ToDateTime(reader[3]);
-                                qa.Content = Convert.ToString(reader[4]);
-
-                            }
-
-                        }
-                        else
-                        {
-                            TempData["msg"] = "error";
-                            return RedirectToAction(nameof(Index));
-                        }
-                    }
-                    catch (SqlException e)
-                    {
-                        connection.Close();
-                        TempData["msg"] = "error";
-                        return RedirectToAction(nameof(Index));
-                    }
-                    connection.Close();
-                }
-
-                return View(qa);
-            }
-            catch (Exception e)
-            {
-
-                return View(qa);
-            }
-
-
-        }
-
-        // POST: Qas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(string id, [Bind("Id,IdAccount,Email,Time,Content")] Qa qa)
-        {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-            TypeOfMember member = new TypeOfMember();
-            try
-            {
-
-
-                string connectionString = HttpContext.Session.GetString("connectString");
-
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    string commandText = $"EXEC dbo.USP_UpdateQA @id = '{qa.Id}', @time = '{qa.Time}', @content = N'{qa.Content}'";
-
-                    var command = new SqlCommand(commandText, connection);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (SqlException e)
-                    {
-                        connection.Close();
-                        TempData["msg"] = "error";
-                        return RedirectToAction(nameof(Index));
-                    }
-                    connection.Close();
-                }
-
-                return View(member);
-            }
-            catch (Exception e)
-            {
-
-                return View(qa);
-            }
-
-        }
+        //}
 
         // POST: Qas/Delete/5
         [HttpDelete]
