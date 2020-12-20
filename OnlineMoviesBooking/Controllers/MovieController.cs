@@ -464,7 +464,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            Exec.ExecUpdateBillStatus("1");
+            Exec.ExecDeleteBillStatus0("1");
             return Content("Thanh toán không thành công");
         }
 

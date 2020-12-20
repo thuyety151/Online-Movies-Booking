@@ -8,7 +8,7 @@
     setTimeout(function () {
         console.log('timeout');
         $('#timeout').submit();
-    }, 60000);
+    }, 300000); // 5 minute
     $('#use-discount').on('click', function () {
         console.log('click');
         if ($('#code-discount').val()=="") {

@@ -14,7 +14,11 @@ namespace OnlineMoviesBooking.Models.Models
         public string Id { get; set; }
         [Display(Name="Tên")]
         [Required(ErrorMessage = "Vui lòng nhập tên khuyến mãi")]
+        
         public string Name { get; set; }
+        [Display(Name = "Code")]
+        [Required(ErrorMessage = "Vui lòng nhập Code khuyến mãi")]
+        public string Code { get; set; }
         [Display(Name = "Mô tả")]
         [Required(ErrorMessage = "Vui lòng nhập mô tả")]
         public string Description { get; set; }
@@ -33,10 +37,11 @@ namespace OnlineMoviesBooking.Models.Models
 
         [Display(Name = "Hình ảnh")]
         public string ImageDiscount { get; set; }
-        public int? NoTicket { get; set; }
         public int? Point { get; set; }
         [Display(Name="Số lượng dùng")]
         public int? Used { get; set; }
+        
+
 
         public virtual ICollection<UseDiscount> UseDiscount { get; set; }
     }
