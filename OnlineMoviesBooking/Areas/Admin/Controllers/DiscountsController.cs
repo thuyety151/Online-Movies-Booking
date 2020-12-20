@@ -232,7 +232,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                         discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
                     }
                 }
-
+                discount.Used = 0;
                 string results = Exec.ExecuteUpdateDiscount(discount);
                 if(results=="")
                 {
@@ -241,6 +241,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (results.Contains("Ngày không hợp lệ"))
                 {
                     ModelState.AddModelError("DateEnd", "Ngày không hợp lệ");
+                }
+                else if(results.Contains("Không được chỉnh sửa")){
+                    ModelState.AddModelError("", "Không thể chỉnh sửa khuyến mãi đang được dùng");
                 }
             }
             discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
