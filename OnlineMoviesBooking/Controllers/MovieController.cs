@@ -341,7 +341,9 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult UseDiscount(string idshow, string iddiscount)
         {
+            
             var obj = Exec.ExecUseDiscount("1", idshow, iddiscount);
+
             return Json(obj);
         }
         public IActionResult TimeOut(string idshow)
@@ -349,8 +351,13 @@ namespace OnlineMoviesBooking.Controllers
             Exec.ExecDeleteBillStatus0("1");
             return View("Index");
         }
-        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout()
+        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string iddiscount)
         {
+            if (iddiscount != null)
+            {
+                // áp dụng khuyến mãi
+                Exec.ExecAddDiscount("1",iddiscount);
+            }
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 

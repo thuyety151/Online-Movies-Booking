@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UploadFiles\" />
     <Folder Include="wwwroot\images\movies\" />
     <Folder Include="wwwroot\images\discounts\" />
     <Folder Include="wwwroot\jquery\" />

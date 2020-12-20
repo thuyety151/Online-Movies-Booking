@@ -32,39 +32,38 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageDiscount" class="control-label"></label>
-                <input  type ="file" name="files" accept="image/*" class="form-control-file" />
-                @*<span asp-validation-for="ImageDiscount" class="text-danger"></span>*@
+                <input id="uploadBox" asp-for="ImageDiscount"  type ="file" name="files" accept="image/*" class="form-control-file" />
+                <span asp-validation-for="ImageDiscount" class="text-danger"></span>
             </div>
             <div class="card border-primary mb-3">
                 <div class="card-header">Mức khuyến mãi</div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label asp-for="PercentDiscount" class="control-label"></label>
-                        <input asp-for="PercentDiscount" class="form-control" />
-                        <span asp-validation-for="PercentDiscount" class="text-danger"></span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="percent" id="flexRadioDefault1" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Phần trăm
+                        </label>
+                        <div class="form-group">
+                            <label asp-for="PercentDiscount" class="control-label"></label>
+                            <input  asp-for="PercentDiscount" class="form-control" />
+                            <span asp-validation-for="PercentDiscount" class="text-danger"></span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="MaxCost" class="control-label"></label>
-                        <input asp-for="MaxCost" class="form-control" />
-                        <span asp-validation-for="MaxCost" class="text-danger"></span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="cost" id="flexRadioDefault2" >
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Đồng giá
+                        </label>
+                        <div class="form-group">
+                            <label asp-for="MaxCost" class="control-label"></label>
+                            <input  asp-for="MaxCost" class="form-control" />
+                            <span asp-validation-for="MaxCost" class="text-danger"></span>
+                        </div>
                     </div>
+                    
+                    
                 </div>
 
-            </div>
-            <div class="card border-primary mb-3">
-                <div class="card-header">Đối tượng áp dụng</div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label asp-for="NoTicket" class="control-label"></label>
-                        <input asp-for="NoTicket" class="form-control" />
-                        <span asp-validation-for="NoTicket" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Point" class="control-label"></label>
-                        <input asp-for="Point" class="form-control" />
-                        <span asp-validation-for="Point" class="text-danger"></span>
-                    </div>
-                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Tạo" class="btn btn-primary" />
@@ -76,6 +75,4 @@
        
     </div>
 </div>
-
-
 

@@ -30,8 +30,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id=x.Id,
                 name=x.Name,
-                dateStart=x.DateStart,
-                dateEnd= x.DateEnd,
+                dateStart=x.DateStart.ToString("dd-MM-yyyy HH:mm"),
+                dateEnd= x.DateEnd.ToString("dd-MM-yyyy HH:mm"),
                 imageDiscount = x.ImageDiscount,
                 used=x.Used
 
@@ -69,9 +69,32 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Discount discount, IFormFile files)
+        public IActionResult Create(Discount discount, IFormFile files,string flexRadioDefault )
         {
-            if (ModelState.IsValid)
+            if (flexRadioDefault == "percent")
+            {
+                if (discount.PercentDiscount == null)
+                {
+                    ModelState.AddModelError("PercentDiscount", "Phải nhập dữ liệu");
+
+                }
+                discount.MaxCost = null;
+            }
+            else if (flexRadioDefault == "cost")
+            {
+                if (discount.MaxCost == null)
+                {
+                    ModelState.AddModelError("MaxCost", "Phải nhập dữ liệu");
+
+                }
+                discount.PercentDiscount = null;
+            }
+            if(files==null)
+            {
+                ModelState.AddModelError("ImageDiscount", "Vui lòng chọn hình ảnh");
+
+            }
+            if (ModelState.IsValid && ModelState.ErrorCount==0)
             {
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -100,6 +123,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     discount.ImageDiscount = @"\images\discounts\" + fileName + extension;
 
                 }
+               
+                
 
                 // gán các giá trị null để insert vào db
                 discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
@@ -146,14 +171,31 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Discount discount,IFormFile files)
+        public async Task<IActionResult> Edit(string id, Discount discount,IFormFile files, string flexRadioDefault)
         {
             if (id != discount.Id)
             {
                 return NotFound();
             }
+            if (flexRadioDefault == "percent")
+            {
+                if (discount.PercentDiscount == null)
+                {
+                    ModelState.AddModelError("PercentDiscount", "Phải nhập dữ liệu");
 
-            if (ModelState.IsValid)
+                }
+                discount.MaxCost = null;
+            }
+            else if (flexRadioDefault == "cost")
+            {
+                if (discount.MaxCost == null)
+                {
+                    ModelState.AddModelError("MaxCost", "Phải nhập dữ liệu");
+
+                }
+                discount.PercentDiscount = null;
+            }
+            if (ModelState.IsValid && ModelState.ErrorCount==0)
             {
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
