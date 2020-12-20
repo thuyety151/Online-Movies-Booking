@@ -22,6 +22,7 @@
                     code: $('#code-discount').val()
                 },
                 success: function (data) {
+                    console.log($('#code-discount').val())
                     console.log(data);
                     if (data.iddiscount == null) {
                       

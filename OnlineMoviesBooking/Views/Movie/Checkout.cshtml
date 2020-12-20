@@ -72,8 +72,8 @@
     <script>
         $('#submit').on('click', function () {
             console.log('submit');
-            $('#submit').attr('href', '/Movie/PaypalCheckout/?iddiscount=' + $('#code-discount').val())
-            console.log('/Movie/PaypalCheckout/' + $('#code-discount').val())
+            $('#submit').attr('href', '/Movie/PaypalCheckout/?code=' + $('#code-discount').val())
+
         });
     </script>
 

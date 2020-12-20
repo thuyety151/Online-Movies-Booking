@@ -1474,7 +1474,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return null;
         }
-        public void ExecAddDiscount(string idaccount, string iddiscount)
+        public void ExecAddDiscount(string idaccount, string code)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1483,7 +1483,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_AddDiscount", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
-                com.Parameters.AddWithValue("@IdDiscount", iddiscount);
+                com.Parameters.AddWithValue("@Code", code);
                 com.ExecuteNonQuery();
             }
         }

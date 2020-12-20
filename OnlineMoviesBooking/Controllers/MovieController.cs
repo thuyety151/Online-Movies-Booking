@@ -351,12 +351,12 @@ namespace OnlineMoviesBooking.Controllers
             Exec.ExecDeleteBillStatus0("1");
             return View("Index");
         }
-        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string iddiscount)
+        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code)
         {
-            if (iddiscount != null)
+            if (code != null)
             {
                 // áp dụng khuyến mãi
-                Exec.ExecAddDiscount("1",iddiscount);
+                Exec.ExecAddDiscount("1", code);
             }
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
