@@ -342,7 +342,7 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult UseDiscount(string idshow, string iddiscount)
         {
             
-            var obj = Exec.ExecUseDiscount("1", idshow, iddiscount);
+            var obj = Exec.ExecUseDiscount("1", iddiscount);
 
             return Json(obj);
         }
@@ -368,18 +368,31 @@ namespace OnlineMoviesBooking.Controllers
             {
                 Items = new List<Item>()
             };
-            var total = Math.Round(double.Parse(checkout.Sum(p => p.Total).ToString()) / 23000, 2);
-            foreach (var item in checkout)
+            double total = 0;
+            if (checkout.TotalPer != null)
             {
-                itemList.Items.Add(new Item()
-                {
-                    Name = item.Name,
-                    Currency = "USD",
-                    Price = Math.Round(double.Parse(item.Total.ToString()) / 23000, 2).ToString(),
-                    Quantity = "1",
-                    Description = "No: " + item.No
-                });
+
+                total = Math.Round(double.Parse(checkout.TotalPer.ToString()) / 23000, 2);
             }
+            else
+            {
+                total = Math.Round(double.Parse(checkout.TotalCost.ToString()) / 23000, 2);
+            }
+
+            // 0 đ không cân thanh toán paypal
+            if (total == 0)
+            {
+                return RedirectToAction("CheckoutSuccess");
+            }
+
+            itemList.Items.Add(new Item()
+            {
+                Name = checkout.Name,
+                Currency = "USD",
+                Price = total.ToString(),
+                Quantity = "1",
+                Description = "No: " + checkout.No
+            });
             #endregion
 
             //var total = Math.Round(double.Parse(checkout[0].Total.ToString()) / 23000, 2) *itemList.Items.Count;

@@ -69,7 +69,13 @@
 <!-- ==========Movie-Section========== -->
 @section Scripts{
     <script src="~/Customer/js/checkout.js"></script>
-
+    <script>
+        $('#submit').on('click', function () {
+            console.log('submit');
+            $('#submit').attr('href', '/Movie/PaypalCheckout/?iddiscount=' + $('#code-discount').val())
+            console.log('/Movie/PaypalCheckout/' + $('#code-discount').val())
+        });
+    </script>
 
 }
 @section Header{

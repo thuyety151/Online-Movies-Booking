@@ -159,7 +159,17 @@
                             </div>
                         </li>
                         <li>
-                            <h6 class="subtitle mb-0"><span>Tickets  Price</span><span>@Model.Total.ToString("#,###")</span></h6>
+                            @{
+                                if (Model.TotalPer != null)
+                                {
+                                    <h6 class="subtitle mb-0"><span>Tickets  Price</span><span>@Model.TotalPer.GetValueOrDefault().ToString("#,###")</span></h6>
+                                }
+                                else
+                                {
+                                    <h6 class="subtitle mb-0"><span>Tickets  Price</span><span>@Model.TotalCost.GetValueOrDefault().ToString("#,###")</span></h6>
+                                }
+                            }
+
                         </li>
                     </ul>
                     <ul class="side-shape">
