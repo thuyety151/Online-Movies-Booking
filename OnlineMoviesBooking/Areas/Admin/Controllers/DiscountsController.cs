@@ -232,7 +232,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                         discount.ImageDiscount = Exec.ExecuteGetImageDiscount(discount.Id);
                     }
                 }
-                discount.Used = 0;
                 string results = Exec.ExecuteUpdateDiscount(discount);
                 if(results=="")
                 {
