@@ -30,6 +30,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id=x.Id,
                 name=x.Name,
+                code=x.Code,
                 dateStart=x.DateStart.ToString("dd-MM-yyyy HH:mm"),
                 dateEnd= x.DateEnd.ToString("dd-MM-yyyy HH:mm"),
                 imageDiscount = x.ImageDiscount,

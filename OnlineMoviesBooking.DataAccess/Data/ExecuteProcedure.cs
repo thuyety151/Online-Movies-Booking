@@ -1076,13 +1076,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     {
                         Id = rdr["Id"].ToString(),
                         Name = rdr["Name"].ToString(),
+                        Code = rdr["Code"].ToString(),
                         Description = rdr["Description"].ToString(),
                         PercentDiscount = rdr["PercentDiscount"].ToString() == "" ? 0 : int.Parse(rdr["PercentDiscount"].ToString()),
                         MaxCost = rdr["MaxCost"].ToString() == "" ? 0 : int.Parse(rdr["MaxCost"].ToString()),
                         DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
                         DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
                         ImageDiscount = rdr["ImageDiscount"].ToString(),
-                        NoTicket = rdr["NoTicket"].ToString()=="" ?0 : int.Parse(rdr["NoTicket"].ToString()),
                         Point = rdr["Point"].ToString() == "" ? 0 : int.Parse(rdr["Point"].ToString()),
                         Used = rdr["Used"].ToString() == "" ? 0 : int.Parse(rdr["Used"].ToString()),
                     });
@@ -1109,13 +1109,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     {
                         Id = rdr["Id"].ToString(),
                         Name = rdr["Name"].ToString(),
+                        Code = rdr["Code"].ToString(),
                         Description = rdr["Description"].ToString(),
                         PercentDiscount = rdr["PercentDiscount"].ToString() == "" ? 0 : int.Parse(rdr["PercentDiscount"].ToString()),
                         MaxCost = rdr["MaxCost"].ToString() == "" ? 0 : int.Parse(rdr["MaxCost"].ToString()),
                         DateStart =DateTime.Parse(rdr["DateStart"].ToString()),
                         DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
                         ImageDiscount = rdr["ImageDiscount"].ToString(),
-                        NoTicket = rdr["NoTicket"].ToString() == "" ? 0 : int.Parse(rdr["NoTicket"].ToString()),
                         Point = rdr["Point"].ToString() == "" ? 0 : int.Parse(rdr["Point"].ToString()),
                         Used = rdr["Used"].ToString() == "" ? 0 : int.Parse(rdr["Used"].ToString()),
                     };
@@ -1138,13 +1138,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@Id", discount.Id);
                     com.Parameters.AddWithValue("@Name", discount.Name);
+                    com.Parameters.AddWithValue("@Code", discount.Code);
                     com.Parameters.AddWithValue("@Description", discount.Description);
                     com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ??Convert.DBNull);
                     com.Parameters.AddWithValue("@DateStart", discount.DateStart);
                     com.Parameters.AddWithValue("@DateEnd", discount.DateEnd );
                     com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
-                    com.Parameters.AddWithValue("@NoTicket", discount.NoTicket ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@Used", discount.Used);
                     com.ExecuteNonQuery();
@@ -1190,13 +1190,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@Id", discount.Id);
                     com.Parameters.AddWithValue("@Name", discount.Name);
+                    com.Parameters.AddWithValue("@Code", discount.Code);
                     com.Parameters.AddWithValue("@Description", discount.Description);
                     com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@DateStart", discount.DateStart );
                     com.Parameters.AddWithValue("@DateEnd", discount.DateEnd );
                     com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
-                    com.Parameters.AddWithValue("@NoTicket", discount.NoTicket ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
                     com.Parameters.AddWithValue("@Used", discount.Used);
                     com.ExecuteNonQuery();
