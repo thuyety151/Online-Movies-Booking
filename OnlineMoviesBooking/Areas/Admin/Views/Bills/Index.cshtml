@@ -1,0 +1,64 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.ViewModels.BillAdminViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>
+    <a asp-action="Upsert">Thêm Bill</a>
+</p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        Bill
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AccountName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MovieName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TimeStart)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Row)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.No)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TotalPrice)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Code)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="~/js/Bill.js"></script>
+
+}

@@ -1,0 +1,58 @@
+﻿@model OnlineMoviesBooking.Models.Models.Bill
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="">
+    <div class="modal-header">
+        <h4>Chi tiết Bill</h4>
+    </div>
+    <div class="modal-body">
+        <form>
+            <dl class="row col-sm-12">
+                <dt class="col-sm-3">
+                    tài khoản
+                </dt>
+                <dd class="col-sm-9">
+                    <input asp-for="IdAccount" id="IdAccount" class="form-control" disabled />
+                </dd>
+                <dt class="col-sm-3">
+                    lịch chiếu
+                </dt>
+                <dd class="col-sm-9">
+                    <textarea asp-for="IdShow" id="IdShow" class="form-control" disabled></textarea>
+                </dd>
+                <dt class="col-sm-3">
+                    ghế ngồi
+                </dt>
+                <dd class="col-sm-9">
+                    <textarea asp-for="IdSeat" id="IdSeat" class="form-control" disabled></textarea>
+                </dd>
+                <dt class="col-sm-3">
+                    ngày chiếu
+                </dt>
+                <dd class="col-sm-9">
+                    <textarea asp-for="Date" id="Date" class="form-control" disabled></textarea>
+                </dd>
+                <dt class="col-sm-3">
+                    Giá
+                </dt>
+                <dd class="col-sm-9">
+                    <input asp-for="TotalPrice" id="TotalPrice" class="form-control" disabled />
+                </dd>
+                <dt class="col-sm-3">
+                    trạng thái
+                </dt>
+                <dd class="col-sm-9">
+                    <textarea asp-for="Status" id="Status" class="form-control" disabled></textarea>
+                </dd>
+                <dt class="col-sm-3">
+                    mã code
+                </dt>
+                <dd class="col-sm-9">
+                    <textarea asp-for="Code" id="Code" class="form-control" disabled></textarea>
+                </dd>
+            </dl>
+            <a asp-action="Index">Trở lại</a>
+        </form>
+    </div>
+</div>
