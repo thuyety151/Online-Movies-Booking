@@ -226,9 +226,6 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
        
-
-
-       // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
             if(date==null)
@@ -367,6 +364,16 @@ namespace OnlineMoviesBooking.Controllers
             var client = new PayPalHttpClient(environment);
 
             var checkout = Exec.TestCheckout("1");
+            // GET POINT
+            int point = 0;
+            if (checkout.PointCost == null)
+            {
+                point = checkout.PointPer.GetValueOrDefault();
+            }
+            else
+            {
+                point = checkout.PointCost.GetValueOrDefault();
+            }
 
             #region Create Paypal Order
             var itemList = new ItemList()
@@ -425,7 +432,7 @@ namespace OnlineMoviesBooking.Controllers
                 RedirectUrls = new RedirectUrls()
                 {
                     CancelUrl = $"{hostname}/Movie/CheckoutFail",
-                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess"
+                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess?point="+point
                 },
                 Payer = new Payer()
                 {
@@ -478,11 +485,12 @@ namespace OnlineMoviesBooking.Controllers
             return Content("Thanh toán không thành công");
         }
 
-        public IActionResult CheckoutSuccess()
+        public IActionResult CheckoutSuccess(int point=0)
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
-            Exec.ExecUpdateBillStatus("1");
+            
+            Exec.ExecUpdateBillStatus("1",point);
             return Content("Thanh toán thành công");
         }
     }

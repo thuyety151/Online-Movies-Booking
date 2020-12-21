@@ -53,7 +53,14 @@
                         </ul>
                         <ul>
                             <li>
-                                <span class="info"><span>Tổng </span><span id="total-price">@Model.TotalPrice.ToString("#,###")</span></span>
+                                <span class="info">
+                                    <span>Tổng </span>
+                                    <span id="total-price">@Model.TotalPrice.ToString("#,###")</span>
+                                </span>
+                                <span class="info">
+                                    <span>Điểm </span>
+                                    <span id="point">@Model.Point.ToString()</span>
+                                </span>
                             </li>
                         </ul>
                     </div>

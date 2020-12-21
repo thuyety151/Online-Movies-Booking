@@ -39,6 +39,7 @@
 
                     }
                     $('#total-price').text(data.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
+                    $('#point').text(data.point)
                 }
 
             });

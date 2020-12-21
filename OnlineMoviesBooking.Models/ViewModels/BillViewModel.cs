@@ -21,5 +21,6 @@ namespace OnlineMoviesBooking.Models.ViewModels
         public string Languages { get; set; }
         public string Address { get; set; }
         public string NameDiscount { get; set; }
+        public int Point { get; set; }
     }
 }

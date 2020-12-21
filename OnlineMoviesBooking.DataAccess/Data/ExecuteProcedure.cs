@@ -1333,7 +1333,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         MovieName = rdr["MovieName"].ToString(),
                         No = rdr["No"].ToString(),
                         TotalPer = rdr["PricePer"].ToString() == "" ? (int?)null : int.Parse(rdr["PricePer"].ToString()),
+                        PointPer = rdr["PointPer"].ToString() == "" ? (int?)null : int.Parse(rdr["PointPer"].ToString()),
                         TotalCost = rdr["PriceCost"].ToString() == "" ? (int?)null : int.Parse(rdr["PriceCost"].ToString()),
+                        PointCost = rdr["PointCost"].ToString() == "" ? (int?)null : int.Parse(rdr["PointCost"].ToString()),
                         TheaterName = rdr["TheaterName"].ToString(),
                         Date = DateTime.Parse(rdr["TimeStart"].ToString())
                     };
@@ -1403,7 +1405,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         TheaterName=(rdr["TheaterName"].ToString()),
                         ScreenName=(rdr["ScreenName"].ToString()),
                         Languages=(rdr["Languages"].ToString()),
-                        Address=(rdr["Address"].ToString())
+                        Address=(rdr["Address"].ToString()),
+                        Point = int.Parse(rdr["Point"].ToString())
                     };
                 }
                 return bill;
@@ -1444,7 +1447,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return s;
         }
-        public void ExecUpdateBillStatus(string idaccount)
+        public void ExecUpdateBillStatus(string idaccount,int point)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1453,6 +1456,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_ChangeBillStatus", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);
                 com.ExecuteNonQuery();
             }
         }
@@ -1477,7 +1481,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         No = int.Parse(rdr["No"].ToString()),
                         NameDiscount = rdr["Name"].ToString(),
                         PercentDiscount=rdr["PercentDiscount"].ToString(),
-                        MaxCost=rdr["MaxCost"].ToString()
+                        MaxCost=rdr["MaxCost"].ToString(),
+                        Point=rdr["Point"].ToString(),
                     };
                 }
             }
