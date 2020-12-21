@@ -44,27 +44,26 @@
     }
     <!-- ==========Speaker-Single========== -->
     <section class="speaker-single" style="margin-top:13rem;margin-bottom:10rem">
-        <div class="container">
-            <div class="bg-six p" style="padding:2.5rem 5rem;display:grid;grid-template-columns:30% 70%">
+        <div class="container-fluid" >
+            <div class="bg-six p" style="padding:2.5rem 5rem;display:grid;grid-template-columns:70% 30%">
                 <div style="grid-column:1;margin-top:5rem">
-                    @{
-                        if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
-                        {
-                            <div style="width:90%; max-width:10rem;">
-                                <img src="@img" class="shadow" />
-                            </div>
+                    <div class="text-center">
+                        @{
+                            if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
+                            {
+                                <div style="width:90%; max-width:25rem;">
+                                    <img src="@img" class="shadow" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="event-about-thumb" style="width:90%; max-width:25rem;">
+                                    <img src="@img" class="shadow" />
+                                </div>
+                            }
                         }
-                        else
-                        {
-                            <div class="event-about-thumb" style="width:90%; max-width:10rem;">
-                                <img src="@img" class="shadow" />
-                            </div>
-                        }
-                    }
-
-                </div>
-
-                <div class="container" style="padding-top:2rem;grid-column:2">
+                    </div>
+                   
                     <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Thông tin tài khoản</h2>
 
 
@@ -98,6 +97,11 @@
                             <input type="submit" value="Sửa thông tin" />
                         </div>
                     </form>
+
+                </div>
+
+                <div class="container" style="padding-top:2rem;grid-column:2">
+                    
 
                 </div>
             </div>

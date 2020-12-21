@@ -83,19 +83,79 @@ namespace OnlineMoviesBooking.Controllers
             return View(acc);
         }
 
-        // GET: AccountInfos/Edit/5
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult ChangePassword()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             if (HttpContext.Session.GetString("idLogin") == null)
             {
                 TempData["msg"] = "loginfirst";
                 return RedirectToAction("Login", "Login");
             }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword([Bind("OldPasswword,NewPassword,ComfirmNewPassword")] ChangePasswordViewModel changePassword)
+        {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
             TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "loginfirst";
+                return RedirectToAction("Login", "Login");
+            }
+            string connectionString = HttpContext.Session.GetString("connectString");
+            string username = HttpContext.Session.GetString("idLogin");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_ChangePassword @username = '{username}',@OldPw = '{changePassword.OldPasswword}',@NewPw = '{changePassword.NewPassword}',@ConfirmNewPw = '{changePassword.ComfirmNewPassword}'";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.RecordsAffected  != 1)
+                    {
+                        TempData["msgchange"] = @"Mật Khẩu không đúng!!";
+                        return View(changePassword);
+                    }
+                    
+                }
+                catch (SqlException e)
+                {
+
+                    TempData["msg"] = "error";
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
+                HttpContext.Session.SetString("connectString", $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={changePassword.NewPassword}");
+                HttpContext.Session.SetString("pwLogin", changePassword.NewPassword);
+            }
+
+            return RedirectToAction("Index","AccountInfos");
+        }
+
+        // GET: AccountInfos/Edit/5
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "loginfirst";
+                return RedirectToAction("Login", "Login");
+            }
+            
             AccountViewModel acc = new AccountViewModel();
 
             string connectionString = HttpContext.Session.GetString("connectString");
@@ -157,11 +217,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
-            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
-            if (ModelState.IsValid)
+            
             {
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 string img = "";
