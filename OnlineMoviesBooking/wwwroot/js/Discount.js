@@ -8,6 +8,7 @@
             },
             "columns": [
                 { "data": "name", "width": "20%" },
+                { "data": "code", "width": "5%" },
                 {
                     "data": "imageDiscount",
                     "render": function (data) {

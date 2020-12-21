@@ -66,14 +66,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
+                    lstmovie = Exec.ExecuteGetMovieComingSoon(num * (numpage - 1), movieCount % num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                    lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
+                    lstmovie = Exec.ExecuteGetMovieComingSoon(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -82,7 +82,7 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                lstmovie = (List<Movie>)Exec.ExecuteGetMovieComingSoon(0, num);
+                lstmovie = Exec.ExecuteGetMovieComingSoon(0, num);
             }
             return View(lstmovie);
         }
@@ -226,9 +226,6 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
        
-
-
-       // ============================ Json
         public IActionResult ShowsDate(DateTime date)
         {
             if(date==null)
@@ -338,35 +335,101 @@ namespace OnlineMoviesBooking.Controllers
             ViewBag.Show = idshow;
             return View(bill);
         }
+        [HttpGet]
+        public IActionResult UseDiscount( string code)
+        {
+            
+            var obj = Exec.ExecUseDiscount("1", code);
+
+            return Json(obj);
+        }
+        [HttpGet]
+        public IActionResult UsePoint(string point)
+        {
+            // kiểm tra điểm hợp lệ
+            var obj = Exec.ExecCheckPoint("1", int.Parse(point));
+            return Json(obj);
+        }
         public IActionResult TimeOut(string idshow)
         {
-            Exec.ExecDeleteBillStatus0("1");
+            string s=Exec.ExecDeleteBillStatus0("1");
+            if (s != "")
+            {
+                // co loi xay ra
+                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+            }
             return View("Index");
         }
-        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout()
+        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code,string pointuse)
         {
+            double total = 0;
+            if (code != null)
+            {
+                // áp dụng khuyến mãi
+                Exec.ExecAddDiscount("1", code);
+            }
+            
+            if (pointuse != null)
+            {
+                // add point vào bill và trừ ở account
+                // sẽ tran khi thanh toán ko thành công
+                string execPoint = Exec.ExecAddPoint("1", pointuse);
+                if(execPoint== "Không dùng được point")
+                {
+                    // lỗi điểm âm sau khi trừ
+                    return Content("Điểm dùng không hợp lệ");
+                }
+                total -= int.Parse(pointuse) * 1000;
+            }
+            else
+            {
+                pointuse = "0";
+            }
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
             var checkout = Exec.TestCheckout("1");
+            // GET POINT
+            int point;
+            if (checkout.PointCost == null)
+            {
+                point = checkout.PointPer.GetValueOrDefault();
+            }
+            else
+            {
+                point = checkout.PointCost.GetValueOrDefault();
+            }
 
             #region Create Paypal Order
             var itemList = new ItemList()
             {
                 Items = new List<Item>()
             };
-            var total = Math.Round(double.Parse(checkout.Sum(p => p.Total).ToString()) / 23000, 2);
-            foreach (var item in checkout)
+            
+            if (checkout.TotalPer != null)
             {
-                itemList.Items.Add(new Item()
-                {
-                    Name = item.Name,
-                    Currency = "USD",
-                    Price = Math.Round(double.Parse(item.Total.ToString()) / 23000, 2).ToString(),
-                    Quantity = "1",
-                    Description = "No: " + item.No
-                });
+
+                total = Math.Round(double.Parse((checkout.TotalPer- int.Parse(pointuse)*1000).ToString()) / 23000, 2);
             }
+            else
+            {
+                total += Math.Round(double.Parse((checkout.TotalCost - int.Parse(pointuse)*1000).ToString()) / 23000, 2);
+            }
+
+            // 0 đ không cân thanh toán paypal
+            if (total == 0)
+            {
+                return RedirectToAction("CheckoutSuccess");
+            }
+
+            itemList.Items.Add(new Item()
+            {
+                Name = checkout.MovieName,
+                Currency = "USD",
+                Price = total.ToString(),
+                Quantity = "1",
+                Description = "No: " + checkout.No
+            });
             #endregion
 
             //var total = Math.Round(double.Parse(checkout[0].Total.ToString()) / 23000, 2) *itemList.Items.Count;
@@ -394,7 +457,7 @@ namespace OnlineMoviesBooking.Controllers
                 RedirectUrls = new RedirectUrls()
                 {
                     CancelUrl = $"{hostname}/Movie/CheckoutFail",
-                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess"
+                    ReturnUrl = $"{hostname}/Movie/CheckoutSuccess?point="+point
                 },
                 Payer = new Payer()
                 {
@@ -438,15 +501,21 @@ namespace OnlineMoviesBooking.Controllers
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            Exec.ExecUpdateBillStatus("1");
+            string s = Exec.ExecDeleteBillStatus0("1");
+            if (s != "")
+            {
+                // co loi xay ra
+                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+            }
             return Content("Thanh toán không thành công");
         }
 
-        public IActionResult CheckoutSuccess()
+        public IActionResult CheckoutSuccess(int point=0)
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
-            Exec.ExecUpdateBillStatus("1");
+            
+            Exec.ExecUpdateBillStatus("1",point);
             return Content("Thanh toán thành công");
         }
     }

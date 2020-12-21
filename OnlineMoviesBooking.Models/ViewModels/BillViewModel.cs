@@ -20,5 +20,7 @@ namespace OnlineMoviesBooking.Models.ViewModels
         public string ScreenName { get; set; }
         public string Languages { get; set; }
         public string Address { get; set; }
+        public string NameDiscount { get; set; }
+        public int Point { get; set; }
     }
 }
