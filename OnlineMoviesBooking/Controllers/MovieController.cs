@@ -390,7 +390,7 @@ namespace OnlineMoviesBooking.Controllers
 
             var checkout = Exec.TestCheckout("1");
             // GET POINT
-            int point = 0;
+            int point;
             if (checkout.PointCost == null)
             {
                 point = checkout.PointPer.GetValueOrDefault();
@@ -424,7 +424,7 @@ namespace OnlineMoviesBooking.Controllers
 
             itemList.Items.Add(new Item()
             {
-                Name = checkout.Name,
+                Name = checkout.MovieName,
                 Currency = "USD",
                 Price = total.ToString(),
                 Quantity = "1",
