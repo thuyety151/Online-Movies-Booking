@@ -362,10 +362,28 @@ namespace OnlineMoviesBooking.Controllers
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code,string pointuse)
         {
+            double total = 0;
             if (code != null)
             {
                 // áp dụng khuyến mãi
                 Exec.ExecAddDiscount("1", code);
+            }
+            
+            if (pointuse != null)
+            {
+                // add point vào bill và trừ ở account
+                // sẽ tran khi thanh toán ko thành công
+                string execPoint = Exec.ExecAddPoint("1", pointuse);
+                if(execPoint== "Không dùng được point")
+                {
+                    // lỗi điểm âm sau khi trừ
+                    return Content("Điểm dùng không hợp lệ");
+                }
+                total -= int.Parse(pointuse) * 1000;
+            }
+            else
+            {
+                pointuse = "0";
             }
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
@@ -387,15 +405,15 @@ namespace OnlineMoviesBooking.Controllers
             {
                 Items = new List<Item>()
             };
-            double total = 0;
+            
             if (checkout.TotalPer != null)
             {
 
-                total = Math.Round(double.Parse(checkout.TotalPer.ToString()) / 23000, 2);
+                total = Math.Round(double.Parse((checkout.TotalPer- int.Parse(pointuse)*1000).ToString()) / 23000, 2);
             }
             else
             {
-                total = Math.Round(double.Parse(checkout.TotalCost.ToString()) / 23000, 2);
+                total += Math.Round(double.Parse((checkout.TotalCost - int.Parse(pointuse)*1000).ToString()) / 23000, 2);
             }
 
             // 0 đ không cân thanh toán paypal

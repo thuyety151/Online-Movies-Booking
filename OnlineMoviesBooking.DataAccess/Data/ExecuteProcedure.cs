@@ -1406,7 +1406,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                         ScreenName=(rdr["ScreenName"].ToString()),
                         Languages=(rdr["Languages"].ToString()),
                         Address=(rdr["Address"].ToString()),
-                        Point = int.Parse(rdr["Point"].ToString())
+                        Point = int.Parse(rdr["PointVM"].ToString())
                     };
                 }
                 return bill;
@@ -1508,6 +1508,25 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 con.Open();
                 // TêN STORE
                 SqlCommand com = new SqlCommand("USP_GetPoint", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return rdr["Result"].ToString();
+                }
+            }
+            return "";
+        }
+        public string ExecAddPoint(string idaccount, string point)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_Addpoint", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
                 com.Parameters.AddWithValue("@Point", point);
