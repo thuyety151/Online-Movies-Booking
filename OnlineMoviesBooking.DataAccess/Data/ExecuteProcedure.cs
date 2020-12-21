@@ -1423,17 +1423,26 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
-        public void ExecDeleteBillStatus0(string idaccount)
+        public string ExecDeleteBillStatus0(string idaccount)
         {
-            using (SqlConnection con = new SqlConnection(cs))
+            string s = "";
+            try
             {
-                con.Open();
-                // TêN STORE
-                SqlCommand com = new SqlCommand("USP_DeleteBillStatus0", con);
-                com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@IdAccount", idaccount ?? Convert.DBNull);
-                com.ExecuteNonQuery();
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_DeleteBillStatus0", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@IdAccount", idaccount ?? Convert.DBNull);
+                    com.ExecuteNonQuery();
+                }
             }
+            catch (SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
         }
         public void ExecUpdateBillStatus(string idaccount)
         {

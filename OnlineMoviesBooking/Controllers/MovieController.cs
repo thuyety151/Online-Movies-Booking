@@ -348,7 +348,12 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult TimeOut(string idshow)
         {
-            Exec.ExecDeleteBillStatus0("1");
+            string s=Exec.ExecDeleteBillStatus0("1");
+            if (s != "")
+            {
+                // co loi xay ra
+                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+            }
             return View("Index");
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code)
@@ -464,7 +469,12 @@ namespace OnlineMoviesBooking.Controllers
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            Exec.ExecDeleteBillStatus0("1");
+            string s = Exec.ExecDeleteBillStatus0("1");
+            if (s != "")
+            {
+                // co loi xay ra
+                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+            }
             return Content("Thanh toán không thành công");
         }
 
