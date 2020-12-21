@@ -343,6 +343,13 @@ namespace OnlineMoviesBooking.Controllers
 
             return Json(obj);
         }
+        [HttpGet]
+        public IActionResult UsePoint(string point)
+        {
+            // kiểm tra điểm hợp lệ
+            var obj = Exec.ExecCheckPoint("1", int.Parse(point));
+            return Json(obj);
+        }
         public IActionResult TimeOut(string idshow)
         {
             string s=Exec.ExecDeleteBillStatus0("1");
@@ -353,7 +360,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             return View("Index");
         }
-        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code)
+        public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code,string pointuse)
         {
             if (code != null)
             {

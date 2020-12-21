@@ -11,6 +11,7 @@ namespace OnlineMoviesBooking.Models.Models
         public DateTime Date { get; set; }
         public int TotalPrice { get; set; }
         public string Code { get; set; }
+        public int? Point { get; set; }
 
         public virtual Account IdAccountNavigation { get; set; }
         public virtual Seat IdSeatNavigation { get; set; }

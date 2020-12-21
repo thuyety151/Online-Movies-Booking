@@ -1501,5 +1501,24 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.ExecuteNonQuery();
             }
         }
+        public string ExecCheckPoint(string idaccount, int point)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetPoint", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return rdr["Result"].ToString();
+                }
+            }
+            return "";
+        }
     }
 }
