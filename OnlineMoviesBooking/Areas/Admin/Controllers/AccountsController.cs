@@ -19,12 +19,36 @@ namespace OnlineMoviesBooking.Areas.Controllers
     [Area("Admin")]
     public class AccountsController : Controller
     {
-
-        private readonly CinemaContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public AccountsController(IWebHostEnvironment hostEnvironment)
+        private readonly string check;
+        public AccountsController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
             this._hostEnvironment = hostEnvironment;
+            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        check = Convert.ToString(reader[0]);
+                    }    
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    check = "0";
+                }
+                connection.Close();
+            }
+
         }
 
         // GET: Accounts
@@ -33,12 +57,21 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            if (HttpContext.Session.GetString("idLogin") != null )
             {
-
-                TempData["msg"] = "Error";
-                return Redirect("/Home/Index");
+                if(check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }    
+               
             }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }    
+
             List<Account> listacc = new List<Account>();
             string connectionString = HttpContext.Session.GetString("connectString");
 
@@ -97,10 +130,18 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
 
-                TempData["msg"] = "Error";
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
             try
@@ -172,10 +213,18 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
 
-                TempData["msg"] = "Error";
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
 
@@ -284,10 +333,18 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
 
-                TempData["msg"] = "Error";
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
             if (id == null)
@@ -423,10 +480,18 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") == null || HttpContext.Session.GetString("roleLogin") != "1")
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
 
-                TempData["msg"] = "Error";
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
             try

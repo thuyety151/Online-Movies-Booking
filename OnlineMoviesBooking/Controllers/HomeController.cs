@@ -73,13 +73,13 @@ namespace OnlineMoviesBooking.Controllers
                     else
                     {
                         TempData["msg"] = "error";
-                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                        return RedirectToAction("index","home");
                     }
                 }
                 catch (SqlException e)
                 {
                     connection.Close();
-                    return RedirectToAction("HomeAdmin", "HomeAdmin");
+                    return RedirectToAction("index", "home");
                 }
                 connection.Close();
 

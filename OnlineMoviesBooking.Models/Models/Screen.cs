@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace OnlineMoviesBooking.Models.Models
 {
@@ -13,9 +12,7 @@ namespace OnlineMoviesBooking.Models.Models
         }
 
         public string Id { get; set; }
-        [Display(Name="Tên phòng chiếu")]
         public string Name { get; set; }
-        [Display(Name="Rạp chiếu")]
         public string IdTheater { get; set; }
 
         public virtual Theater IdTheaterNavigation { get; set; }

@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineMoviesBooking.Models.ViewModels;
+using Microsoft.Data.SqlClient;
 
 namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
@@ -24,15 +25,57 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     {
         private ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly string check;
         public MoviesController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
             Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
             this._hostEnvironment = hostEnvironment;
+            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        check = Convert.ToString(reader[0]);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    check = "0";
+                }
+                connection.Close();
+            }
         }
 
         public IActionResult GetAll()
         {
-           // var obj = Exec.ExecuteMovieGetAll();        // dùng ajax chưa hiệu quả
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
+            // var obj = Exec.ExecuteMovieGetAll();        // dùng ajax chưa hiệu quả
             var movie = Exec.ExecuteMovieGetAll().Select(x => new             // tốn dữ liệu
             {
                 id = x.Id,
@@ -46,11 +89,45 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // GET: Movies
         public IActionResult Index()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             return View();
         }
 
         public IActionResult Details(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -71,6 +148,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Upsert(string id=null)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id != null)
             {
                 // Edit
@@ -174,8 +268,25 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // POST: Movies/Delete/5
         [HttpDelete]
       
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             var movie = Exec.ExecuteMovieDetail(id);
             if(movie==null)
             {

@@ -457,11 +457,11 @@
     <!-- ==========discount-Section========== -->
     @{
 
-        if (TempData["msg"] == "success")
+        if (TempData["msg"] != null)
         {
-            string msg = @"Đăng nhập thành công!!!";
+            string msg = TempData["msg"].ToString();
             <script>
-                alert(msg)
+                alert('@msg')
             </script>
         }
     }

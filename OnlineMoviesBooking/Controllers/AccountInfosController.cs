@@ -25,15 +25,16 @@ namespace OnlineMoviesBooking.Controllers
         // GET: AccountInfos    // tắt debug giùm t
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("idLogin") == null)
-            {
-                TempData["msg"] = "loginfirst";
-                return RedirectToAction("Login", "Login");
-            }
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
             TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
+            
             Account acc = new Account();
             string connectionString = HttpContext.Session.GetString("connectString");
             using (var connection = new SqlConnection(connectionString))
@@ -92,7 +93,7 @@ namespace OnlineMoviesBooking.Controllers
             TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             if (HttpContext.Session.GetString("idLogin") == null)
             {
-                TempData["msg"] = "loginfirst";
+                TempData["msg"] = "Dang nhap truoc";
                 return RedirectToAction("Login", "Login");
             }
             return View();
@@ -107,7 +108,7 @@ namespace OnlineMoviesBooking.Controllers
             TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             if (HttpContext.Session.GetString("idLogin") == null)
             {
-                TempData["msg"] = "loginfirst";
+                TempData["msg"] = "Dang nhap truoc";
                 return RedirectToAction("Login", "Login");
             }
             string connectionString = HttpContext.Session.GetString("connectString");
@@ -131,7 +132,8 @@ namespace OnlineMoviesBooking.Controllers
                 catch (SqlException e)
                 {
 
-                    TempData["msg"] = "error";
+                    TempData["msg"] = "Dang nhap truoc";
+                    ModelState.AddModelError("", e.ToString());
                     return RedirectToAction("Index", "Home");
                 }
                 connection.Close();
@@ -285,6 +287,50 @@ namespace OnlineMoviesBooking.Controllers
             return RedirectToAction("Index", "AccountInfos");
         }
 
+        public IActionResult GetAllTicket()
+        {
+           
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            string username = HttpContext.Session.GetString("idLogin").ToString();
+            List<Ticket> listTicket = new List<Ticket>();
+            string connectionString = HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_GetAllTicketOfAccount @username = '{username}'";
 
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Ticket ticket = new Ticket();
+                        ticket.Id = Convert.ToString(reader[0]);
+                        ticket.Date = Convert.ToDateTime(reader[1]);
+                        ticket.Point = Convert.ToInt32(reader[2]);
+                        //ticket.Status = Convert.ToBoolean(reader[3]);
+                        ticket.IdShow = Convert.ToString(reader[4]);
+                        ticket.IdAccount = Convert.ToString(reader[5]);
+                        ticket.IdDiscount = Convert.ToString(reader[6]);
+                        ticket.IdSeat = Convert.ToString(reader[7]);
+                        listTicket.Add(ticket);
+                    }
+
+                }
+                catch (SqlException e)
+                {
+
+                    TempData["msg"] = e.ToString();
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
+            }
+
+            return View(listTicket);
+        }
     }
 }

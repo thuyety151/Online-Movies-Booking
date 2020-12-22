@@ -1,0 +1,152 @@
+﻿@model List<OnlineMoviesBooking.Models.Models.Ticket>
+
+@{
+    ViewData["Title"] = "AllQuestion";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    @*<link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />*@
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+
+    <title>Boleto  - Online Ticket Booking Website HTML Template</title>
+
+
+</head>
+
+<body>
+
+    <!-- ==========Speaker-Single========== -->
+    <section class="speaker-single" style="margin-top:13rem;margin-bottom:10rem">
+        <div class="container">
+            <h4>Lịch sự</h4>
+            <br />
+            <form class="contact-form " id="areaFQA">
+                @{
+                    foreach (var item in Model)
+                    {
+                        string heading = "heading" + item.Id;
+                        string collapse = "collapse" + item.Id;
+                        <div class="card-header bg-six shadow" id="@heading">
+                            <h5 class="mb-0">
+                                <a class="btn btn-link" data-toggle="collapse"
+                                   data-target="#@collapse"
+                                   aria-expanded="false" aria-controls="@collapse">
+                                    @item.Id
+                                </a>
+                            </h5>
+                        </div>
+
+                        <div id="@collapse" class="collapse"
+                             aria-labelledby="@heading" data-parent="#areaFQA">
+                            <div class="card-body">
+                               Mã lịch chiếu: @item.IdShow <br />
+                               Mã ghế: @item.IdSeat <br />
+                               Ngày thanh toán: @item.Date
+                            </div>
+                        </div>
+                        <br />
+                    }
+                }
+
+            </form>
+            
+        </div>
+    </section>
+    <!-- ==========Speaker-Single========== -->
+    <!-- ==========Newslater-Section========== -->
+
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
+    @*<script>
+            $(document).ready(function () {
+                $('#areaFQA').DataTable({
+                    "ajax": {
+                        "url": "/Admin/Products/GetAll"
+                    },
+                    "columns": [
+                        { "data": "id" },
+                        { "data": "name" },
+                        { "data": "description" },
+                        { "data": "imageUrl" },
+                        { "data": "price" },
+                        { "data": "status" },
+                        { "data": "quantity" },
+                        { "data": "categoryId" },
+                        { "data": "shopId" },
+                        {
+                            "data": "id",
+                            "render": function (data) {
+                                return `
+                                 <div class="text-center">
+                                    <a href="#" data-toggle="modal" data-target="#EditModalProduct" data-whatever="${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                        Sửa
+                                    </a>
+                                    <a href="#" data-toggle="modal" data-target="#DetailModalProduct" data-whatever="${data}" class="btn btn-dark text-white" style="cursor:pointer"">
+                                        Detail
+                                    </a>
+                                    <a onClick=Delete("/Admin/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                        Xóa
+                                    </a>
+                                </div>
+
+                               `;
+                            }, "width": "40%"
+                        }
+                    ]
+
+                });
+
+                $('.selectlist').select2({
+                    placeholder: "Select a product",
+                    minimumInputLength: 1,
+                    ajax: {
+                        url: '/Admin/Products/GetforSelect',
+                        data: function (params) {
+                            return {
+                                q: params.term// search term
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.items
+                            }
+                        },
+                    }
+
+
+
+                });
+
+
+
+            });
+        </script>*@
+</body>
+
+</html>
