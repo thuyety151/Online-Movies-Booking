@@ -93,7 +93,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Movie movie, IFormFile files)
         {
-            
+
             if (ModelState.IsValid)
             {
                 // check image

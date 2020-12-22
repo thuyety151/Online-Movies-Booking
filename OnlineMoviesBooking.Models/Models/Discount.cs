@@ -24,7 +24,7 @@ namespace OnlineMoviesBooking.Models.Models
         [Display(Name = "Phần trăm khuyến mãi")]
         [Range(minimum:0,maximum:100,ErrorMessage ="Phần trăm không hợp lệ")]
         public int? PercentDiscount { get; set; }
-        [Display(Name = "Mức giảm tối đa")]
+        [Display(Name = "Thành tiền (VNĐ)")]
         public int? MaxCost { get; set; }
         [Display(Name = "Ngày bắt đầu")]
         [Required]
@@ -34,13 +34,6 @@ namespace OnlineMoviesBooking.Models.Models
         public DateTime? DateEnd { get; set; }
         [Display(Name = "Hình ảnh")]
         public string ImageDiscount { get; set; }
-
-        [Display(Name = "Số lượng vé / lần áp dụng")]
-        [Range(minimum:0,maximum:100000,ErrorMessage ="Số lượng không hợp lệ")]
-        [Required]
-        public int? NoTicket { get; set; }
-        [Display(Name = "Số điểm quy đổi")]
-        [Range(minimum:0, maximum:100000,ErrorMessage ="Số điểm không hợp lệ")]
         public int? Point { get; set; }
         [Display(Name = "Số lượng đã sử dụng")]
         public int? Used { get; set; }

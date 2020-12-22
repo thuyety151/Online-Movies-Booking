@@ -13,30 +13,30 @@ namespace OnlineMoviesBooking.Models.Models
 
         public string Id { get; set; }
         [Display(Name = "Tên phim")]
-        [Required]
+        [Required(ErrorMessage ="Vui lòng nhập tên phim")]
         public string Name { get; set; }
         [Display(Name = "Thể loại")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập thể loại phim")]
         public string Genre { get; set; }
         [Display(Name = "Đạo diễn")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập tên đạo diễn")]
         public string Director { get; set; }
         [Display(Name = "Diễn viên")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập tên diễn viên")]
         public string Casts { get; set; }
         [Display(Name = "Qui định")]
         public string Rated { get; set; }
         [Display(Name = "Mô tả")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập mô tả")]
         public string Description { get; set; }
         [Display(Name = "Link trailer")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập link trailer")]
         public string Trailer { get; set; }
         [Display(Name = "Ngày khởi chiếu")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng chọn ngày khởi chiếu")]
         public DateTime ReleaseDate { get; set; }
         [Display(Name = "Thời lượng")]
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập thời lượng")]
         public int RunningTime { get; set; }
         [Display(Name = "Poster")]
         public string Poster { get; set; }
