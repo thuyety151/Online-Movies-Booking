@@ -3,13 +3,8 @@ using System.Collections.Generic;
 
 namespace OnlineMoviesBooking.Models.Models
 {
-    public partial class Movie
+    public partial class VMovieNow
     {
-        public Movie()
-        {
-            Show = new HashSet<Show>();
-        }
-
         public string Id { get; set; }
         public string Name { get; set; }
         public string Genre { get; set; }
@@ -21,7 +16,5 @@ namespace OnlineMoviesBooking.Models.Models
         public DateTime ReleaseDate { get; set; }
         public int RunningTime { get; set; }
         public string Poster { get; set; }
-
-        public virtual ICollection<Show> Show { get; set; }
     }
 }

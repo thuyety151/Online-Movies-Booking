@@ -276,11 +276,11 @@ namespace OnlineMoviesBooking.Controllers
             List<string> lstseat = lstSeat.Split(' ').ToList();
             if (show == null)
             {
-                return Json(new { success = false });
+                return Json("error");    // show không hợp lệ
             }
             if (lstSeat == " undefined")
             {
-                return Json(new { success = false });
+                return Json("seat");    // ghế chọn không hợp lệ
             }
             foreach (var item in lstseat.ToList())
             {
@@ -291,22 +291,41 @@ namespace OnlineMoviesBooking.Controllers
             }
             if (lstseat.Count == 0)
             {
-                return Json(new { success = false });
+                return Json("seat");  // ghế chọn không hợp lệ
             }
             var seatVM = new List<string>();
             foreach (var item in lstseat)
             {
-                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow).Id);
+                seatVM.Add(Exec.ExecCheckIdSeat(item, idshow).Id);  // kiểm tra idseat là hợp lệ
             }
 
             foreach (var item in seatVM)
             {
                 if (item == null)
                 {
-                    return Json(false);
+                    return Json("error");
                 }
             }
-           
+            // tạo 8 ghế để insert vào tickets
+            List<string> seats = new List<string>();
+            for (int i = 0; i < 8; i++)
+            {
+                if (seatVM.Count <= i)
+                {
+                    seats.Add(null);
+                }
+                else
+                {
+                    seats.Add(seatVM[i]);
+                }
+            }
+            // insert seat vào ticket
+            string result = Exec.ExecInsertTickets(seats, "1", idshow, null);
+            //  xử lí transaction
+            if (result == "Ghế đã được chọn")
+            {
+                return Json(result);
+            }
             return Json(seatVM );
         }
         [HttpGet]
@@ -314,24 +333,8 @@ namespace OnlineMoviesBooking.Controllers
         {
             List<string> lst = lstSeat.Split(',').ToList();
 
-            // tạo bill
-            List<string> seats = new List<string>();
-            for (int i = 0; i < 8; i++)
-            {
-                if (lst.Count <= i)
-                {
-                    seats.Add(null);
-                }
-                else
-                {
-                    seats.Add(lst[i]);
-                }
-            }
-            string result = Exec.ExecInsertBill(seats, "1", idshow, null);
-            // chưa xử lí transaction
-
             // get bill
-            var bill = Exec.ExecGetBillDetail("1", idshow);
+                var bill = Exec.ExecGetTicketDetail("1", idshow);
             ViewBag.Show = idshow;
             return View(bill);
         }

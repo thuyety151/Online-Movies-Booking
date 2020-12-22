@@ -9,6 +9,7 @@ namespace OnlineMoviesBooking.Models.Models
         {
             Bill = new HashSet<Bill>();
             Qa = new HashSet<Qa>();
+            Ticket = new HashSet<Ticket>();
             UseDiscount = new HashSet<UseDiscount>();
         }
 
@@ -28,6 +29,7 @@ namespace OnlineMoviesBooking.Models.Models
         public virtual TypesOfAccount IdTypesOfUserNavigation { get; set; }
         public virtual ICollection<Bill> Bill { get; set; }
         public virtual ICollection<Qa> Qa { get; set; }
+        public virtual ICollection<Ticket> Ticket { get; set; }
         public virtual ICollection<UseDiscount> UseDiscount { get; set; }
     }
 }

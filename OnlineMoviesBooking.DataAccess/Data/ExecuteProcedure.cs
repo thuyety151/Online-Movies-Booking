@@ -1345,72 +1345,69 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
 
         //==================BILL
-        public string ExecInsertBill(List<string> seatVM, string idAccount, string idShow, string code)
+        public string ExecInsertTickets(List<string> seatVM, string idAccount, string idShow, string iddiscount)
         {
             string result = "";
-            try
-            {
-                using (SqlConnection con = new SqlConnection(cs))
-                {
-                    con.Open();
-                    // TêN STORE
-                    SqlCommand com = new SqlCommand("USP_InsertBill", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.AddWithValue("@Id_Seat1", seatVM[0]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat2", seatVM[1]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat3", seatVM[2]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat4", seatVM[3]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat5", seatVM[4]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat6", seatVM[5]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat7", seatVM[6]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Seat8", seatVM[7]?? Convert.DBNull);
-                    com.Parameters.AddWithValue("@Id_Account", idAccount);
-                    com.Parameters.AddWithValue("@Id_Show", idShow);
-                    com.Parameters.AddWithValue("@Code", code ?? Convert.DBNull);
-                    com.ExecuteNonQuery();
-
-                }
-            }
-            catch (SqlException s)
-            {
-                result = s.Message;
-            }
-            return result;
-        }
-        public BillViewModel ExecGetBillDetail(string idaccount, string idshow)
-        {
-            var bill = new BillViewModel();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_GetDetailBillVM", con);
+                SqlCommand com = new SqlCommand("USP_InsertTickets", con);
                 com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@Id_Account", idaccount);
-                com.Parameters.AddWithValue("@Id_Show", idshow);
+                com.Parameters.AddWithValue("@Id_Seat1", seatVM[0] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat2", seatVM[1] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat3", seatVM[2] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat4", seatVM[3] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat5", seatVM[4] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat6", seatVM[5] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat7", seatVM[6] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat8", seatVM[7] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Account", idAccount);
+                com.Parameters.AddWithValue("@Id_Show", idShow);
+                com.Parameters.AddWithValue("@Id_Discount", iddiscount ?? Convert.DBNull);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())
                 {
-                    bill= new BillViewModel
-                    {
-                        IdShow= rdr["Id_Show"].ToString(),
-                        IdAccount = rdr["Id_Account"].ToString(),
-                        No = int.Parse(rdr["No"].ToString()),
-                        TotalPrice = double.Parse(rdr["TotalPrice"].ToString()),
-                        MovieName= rdr["MovieName"].ToString(),
-                        RunningTime= int.Parse(rdr["RunningTime"].ToString()),
-                        TimeStart=DateTime.Parse(rdr["TimeStart"].ToString()),
-                        TimeEnd=DateTime.Parse(rdr["TimeEnd"].ToString()),
-                        TheaterName=(rdr["TheaterName"].ToString()),
-                        ScreenName=(rdr["ScreenName"].ToString()),
-                        Languages=(rdr["Languages"].ToString()),
-                        Address=(rdr["Address"].ToString()),
-                        Point = int.Parse(rdr["PointVM"].ToString())
-                    };
+                    result = rdr["Results"].ToString();
                 }
-                return bill;
+
             }
+            return result;
+        }
+        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow)
+        {
+            var bill = new TicketViewModel();
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            // TêN STORE
+            SqlCommand com = new SqlCommand("USP_GetDetailBillVM", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@Id_Account", idaccount);
+            com.Parameters.AddWithValue("@Id_Show", idshow);
+            SqlDataReader rdr = com.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                bill = new TicketViewModel
+                {
+                    IdShow = rdr["IdShow"].ToString(),
+                    IdAccount = rdr["IdAccount"].ToString(),
+                    No = int.Parse(rdr["No"].ToString()),
+                    TotalPrice = double.Parse(rdr["TotalPrice"].ToString()),
+                    MovieName = rdr["MovieName"].ToString(),
+                    RunningTime = int.Parse(rdr["RunningTime"].ToString()),
+                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                    TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                    TheaterName = (rdr["TheaterName"].ToString()),
+                    ScreenName = (rdr["ScreenName"].ToString()),
+                    Languages = (rdr["Languages"].ToString()),
+                    Address = (rdr["Address"].ToString()),
+                    Point = int.Parse(rdr["PointVM"].ToString())
+                };
+            }
+            return bill;
         }
 
         public void ExecDeleteBill(string idaccount, string idshow)
