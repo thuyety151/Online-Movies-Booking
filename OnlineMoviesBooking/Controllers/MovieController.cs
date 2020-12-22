@@ -18,7 +18,7 @@ namespace OnlineMoviesBooking.Controllers
     {
         private readonly string _clientId;
         private readonly string _secretKey;
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         public MovieController(IConfiguration config)
         {
             Exec = new ExecuteProcedure();
@@ -210,6 +210,7 @@ namespace OnlineMoviesBooking.Controllers
             ViewBag.MovieName = plan.MovieName;
             ViewBag.ScreenName = plan.ScreenName;
             ViewBag.TheaterName = plan.TheaterName;
+            ViewBag.Language = plan.Languages;
             ViewBag.TimeStart = plan.TimeStart.ToString("HH:mm");
             ViewBag.Date = plan.TimeStart.ToString("dd/mm/yyyy");
 
@@ -238,7 +239,7 @@ namespace OnlineMoviesBooking.Controllers
         
 
         [HttpGet]
-        public IActionResult getshowbydate(string idMovie, string date)
+        public IActionResult Getshowbydate(string idMovie, string date)
         {
             if(idMovie==null || date == null)
             {
@@ -251,7 +252,7 @@ namespace OnlineMoviesBooking.Controllers
             return Json(  theater );
         }
         [HttpGet]
-        public IActionResult getprice()
+        public IActionResult Getprice()
         {
             //List<TypesOfSeat> price = new List<TypesOfSeat>();
              var price = Exec.GetAllTypesOfSeat();
@@ -268,7 +269,7 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult getinfo(string idshow, string lstSeat)
+        public IActionResult Getinfo(string idshow, string lstSeat)
         {
             // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
             // Kiểm tra ID show hợp lêk
@@ -331,7 +332,7 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
-            List<string> lst = lstSeat.Split(',').ToList();
+            
 
             // get bill
                 var bill = Exec.ExecGetTicketDetail("1", idshow);

@@ -13,7 +13,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class TheatersController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         public TheatersController()
         {
             Exec = new ExecuteProcedure();
@@ -37,7 +37,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Theaters/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             // chi tiết rạp chiếu gồm: danh sách các phòng chiếu
             if (id == null)
@@ -93,7 +93,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Theaters/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -111,7 +111,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
+        public IActionResult Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
         {
             if (id != theater.Id)
             {

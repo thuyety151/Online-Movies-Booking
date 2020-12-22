@@ -5,11 +5,11 @@ $(document).ready(function () {
             "url": '/Admin/theaters/getall'
         },
         "columns": [
-            { "data": "name" },
-            { "data": "address" },
-            { "data": "hotline" },
+            { "data": "name","width":"20%" },
+            { "data": "address", "width": "40%" },
+            { "data": "hotline", "width": "20%" },
             {
-                "data": "id",
+                "data": "id", "width": "20%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
