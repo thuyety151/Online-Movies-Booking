@@ -17,13 +17,14 @@ namespace OnlineMoviesBooking.DataAccess.Data
     public class ExecuteProcedure
     {
         private readonly string cs;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        
-        public ExecuteProcedure(IHttpContextAccessor httpContextAccessor)
+
+        public  ExecuteProcedure(string _cs)
         {
 
-            cs = httpContextAccessor.HttpContext.Session.GetString("connectString");
-
+            //_cs = httpContextAccessor.HttpContext.Session.GetString("connectString");
+            cs = _cs;
           //  cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
 
         }

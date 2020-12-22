@@ -31,7 +31,7 @@ namespace OnlineMoviesBooking.Controllers
                 TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
                 TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
                 TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");//à
             }
             else
             {
@@ -63,7 +63,7 @@ namespace OnlineMoviesBooking.Controllers
                             dis.DateStart = Convert.ToDateTime(reader[5]);
                             dis.DateEnd = Convert.ToDateTime(reader[6]);
                             dis.ImageDiscount = Convert.ToString(reader[7]);
-                            dis.NoTicket = Convert.ToInt32(reader[8]);
+                           // dis.NoTicket = Convert.ToInt32(reader[8]);      // fix nè // ê biết r, t xóa cái noticke t 
                             dis.Point = Convert.ToInt32(reader[9]);
                             dis.Used = Convert.ToInt32(reader[10]);
                             listdis.Add(dis);

@@ -20,7 +20,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         public TypesOfSeatsController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString").ToString());
             string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
             string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
 

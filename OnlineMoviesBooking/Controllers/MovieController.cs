@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -23,7 +24,7 @@ namespace OnlineMoviesBooking.Controllers
         private ExecuteProcedure Exec;
         public MovieController(IHttpContextAccessor httpContextAccessor,IConfiguration config)
         { 
-            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString".ToString()));
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
         }
@@ -247,7 +248,9 @@ namespace OnlineMoviesBooking.Controllers
             {
                 return NotFound();
             }
-            DateTime d = DateTime.Parse(date);
+            //DateTime d = DateTime.Parse(date);
+            DateTime d = DateTime.ParseExact(date, "dd-MM-yyyy hh:mm:ss:tt",
+                                           CultureInfo.InvariantCulture);
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện

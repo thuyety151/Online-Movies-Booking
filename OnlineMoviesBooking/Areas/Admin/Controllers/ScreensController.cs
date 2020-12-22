@@ -21,7 +21,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         public ScreensController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString").ToString());        // sao chỗ này lỗi v
             string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
             string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
 
