@@ -14,9 +14,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class ScreensController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
 
-        public ScreensController(CinemaContext context)
+        public ScreensController()
         {
             Exec = new ExecuteProcedure();
         }
@@ -26,7 +26,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new {data=obj});
         }
         // GET: Screens
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theater= new SelectList(theater, "Id", "Name");
@@ -65,7 +65,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IdTheater")] Screen screen)
+        public IActionResult Create([Bind("Id,Name,IdTheater")] Screen screen)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +105,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Screens/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -133,7 +133,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,IdTheater")] Screen screen)
+        public IActionResult Edit(string id, [Bind("Id,Name,IdTheater")] Screen screen)
         {
             if (id != screen.Id)
             {

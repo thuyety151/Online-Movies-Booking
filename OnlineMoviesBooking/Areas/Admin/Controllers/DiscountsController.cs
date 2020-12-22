@@ -16,7 +16,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class DiscountsController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
         public DiscountsController( IWebHostEnvironment hostEnvironment)
         {
@@ -31,8 +31,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 id=x.Id,
                 name=x.Name,
                 code=x.Code,
-                dateStart=x.DateStart.ToString("dd-MM-yyyy HH:mm"),
-                dateEnd= x.DateEnd.ToString("dd-MM-yyyy HH:mm"),
+                dateStart=x.DateStart.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
+                dateEnd= x.DateEnd.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
                 imageDiscount = x.ImageDiscount,
                 used=x.Used
 
@@ -176,7 +176,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, Discount discount,IFormFile files, string flexRadioDefault)
+        public IActionResult Edit(string id, Discount discount,IFormFile files, string flexRadioDefault)
         {
             if (id != discount.Id)
             {

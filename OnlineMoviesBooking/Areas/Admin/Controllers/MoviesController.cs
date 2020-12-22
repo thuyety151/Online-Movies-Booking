@@ -22,7 +22,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class MoviesController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
         public MoviesController(IWebHostEnvironment hostEnvironment)
         {
@@ -91,7 +91,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(Movie movie, IFormFile files)
+        public IActionResult Upsert(Movie movie, IFormFile files)
         {
             
             if (ModelState.IsValid)
@@ -174,7 +174,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // POST: Movies/Delete/5
         [HttpDelete]
       
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
             var movie = Exec.ExecuteMovieDetail(id);
             if(movie==null)

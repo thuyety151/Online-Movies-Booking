@@ -114,7 +114,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Show showVM)
+        public IActionResult Create(Show showVM)
         {
 
             if (ModelState.IsValid)
@@ -189,7 +189,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ShowViewModel show)
+        public IActionResult Edit(string id, ShowViewModel show)
         {
             if (id != show.Id)
             {
