@@ -204,7 +204,7 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            Exec.ExecDeleteBillStatus0("1");
+            Exec.ExecDeleteTicketStatus0("1");
 
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
@@ -355,7 +355,7 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult TimeOut(string idshow)
         {
-            string s=Exec.ExecDeleteBillStatus0("1");
+            string s=Exec.ExecDeleteTicketStatus0("1");
             if (s != "")
             {
                 // co loi xay ra
@@ -504,7 +504,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            string s = Exec.ExecDeleteBillStatus0("1");
+            string s = Exec.ExecDeleteTicketStatus0("1");
             if (s != "")
             {
                 // co loi xay ra
