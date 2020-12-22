@@ -17,9 +17,9 @@ namespace OnlineMoviesBooking.Models.Models
         public string ScreenName { get; set; }
         public string Languages { get; set; }
         public string Address { get; set; }
-        public bool Status { get; set; }
-        public DateTime Date { get; set; }
-        public string Code { get; set; }
+        public bool? Status { get; set; }
+        public DateTime? Date { get; set; }
+        public string IdDiscount { get; set; }
         public int? Point { get; set; }
     }
 }

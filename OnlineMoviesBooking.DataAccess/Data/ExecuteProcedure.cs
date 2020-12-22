@@ -1314,7 +1314,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             int str = int.Parse(dt.Rows[0][0].ToString());
             return str;
         }
-        public CheckoutViewModel TestCheckout(string idaccount)
+        public CheckoutViewModel TestCheckout(string idaccount,string pointuse)
         {
             var v = new CheckoutViewModel();
             using (SqlConnection con = new SqlConnection(cs))
@@ -1324,6 +1324,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_Checkout", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@PointUse", pointuse);
                 SqlDataReader rdr = com.ExecuteReader();
 
                 while (rdr.Read())
@@ -1410,13 +1411,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return bill;
         }
 
-        public void ExecDeleteBill(string idaccount, string idshow)
+        public void ExecDeleteTicket(string idaccount, string idshow)   // không dùng
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_DeleteBill", con);
+                SqlCommand com = new SqlCommand("USP_DeleteTicket", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id_Account", idaccount);
                 com.Parameters.AddWithValue("@Id_Show", idshow);
@@ -1444,16 +1445,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return s;
         }
-        public void ExecUpdateBillStatus(string idaccount,int point)
+        public void ExecUpdateTicketStatus(string idaccount,int point)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_ChangeBillStatus", con);
+                SqlCommand com = new SqlCommand("USP_ChangeTicketStatus", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@IdAccount", idaccount);
-                com.Parameters.AddWithValue("@Point", point);
+                com.Parameters.AddWithValue("@Point", point);       // point = 0 nếu không dùng
                 com.ExecuteNonQuery();
             }
         }
@@ -1473,7 +1474,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 {
                     return  new 
                     {
-                        IdAccount = rdr["Id_Account"].ToString(),
+                        IdAccount = rdr["IdAccount"].ToString(),
                         Price = double.Parse(rdr["Price"].ToString()),
                         No = int.Parse(rdr["No"].ToString()),
                         NameDiscount = rdr["Name"].ToString(),

@@ -78,11 +78,14 @@
                         else {
                             $('#validation-point').text("")
                             // thảy đổi giá tiền hiển thị
-                            $('#point-hidden').val($('#code-point').val())
+                           
+                            
                             $('#total-price').text(price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
                             // thay đổi số điểm
                             var point = (parseInt($('#total-price').text().replace(/\20AB(\d)(?=(\d{3})+\.)/g, '$1,')) * 5 / 100);
                             $('#point').text(parseInt(point))
+                            $('#point-hidden').val(parseInt(point))
+                            console.log('point ' + $('#point-hidden').val())
                         }
                         console.log(parseInt(point))
                     }

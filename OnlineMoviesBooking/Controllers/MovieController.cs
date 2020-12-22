@@ -391,7 +391,7 @@ namespace OnlineMoviesBooking.Controllers
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
-            var checkout = Exec.TestCheckout("1");
+            var checkout = Exec.TestCheckout("1",pointuse);
             // GET POINT
             int point;
             if (checkout.PointCost == null)
@@ -518,7 +518,7 @@ namespace OnlineMoviesBooking.Controllers
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
             
-            Exec.ExecUpdateBillStatus("1",point);
+            Exec.ExecUpdateTicketStatus("1",point);
             return Content("Thanh toán thành công");
         }
     }

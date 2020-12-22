@@ -16,7 +16,6 @@ namespace OnlineMoviesBooking.Models.Models
         }
 
         public virtual DbSet<Account> Account { get; set; }
-        public virtual DbSet<Bill> Bill { get; set; }
         public virtual DbSet<Discount> Discount { get; set; }
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Qa> Qa { get; set; }
@@ -103,58 +102,6 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasForeignKey(d => d.IdTypesOfUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Account_TypesOfAccount");
-            });
-
-            modelBuilder.Entity<Bill>(entity =>
-            {
-                entity.HasKey(e => new { e.IdSeat, e.IdAccount, e.IdShow });
-
-                entity.Property(e => e.IdSeat)
-                    .HasColumnName("Id_Seat")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdAccount)
-                    .HasColumnName("Id_Account")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdShow)
-                    .HasColumnName("Id_Show")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Code)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasDefaultValueSql("('0')");
-
-                entity.HasOne(d => d.CodeNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.Code)
-                    .HasConstraintName("FK__Bill__Code__7FB5F314");
-
-                entity.HasOne(d => d.IdAccountNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.IdAccount)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Bill_Account");
-
-                entity.HasOne(d => d.IdSeatNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.IdSeat)
-                    .HasConstraintName("FK_Bill_Seat");
-
-                entity.HasOne(d => d.IdShowNavigation)
-                    .WithMany(p => p.Bill)
-                    .HasForeignKey(d => d.IdShow)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Bill_Show");
             });
 
             modelBuilder.Entity<Discount>(entity =>
@@ -563,21 +510,19 @@ namespace OnlineMoviesBooking.Models.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.Code)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.IdAccount)
                     .IsRequired()
-                    .HasColumnName("Id_Account")
                     .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdDiscount)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.IdShow)
                     .IsRequired()
-                    .HasColumnName("Id_Show")
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
@@ -803,12 +748,7 @@ namespace OnlineMoviesBooking.Models.Models
 
                 entity.ToView("V_Price");
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Date).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.IdAccount)
                     .IsRequired()
@@ -817,11 +757,6 @@ namespace OnlineMoviesBooking.Models.Models
 
                 entity.Property(e => e.IdDiscount)
                     .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdSeat)
-                    .IsRequired()
-                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.IdShow)
