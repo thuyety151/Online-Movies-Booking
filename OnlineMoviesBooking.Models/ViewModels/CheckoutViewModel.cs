@@ -12,7 +12,10 @@ namespace OnlineMoviesBooking.Models.ViewModels
         public string IdShow { get; set; }
         public  DateTime TimeStart { get; set; }
         public  DateTime TimeEnd { get; set; }
-        public  int Total { get; set; }
+        public  int? TotalPer { get; set; }
+        public  int? PointPer { get; set; }
+        public  int? TotalCost { get; set; }
+        public  int? PointCost { get; set; }
         public string TheaterName { get; set; }
         public string ScreenName { get; set; }
         public string No { get; set; }

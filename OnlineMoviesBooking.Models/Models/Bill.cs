@@ -11,7 +11,10 @@ namespace OnlineMoviesBooking.Models.Models
         public DateTime Date { get; set; }
         public int TotalPrice { get; set; }
         public string Code { get; set; }
+        public bool? Status { get; set; }
+        public int? Point { get; set; }
 
+        public virtual Discount CodeNavigation { get; set; }
         public virtual Account IdAccountNavigation { get; set; }
         public virtual Seat IdSeatNavigation { get; set; }
         public virtual Show IdShowNavigation { get; set; }

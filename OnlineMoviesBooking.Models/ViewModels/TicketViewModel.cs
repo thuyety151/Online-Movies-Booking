@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OnlineMoviesBooking.Models.ViewModels
 {
-    public class BillViewModel
+    public class TicketViewModel
     {
         public List<string> IdSeat { get; set; }
         public string IdAccount { get; set; }

@@ -7,7 +7,6 @@ namespace OnlineMoviesBooking.Models.Models
     {
         public Show()
         {
-            Bill = new HashSet<Bill>();
             Ticket = new HashSet<Ticket>();
         }
 
@@ -20,7 +19,6 @@ namespace OnlineMoviesBooking.Models.Models
 
         public virtual Movie IdMovieNavigation { get; set; }
         public virtual Screen IdScreenNavigation { get; set; }
-        public virtual ICollection<Bill> Bill { get; set; }
         public virtual ICollection<Ticket> Ticket { get; set; }
     }
 }
