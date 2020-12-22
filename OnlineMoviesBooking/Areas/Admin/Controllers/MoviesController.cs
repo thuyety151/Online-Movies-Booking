@@ -23,7 +23,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class MoviesController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string check;
         public MoviesController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
@@ -185,9 +185,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(Movie movie, IFormFile files)
+        public IActionResult Upsert(Movie movie, IFormFile files)
         {
-            
+
             if (ModelState.IsValid)
             {
                 // check image

@@ -82,7 +82,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Theaters/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
@@ -172,7 +172,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Theaters/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
@@ -207,7 +207,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
+        public IActionResult Edit(string id, [Bind("Id,Name,Address,Hotline")] Theater theater)
         {
             if (id != theater.Id)
             {

@@ -5,11 +5,11 @@
             "url": '/Admin/movies/getall'
         },
         "columns": [
-            { "data": "name" },
-            { "data": "releaseDate" },
-            { "data": "runningtime" },
+            { "data": "name", "width": "30%"},
+            { "data": "releaseDate", "width": "15%" },
+            { "data": "runningtime", "width": "15%"},
             {
-                "data": "poster",
+                "data": "poster", "width": "20%",
                 "render": function (data) {
                     return `
                             <img src="${data}" style="width: 150px;"/>
@@ -17,11 +17,11 @@
                 }
             },
             {
-                "data": "id",
+                "data": "id", "width": "10%",
                 "render": function (data) {
                     return `
-                             <div class="text-center" >
-                                <a href="/Admin/Movies/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                             <div class="text-center" style="display:grid" >
+                                <a href="/Admin/Movies/Upsert/${data}" class="btn btn-primary text-white" style="cursor:pointer">
                                     Sửa
                                 </a>
                                  <a href="/Admin/Movies/Details/${data}"

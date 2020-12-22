@@ -45,10 +45,6 @@
                 <!--TÊN MOVIE-->
                 <h3 id="nameMovie" class="title">@Model.Name</h3>
                 <div class="tags">
-                    <a>English</a>
-                    <a>Hindi</a>
-                    <a>Telegu</a>
-                    <a>Tamil</a>
                 </div>
             </div>
         </div>
@@ -70,7 +66,7 @@
                 <a id="date-a" href="#shows-date" class="button clickcolor">@ViewBag.Date[0]</a>
                 @for(int i=1;i<ViewBag.Date.Count;i++)
                 {
-                    <a id="date-a" href="#shows-date"  class="button">@ViewBag.Date[i]</a>
+                    <a id="date-a"  class="button">@ViewBag.Date[i]</a>
                 }
             </div>
         </form>
