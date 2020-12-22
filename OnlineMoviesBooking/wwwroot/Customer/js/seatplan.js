@@ -1,6 +1,5 @@
 ﻿(function ($) {
     $(document).ready(function () {
-        
         // get row
         var rows = document.querySelectorAll('.seat-line');
         $.each(rows, function (index, row) {
@@ -33,43 +32,7 @@
 
         });
 
-        // thanh toasn
-        var checkout = document.getElementById("submit");
-        checkout.addEventListener("click", function () {
-            console.log($('#lstSeat').val());
-            if ($('#lstSeat').val() == "") {
-                alert("Vui lòng chọn vị trí ngồi");
-            }
-            $.ajax({
-                type: 'GET',
-                url: '/Movie/getinfo/',
-                
-                data: {
-                    "idshow": $('#idshow').val(),
-                    "lstSeat": $('#lstSeat').val(),
-                },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.success == false) {
-                        alert("Hello! I am an alert box!");
-                    }
-                    else {
-                        $("#Checkout").modal();
-                        var vnd = data.totalprice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
-                        
-                        $("#Checkout").find('#modal-movie').text(data.movieName);
-                        $("#Checkout").find('#modal-languages').text(data.languages);
-                        $("#Checkout").find('#modal-time').text(data.datestart + ' ' + data.timestart);
-                        $("#Checkout").find('#modal-total').text(vnd);
-                        $("#Checkout").find('#modal-count').text(data.seats.length);
-                        $("#Checkout").find('#modal-theater').text(data.theatername);
-                    }
-                }
-            });
-        });
 
-        
         var cost = 0;
         $('#total-price').text(cost.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
         //get price
@@ -97,5 +60,40 @@
 
     });
 
-    
+        var checkout = document.getElementById("submit");
+        checkout.addEventListener("click", function () {
+            console.log($('#lstSeat').val());
+            if ($('#lstSeat').val() == "") {
+                alert("Vui lòng chọn vị trí ngồi");
+            }
+            else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Movie/getinfo/',
+
+                    data: {
+                        "idshow": $('#idshow').val(),
+                        "lstSeat": $('#lstSeat').val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("Đã xảy ra lỗi! Vui lòng load lại trang");
+                        }
+                        else if (data == "seat") {
+                            alert("Vui lòng chọn chỗ ngồi");
+                        }
+                        else if (data == "Ghế đã được chọn") {
+                            alert("Ghế đã được chọn, vui lòng chọn lại!");
+                        }
+                        else {
+                            console.log(data)
+                            window.location.href = "/Movie/CheckOut?idshow=" + $('#idshow').val() + "&lstSeat=" + data;
+                            console.log("redirect")
+                        }
+                    }
+                })
+            }
+
+        });
 })(jQuery);

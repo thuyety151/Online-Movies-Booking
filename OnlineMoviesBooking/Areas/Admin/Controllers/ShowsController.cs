@@ -14,12 +14,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class ShowsController : Controller
     {
-        private readonly CinemaContext _context;
         private readonly ExecuteProcedure Exec;
-        public ShowsController(CinemaContext context)
+        public ShowsController()
         {
-            _context = context;
-            Exec = new ExecuteProcedure(_context);
+            Exec = new ExecuteProcedure();
         }
         [HttpGet]
         public IActionResult GetAll()
@@ -241,9 +239,5 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        private bool ShowExists(string id)
-        {
-            return _context.Show.Any(e => e.Id == id);
-        }
     }
 }

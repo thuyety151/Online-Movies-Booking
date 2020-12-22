@@ -15,19 +15,12 @@ namespace OnlineMoviesBooking.DataAccess.Data
     public class ExecuteProcedure
     {
         private string cs;
-        private readonly CinemaContext _context;
 
         public ExecuteProcedure()
         {
-             
+            cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
         }
 
-        public ExecuteProcedure(CinemaContext context)
-        {
-            _context = context;                 // xem lại
-            cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
-               "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
-        }
         //-------------------------------MOVIE
         
         public int GetCountMovieNow()
@@ -69,75 +62,141 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public List<Movie> ExecuteMovieGetAll()
         {
-            var obj = _context.Movie.FromSqlRaw($"SELECT * FROM Movie").ToList();
-            return obj;
+            var lst = new List<Movie>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lst.Add(new Movie
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name=(rdr["Name"].ToString()),
+                        Genre=(rdr["Genre"].ToString()),
+                        Director=(rdr["Director"].ToString()),
+                        Casts=(rdr["Casts"].ToString()),
+                        Rated=(rdr["Rated"].ToString()),
+                        Description=(rdr["Description"].ToString()),
+                        Trailer=(rdr["Trailer"].ToString()),
+                        ReleaseDate=DateTime.Parse(rdr["ReleaseDate"].ToString()),
+                        RunningTime=int.Parse(rdr["RunningTime"].ToString()),
+                        Poster=(rdr["Poster"].ToString())
+                    });
+
+                }
+                return lst;
+            }
 
         }
         public Movie ExecuteMovieDetail(string id)
         {
+            var movie = new Movie();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    movie = new Movie
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name = (rdr["Name"].ToString()),
+                        Genre = (rdr["Genre"].ToString()),
+                        Director = (rdr["Director"].ToString()),
+                        Casts = (rdr["Casts"].ToString()),
+                        Rated = (rdr["Rated"].ToString()),
+                        Description = (rdr["Description"].ToString()),
+                        Trailer = (rdr["Trailer"].ToString()),
+                        ReleaseDate = DateTime.Parse(rdr["ReleaseDate"].ToString()),
+                        RunningTime = int.Parse(rdr["RunningTime"].ToString()),
+                        Poster = (rdr["Poster"].ToString())
+                    };
+
+                }
+                return movie;
+            }
+        }
+        public string ExecuteInsertMovie(Movie movie)
+        {
+            string error = "";
             try
             {
-                var sqlParam = new SqlParameter("@Id", id);
-                var obj = _context.Movie.FromSqlRaw("EXEC USP_GetDetailMovie @Id", sqlParam).ToList();
-                return obj[0];
-            }
-            catch
-            {
-                return new Movie();
-            }
-        }
-        public void ExecuteInsertMovie(Movie movie)
-        {
-            var sqlParam = new SqlParameter[]
-             {
-                new SqlParameter("@Id",movie.Id),
-                new SqlParameter("@Name",movie.Name),
-                new SqlParameter("@Genre",movie.Genre),
-                new SqlParameter("@Director",movie.Director),
-                new SqlParameter("@Casts",movie.Casts),
-                new SqlParameter("@Rated",movie.Rated),
-                new SqlParameter("@Description",movie.Description),
-                new SqlParameter("@Trailer",movie.Trailer),
-                new SqlParameter("@ReleaseDate",movie.ReleaseDate),
-                new SqlParameter("@RunningTime",movie.RunningTime),
-                new SqlParameter("@Poster",movie.Poster)
-             };
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_InsertMovie", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", movie.Id);
+                    com.Parameters.AddWithValue("@Name", movie.Name);
+                    com.Parameters.AddWithValue("@Genre", movie.Genre);
+                    com.Parameters.AddWithValue("@Director", movie.Director);
+                    com.Parameters.AddWithValue("@Casts", movie.Casts);
+                    com.Parameters.AddWithValue("@Rated", movie.Rated);
+                    com.Parameters.AddWithValue("@Description", movie.Description);
+                    com.Parameters.AddWithValue("@Trailer", movie.Trailer);
+                    com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate);
+                    com.Parameters.AddWithValue("@RunningTime", movie.RunningTime);
+                    com.Parameters.AddWithValue("@Poster", movie.Poster);
+                    com.ExecuteNonQuery();
 
-            _context.Database.ExecuteSqlRaw("EXEC USP_InsertMovie @Id, @Name, @Genre, @Director," +
-                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
-                "@RunningTime , @Poster", sqlParam);
+                }
+            }
+            catch(SqlException s)
+            {
+                error = s.Message.ToString();
+            }
+            return error;
            
         }
-        public int ExecuteDeleteMovie(string id)
+        public void ExecuteDeleteMovie(string id)
         {
-            var sqlParam = new SqlParameter("@Id", id);
-            return _context.Database.ExecuteSqlRaw("EXEC USP_DeleteMovie @Id", sqlParam);
-        }
-        public int ExecuteUpdateMovie(Movie movie)
-        {
-            var sqlParam = new SqlParameter[]
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                new SqlParameter("@Id",movie.Id),
-                new SqlParameter("@Name",movie.Name),
-                new SqlParameter("@Genre",movie.Genre),
-                new SqlParameter("@Director",movie.Director),
-                new SqlParameter("@Casts",movie.Casts),
-                new SqlParameter("@Rated",movie.Rated),
-                new SqlParameter("@Description",movie.Description),
-                new SqlParameter("@Trailer",movie.Trailer),
-                new SqlParameter("@ReleaseDate",movie.ReleaseDate),
-                new SqlParameter("@RunningTime",movie.RunningTime),
-                new SqlParameter("@Poster",movie.Poster)
-            };
-            var i = _context.Database.ExecuteSqlRaw("EXEC USP_UpdateMovie @Id, @Name, @Genre, @Director," +
-                " @Casts , @Rated , @Description , @Trailer , @ReleaseDate  ," +
-                "@RunningTime , @Poster", sqlParam);
-            return i;
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+
+                com.ExecuteNonQuery();
+            }
+        }
+        public void ExecuteUpdateMovie(Movie movie)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", movie.Id);
+                com.Parameters.AddWithValue("@Name", movie.Name);
+                com.Parameters.AddWithValue("@Genre", movie.Genre);
+                com.Parameters.AddWithValue("@Director", movie.Director);
+                com.Parameters.AddWithValue("@Casts", movie.Casts);
+                com.Parameters.AddWithValue("@Rated", movie.Rated);
+                com.Parameters.AddWithValue("@Description", movie.Description);
+                com.Parameters.AddWithValue("@Trailer", movie.Trailer);
+                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate);
+                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime);
+                com.Parameters.AddWithValue("@Poster", movie.Poster);
+                com.ExecuteNonQuery();
+
+            }
         }
         public string ExecuteGetImageMovie(string id)
         {
-            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
-               "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
             string pos = "";
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -158,57 +217,197 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public List<Movie> ExecuteGetMovieNow(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieNow @Skip= "+skip +", @Take= "+take).ToList();
+            var lst = new List<Movie>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_PagingMovieNow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Skip", skip);
+                com.Parameters.AddWithValue("@Take", take);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lst.Add(new Movie
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name = (rdr["Name"].ToString()),
+                        Genre = (rdr["Genre"].ToString()),
+                        Director = (rdr["Director"].ToString()),
+                        Casts = (rdr["Casts"].ToString()),
+                        Rated = (rdr["Rated"].ToString()),
+                        Description = (rdr["Description"].ToString()),
+                        Trailer = (rdr["Trailer"].ToString()),
+                        ReleaseDate = DateTime.Parse(rdr["ReleaseDate"].ToString()),
+                        RunningTime = int.Parse(rdr["RunningTime"].ToString()),
+                        Poster = (rdr["Poster"].ToString())
+                    });
+
+                }
+                return lst;
+            }
 
         }
         public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)
         {
-            return _context.Movie.FromSqlRaw("EXEC USP_PagingMovieComing @Skip = "+skip +", @Take = "+take).ToList();
+            var lst = new List<Movie>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_PagingMovieComing", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Skip", skip);
+                com.Parameters.AddWithValue("@Take", take);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lst.Add(new Movie
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name = (rdr["Name"].ToString()),
+                        Genre = (rdr["Genre"].ToString()),
+                        Director = (rdr["Director"].ToString()),
+                        Casts = (rdr["Casts"].ToString()),
+                        Rated = (rdr["Rated"].ToString()),
+                        Description = (rdr["Description"].ToString()),
+                        Trailer = (rdr["Trailer"].ToString()),
+                        ReleaseDate = DateTime.Parse(rdr["ReleaseDate"].ToString()),
+                        RunningTime = int.Parse(rdr["RunningTime"].ToString()),
+                        Poster = (rdr["Poster"].ToString())
+                    });
+
+                }
+                return lst;
+            }
         }
         //----------------------THEATER
         public List<Theater> ExecuteTheaterGetAll()
         {
-            var x = _context.Theater.FromSqlRaw("EXEC USP_GetAllTheater").ToList();
-            return x;
+            var lst = new List<Theater>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lst.Add(new Theater
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name = (rdr["Name"].ToString()),
+                        Address = (rdr["Address"].ToString()),
+                        Hotline = (rdr["Hotline"].ToString())
+                    });
+
+                }
+                return lst;
+            }
         }
         public Theater ExecuteDetailTheater(string id)
         {
-            var obj= _context.Theater.FromSqlRaw("EXEC USP_GetDetailTheater @Id", new SqlParameter("@Id", id)).ToList();
-            return obj[0];
+            var theater = new Theater();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailTheater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    theater = new Theater
+                    {
+                        Id = (rdr["Id"].ToString()),
+                        Name = (rdr["Name"].ToString()),
+                        Address = (rdr["Address"].ToString()),
+                        Hotline = (rdr["Hotline"].ToString())
+                    };
+                }
+                return theater;
+            }
         }
         public string ExecuteInsertTheater(string id, string name, string address, string hotline)
         {
             string mess = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Id",id),
-                new SqlParameter("@Name",name),
-                new SqlParameter("@Address",address),
-                new SqlParameter("@Hotline",hotline)
-            };
             try 
             {
-                _context.Database.ExecuteSqlRaw("USP_InsertTheater @Id, @Name, @Address, @Hotline", sqlParam);
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_InsertTheater", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", id);
+                    com.Parameters.AddWithValue("@Name", name);
+                    com.Parameters.AddWithValue("@Address", address);
+                    com.Parameters.AddWithValue("@Hotline", hotline);
+                    
+                    com.ExecuteScalar();
+
+                }
 
             }
             catch(SqlException s)
             {
-                 mess = s.Number.ToString();
+                 mess = s.Message.ToString();
+            }
+            return mess;
+        }
+        public string ExecuteUpdateTheater(Theater theater)
+        {
+            string mess = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_UpdateTheater", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", theater.Id);
+                    com.Parameters.AddWithValue("@Name", theater.Name);
+                    com.Parameters.AddWithValue("@Address", theater.Address);
+                    com.Parameters.AddWithValue("@Hotline", theater.Hotline);
+
+                    com.ExecuteScalar();
+
+                }
+
+            }
+            catch (SqlException s)
+            {
+                mess = s.Message.ToString();
             }
             return mess;
         }
         public void ExecuteDeleteTheater(string id)
         {
-            var sqlParam = new SqlParameter("@Id", id);
-            _context.Database.ExecuteSqlRaw("USP_DeleteThreater @Id", sqlParam);
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteThreater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+
+                com.ExecuteScalar();
+
+            }
         }
         //-----------------------Screen
         public List<Screen_Theater> ExecuteScreenGetAllwithTheater()
         {
             /// Id, Name, Name Theater
-            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
-                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
-            List<Screen_Theater> lst = new List<Screen_Theater>();
+            var lst = new List<Screen_Theater>();
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -232,7 +431,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public string ExecuteInsertScreen(Screen screen)      // EDIT HERE AFTER USE TRANSACTION
         {
-            string result = "";
+            string mess = "";
+            string num = "";
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -245,20 +445,17 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())
                 {
-                    result = (rdr["ErrorNumber"]).ToString();
+                    num = (rdr["ErrorNumber"]).ToString();
+                    mess = (rdr["ErrorMessage"]).ToString();
                 }
-                return result;  // 3609 : trigger
+                return mess;  // 3609 : trigger
             }
 
         }
         public string CheckNameScreen(string name, string id)
         {
             string result = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Name",name),
-                new SqlParameter("@Id",id)
-            };
+
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -278,8 +475,6 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)
         {
             /// Id, Name, Name Theater
-            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
-                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
             ScreenViewModel lst = new ScreenViewModel();
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -305,13 +500,19 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public void ExecuteUpdateScreen(Screen screen)
         {
-            var sqlParam = new SqlParameter[]
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                new SqlParameter("@Id",screen.Id),
-                new SqlParameter("@Name",screen.Name),
-                new SqlParameter("@Id_Theater",screen.IdTheater)
-            };
-            _context.Database.ExecuteSqlRaw("EXEC USP_UpdateScreen @Id ,@Name ,@Id_Theater", sqlParam);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateScreen", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", screen.Id);
+                com.Parameters.AddWithValue("@Name", screen.Name);
+                com.Parameters.AddWithValue("@Id_Theater", screen.IdTheater);
+
+                com.ExecuteScalar();
+
+            }
         }
         public string ExecuteDeleteScreen(string id)
         {
@@ -333,8 +534,6 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public List<Screen_Theater> SearchScreenwithTheater(string id)
         {
-            string cs = "Server=db.c1q99xmhvjrm.ap-southeast-1.rds.amazonaws.com,1433;Initial " +
-                "Catalog=Cinema;MultipleActiveResultSets=true;User Id=admin;Password=thuyety12315?!";
             List<Screen_Theater> lst = new List<Screen_Theater>();
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -358,29 +557,104 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
         }
         //--------------------TypesOfSeat
+        public void CreateTypeOfSeat()
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_CreateTypeOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.ExecuteScalar();
+
+            }
+        }
         public List<TypesOfSeat> GetAllTypesOfSeat()
         {
-            return _context.TypesOfSeat.FromSqlRaw("EXEC USP_GetAllTypesOfSeat").ToList();
+            var lst = new List<TypesOfSeat>();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetAllTypesOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lst.Add(new TypesOfSeat
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Cost = int.Parse(rdr["Cost"].ToString()),
+                        Num = int.Parse(rdr["Num"].ToString())
+                    });
+                }
+                return lst;
+
+            }
         }
         public void ExecuteUpdateTypesOfSeat(TypesOfSeat s)
         {
-            var sqlParam = new SqlParameter[]
+            using (SqlConnection con = new SqlConnection(cs))
             {
-                new SqlParameter("@Id",s.Id),
-                new SqlParameter("@Name",s.Name),
-                new SqlParameter("@Cost",s.Cost)
-            };
-            _context.Database.ExecuteSqlRaw("EXEC USP_UpdateTypesOfSeat @Id, @Name, @Cost ", sqlParam);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateTypesOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", s.Id);
+                com.Parameters.AddWithValue("@Name", s.Name);
+                com.Parameters.AddWithValue("@Cost", s.Cost);
+                com.ExecuteNonQuery();
+
+            }
+        }
+        public TypesOfSeat ExecGetDetailTypeOfSeat(string id)
+        {
+            var type = new TypesOfSeat();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetDetailTypeOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    type =new TypesOfSeat
+                    {
+                        Id = rdr["Id"].ToString(),
+                        Name = rdr["Name"].ToString(),
+                        Cost = int.Parse(rdr["Cost"].ToString()),
+                        Num = int.Parse(rdr["Num"].ToString())
+                    };
+                }
+                return type;
+
+            }
         }
         public int CheckToSeatName(string id, string name)
         {
-            var sqlParam = new SqlParameter[]
-           {
-                new SqlParameter("@Id",id),
-                new SqlParameter("@Name",name)
-           };
-            var ls = _context.TypesOfSeat.FromSqlRaw("EXEC USP_CheckToSeatName @Id , @Name ", sqlParam).ToList();
-            return ls.Count();
+            var count = 0;
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_CheckToSeatName", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                com.Parameters.AddWithValue("@Name", name);
+                SqlDataReader rdr = com.ExecuteReader();
+                while (rdr.Read())
+                {
+                    count++;
+                }
+                return count;
+
+            }
         }
         //------------------SHOW
         public List<ShowViewModel> ExecuteGetAllShow()
@@ -561,23 +835,27 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public string ExecuteInsertShow(Show show)
         {
             string result = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Id",show.Id),
-                new SqlParameter("@Languages",show.Languages),
-                new SqlParameter("@TimeStart",show.TimeStart),
-                //new SqlParameter("@TimeEnd",show.TimeEnd),
-                new SqlParameter("@Id_Movie",show.IdMovie),
-                new SqlParameter("@Id_Screen",show.IdScreen)
-            };
             try
             {
-                _context.Database.ExecuteSqlRaw("EXEC USP_InsertShow @Id, @Languages ,@TimeStart," +
-                    " @Id_Movie,  @Id_Screen", sqlParam);
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_InsertShow", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", show.Id);
+                    com.Parameters.AddWithValue("@Languages", show.Languages);
+                    com.Parameters.AddWithValue("@TimeStart", show.TimeStart);
+                    com.Parameters.AddWithValue("@Id_Movie", show.IdMovie);
+                    com.Parameters.AddWithValue("@Id_Screen", show.IdScreen);
+
+                    com.ExecuteNonQuery();
+
+                }
             }
             catch(SqlException s)
             {
-                result = s.Message;
+                result = s.Message.ToString();
             }
             return result;
         }
@@ -645,19 +923,24 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public string ExecuteUpdateShow(ShowViewModel show)
         {
             string result = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Id",show.Id),
-                new SqlParameter("@Languages",show.Languages),
-                new SqlParameter("@TimeStart",show.TimeStart),
-                //new SqlParameter("@TimeEnd",show.TimeEnd),
-                new SqlParameter("@Id_Movie",show.IdMovie),
-                new SqlParameter("@Id_Screen",show.IdScreen)
-            };
+
             try
             {
-                _context.Database.ExecuteSqlRaw("EXEC USP_UpdateShow @Id, @Languages ,@TimeStart," +
-                    " @Id_Movie,  @Id_Screen", sqlParam);
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_UpdateShow", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", show.Id);
+                    com.Parameters.AddWithValue("@Languages", show.Languages);
+                    com.Parameters.AddWithValue("@TimeStart", show.TimeStart);
+                    com.Parameters.AddWithValue("@Id_Movie", show.IdMovie);
+                    com.Parameters.AddWithValue("@Id_Screen", show.IdScreen);
+
+                    com.ExecuteNonQuery();
+
+                }
             }
             catch (SqlException s)
             {
@@ -667,7 +950,17 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public void ExecuteDeleteShow(string id)
         {
-            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteShow @IdShow", new SqlParameter("@IdShow", id));
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteShow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdShow", id);
+
+                com.ExecuteNonQuery();
+
+            }
         }
         public object ExecuteFindTheaterShow(string idmovie, string date)
         {
@@ -768,6 +1061,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public List<Discount> ExecuteGetAllDiscount()
         {
             List<Discount> lstDiscount = new List<Discount>();
+
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
@@ -782,15 +1076,15 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     {
                         Id = rdr["Id"].ToString(),
                         Name = rdr["Name"].ToString(),
+                        Code = rdr["Code"].ToString(),
                         Description = rdr["Description"].ToString(),
-                        PercentDiscount = int.Parse(rdr["PercentDiscount"].ToString()),
-                        MaxCost = int.Parse(rdr["MaxCost"].ToString()),
+                        PercentDiscount = rdr["PercentDiscount"].ToString() == "" ? 0 : int.Parse(rdr["PercentDiscount"].ToString()),
+                        MaxCost = rdr["MaxCost"].ToString() == "" ? 0 : int.Parse(rdr["MaxCost"].ToString()),
                         DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
                         DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
                         ImageDiscount = rdr["ImageDiscount"].ToString(),
-                        NoTicket = int.Parse(rdr["NoTicket"].ToString()),
-                        Point = int.Parse(rdr["Point"].ToString()),
-                        Used = int.Parse(rdr["Used"].ToString())
+                        Point = rdr["Point"].ToString() == "" ? 0 : int.Parse(rdr["Point"].ToString()),
+                        Used = rdr["Used"].ToString() == "" ? 0 : int.Parse(rdr["Used"].ToString()),
                     });
 
                 }
@@ -815,15 +1109,15 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     {
                         Id = rdr["Id"].ToString(),
                         Name = rdr["Name"].ToString(),
+                        Code = rdr["Code"].ToString(),
                         Description = rdr["Description"].ToString(),
-                        PercentDiscount = int.Parse(rdr["PercentDiscount"].ToString()),
-                        MaxCost = int.Parse(rdr["MaxCost"].ToString()),
-                        DateStart = DateTime.Parse(rdr["DateStart"].ToString()),
+                        PercentDiscount = rdr["PercentDiscount"].ToString() == "" ? 0 : int.Parse(rdr["PercentDiscount"].ToString()),
+                        MaxCost = rdr["MaxCost"].ToString() == "" ? 0 : int.Parse(rdr["MaxCost"].ToString()),
+                        DateStart =DateTime.Parse(rdr["DateStart"].ToString()),
                         DateEnd = DateTime.Parse(rdr["DateEnd"].ToString()),
                         ImageDiscount = rdr["ImageDiscount"].ToString(),
-                        NoTicket = int.Parse(rdr["NoTicket"].ToString()),
-                        Point = int.Parse(rdr["Point"].ToString()),
-                        Used = int.Parse(rdr["Used"].ToString())
+                        Point = rdr["Point"].ToString() == "" ? 0 : int.Parse(rdr["Point"].ToString()),
+                        Used = rdr["Used"].ToString() == "" ? 0 : int.Parse(rdr["Used"].ToString()),
                     };
 
                 }
@@ -833,25 +1127,29 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public string ExecuteInsertDiscount(Discount discount)
         {
             string result = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Id",discount.Id),
-                new SqlParameter("@Name",discount.Name),
-                new SqlParameter("@Description",discount.Description),
-                new SqlParameter("@PercentDiscount",discount.PercentDiscount),
-                new SqlParameter("@MaxCost",discount.MaxCost),
-                new SqlParameter("@DateStart",discount.DateStart),
-                new SqlParameter("@DateEnd",discount.DateEnd),
-                new SqlParameter("@ImageDiscount",discount.ImageDiscount),
-                new SqlParameter("@NoTicket",discount.NoTicket),
-                new SqlParameter("@Point",discount.Point),
-                new SqlParameter("@Used",discount.Used)
-            };
+           
             try
             {
-                _context.Database.ExecuteSqlRaw("EXEC USP_InsertDiscount @Id, @Name ,@Description," +
-                    " @PercentDiscount,  @MaxCost ,@DateStart,@DateEnd,@ImageDiscount,@NoTicket,@Point," +
-                    "@Used  ", sqlParam);
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_InsertDiscount", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", discount.Id);
+                    com.Parameters.AddWithValue("@Name", discount.Name);
+                    com.Parameters.AddWithValue("@Code", discount.Code);
+                    com.Parameters.AddWithValue("@Description", discount.Description);
+                    com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
+                    com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ??Convert.DBNull);
+                    com.Parameters.AddWithValue("@DateStart", discount.DateStart);
+                    com.Parameters.AddWithValue("@DateEnd", discount.DateEnd );
+                    com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
+                    com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
+                    com.Parameters.AddWithValue("@Used", discount.Used);
+                    com.ExecuteNonQuery();
+
+                }
             }
             catch (SqlException s)
             {
@@ -882,25 +1180,25 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public string ExecuteUpdateDiscount(Discount discount)
         {
             string result = "";
-            var sqlParam = new SqlParameter[]
-            {
-                new SqlParameter("@Id",discount.Id),
-                new SqlParameter("@Name",discount.Name),
-                new SqlParameter("@Description",discount.Description),
-                new SqlParameter("@PercentDiscount",discount.PercentDiscount),
-                new SqlParameter("@MaxCost",discount.MaxCost),
-                new SqlParameter("@DateStart",discount.DateStart),
-                new SqlParameter("@DateEnd",discount.DateEnd),
-                new SqlParameter("@ImageDiscount",discount.ImageDiscount),
-                new SqlParameter("@NoTicket",discount.NoTicket),
-                new SqlParameter("@Point",discount.Point),
-                new SqlParameter("@Used",discount.Used)
-            };
             try
             {
-                _context.Database.ExecuteSqlRaw("EXEC USP_UpdateDiscount @Id, @Name ,@Description," +
-                    " @PercentDiscount,  @MaxCost ,@DateStart,@DateEnd,@ImageDiscount,@NoTicket,@Point," +
-                    "@Used  ", sqlParam);
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", discount.Id);
+                com.Parameters.AddWithValue("@Name", discount.Name);
+                com.Parameters.AddWithValue("@Code", discount.Code);
+                com.Parameters.AddWithValue("@Description", discount.Description);
+                com.Parameters.AddWithValue("@PercentDiscount", discount.PercentDiscount ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@MaxCost", discount.MaxCost ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@DateStart", discount.DateStart);
+                com.Parameters.AddWithValue("@DateEnd", discount.DateEnd);
+                com.Parameters.AddWithValue("@ImageDiscount", discount.ImageDiscount);
+                com.Parameters.AddWithValue("@Point", discount.Point ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Used", discount.Used);
+                com.ExecuteNonQuery();
             }
             catch (SqlException s)
             {
@@ -910,7 +1208,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
         }
         public void ExecuteDeleteDiscount(string id)
         {
-            _context.Database.ExecuteSqlRaw("EXEC USP_DeleteDiscount @Id " ,new SqlParameter("@Id", id));
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                com.ExecuteNonQuery();
+
+            }
         }
         //==========SEAT============
         public List<SeatViewModel> ExecGetAllSeat(string idShow)
@@ -1006,6 +1313,229 @@ namespace OnlineMoviesBooking.DataAccess.Data
             da.Fill(dt);
             int str = int.Parse(dt.Rows[0][0].ToString());
             return str;
+        }
+        public CheckoutViewModel TestCheckout(string idaccount,string pointuse)
+        {
+            var v = new CheckoutViewModel();
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_Checkout", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@PointUse", pointuse);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return new CheckoutViewModel
+                    {
+                        MovieName = rdr["MovieName"].ToString(),
+                        No = rdr["No"].ToString(),
+                        TotalPer = rdr["PricePer"].ToString() == "" ? (int?)null : int.Parse(rdr["PricePer"].ToString()),
+                        PointPer = rdr["PointPer"].ToString() == "" ? (int?)null : int.Parse(rdr["PointPer"].ToString()),
+                        TotalCost = rdr["PriceCost"].ToString() == "" ? (int?)null : int.Parse(rdr["PriceCost"].ToString()),
+                        PointCost = rdr["PointCost"].ToString() == "" ? (int?)null : int.Parse(rdr["PointCost"].ToString()),
+                        TheaterName = rdr["TheaterName"].ToString(),
+                        Date = DateTime.Parse(rdr["TimeStart"].ToString())
+                    };
+                }
+                return null;
+            }
+        }
+
+        //==================BILL
+        public string ExecInsertTickets(List<string> seatVM, string idAccount, string idShow, string iddiscount)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_InsertTickets", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id_Seat1", seatVM[0] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat2", seatVM[1] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat3", seatVM[2] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat4", seatVM[3] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat5", seatVM[4] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat6", seatVM[5] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat7", seatVM[6] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Seat8", seatVM[7] ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Id_Account", idAccount);
+                com.Parameters.AddWithValue("@Id_Show", idShow);
+                com.Parameters.AddWithValue("@Id_Discount", iddiscount ?? Convert.DBNull);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    result = rdr["Results"].ToString();
+                }
+
+            }
+            return result;
+        }
+        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow)
+        {
+            var bill = new TicketViewModel();
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            // TêN STORE
+            SqlCommand com = new SqlCommand("USP_GetDetailTicketVM", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@Id_Account", idaccount);
+            com.Parameters.AddWithValue("@Id_Show", idshow);
+            SqlDataReader rdr = com.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                bill = new TicketViewModel
+                {
+                    IdShow = rdr["IdShow"].ToString(),
+                    IdAccount = rdr["IdAccount"].ToString(),
+                    No = int.Parse(rdr["No"].ToString()),
+                    TotalPrice = double.Parse(rdr["TotalPrice"].ToString()),
+                    MovieName = rdr["MovieName"].ToString(),
+                    RunningTime = int.Parse(rdr["RunningTime"].ToString()),
+                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                    TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
+                    TheaterName = (rdr["TheaterName"].ToString()),
+                    ScreenName = (rdr["ScreenName"].ToString()),
+                    Languages = (rdr["Languages"].ToString()),
+                    Address = (rdr["Address"].ToString()),
+                    Point = int.Parse(rdr["PointVM"].ToString())
+                };
+            }
+            return bill;
+        }
+
+        public void ExecDeleteTicket(string idaccount, string idshow)   // không dùng
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteTicket", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id_Account", idaccount);
+                com.Parameters.AddWithValue("@Id_Show", idshow);
+                com.ExecuteNonQuery();
+            }
+        }
+        public string ExecDeleteTicketStatus0(string idaccount)
+        {
+            string s = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    // TêN STORE
+                    SqlCommand com = new SqlCommand("USP_DeleteTicketStatus0", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@IdAccount", idaccount ?? Convert.DBNull);
+                    com.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
+        }
+        public void ExecUpdateTicketStatus(string idaccount,int point)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_ChangeTicketStatus", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);       // point = 0 nếu không dùng
+                com.ExecuteNonQuery();
+            }
+        }
+        public object ExecUseDiscount(string idaccount, string code)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UseDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Code", code);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return  new 
+                    {
+                        IdAccount = rdr["IdAccount"].ToString(),
+                        Price = double.Parse(rdr["Price"].ToString()),
+                        No = int.Parse(rdr["No"].ToString()),
+                        NameDiscount = rdr["Name"].ToString(),
+                        PercentDiscount=rdr["PercentDiscount"].ToString(),
+                        MaxCost=rdr["MaxCost"].ToString(),
+                        Point=rdr["Point"].ToString(),
+                    };
+                }
+            }
+            return null;
+        }
+        public void ExecAddDiscount(string idaccount, string code)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_AddDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Code", code);
+                com.ExecuteNonQuery();
+            }
+        }
+        public string ExecCheckPoint(string idaccount, int point)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_GetPoint", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return rdr["Result"].ToString();
+                }
+            }
+            return "";
+        }
+        public string ExecAddPoint(string idaccount, string point)
+        {
+            using (SqlConnection con = new SqlConnection(cs))
+            {
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_Addpoint", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdAccount", idaccount);
+                com.Parameters.AddWithValue("@Point", point);
+                SqlDataReader rdr = com.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    return rdr["Result"].ToString();
+                }
+            }
+            return "";
         }
     }
 }

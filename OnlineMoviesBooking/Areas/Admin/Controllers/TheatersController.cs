@@ -13,12 +13,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     [Area("Admin")]
     public class TheatersController : Controller
     {
-        private readonly CinemaContext _context;
         private ExecuteProcedure Exec;
-        public TheatersController(CinemaContext context)
+        public TheatersController()
         {
-            _context = context;
-            Exec = new ExecuteProcedure(context);
+            Exec = new ExecuteProcedure();
         }
 
         public JsonResult GetAll()
@@ -72,17 +70,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public  IActionResult Create([Bind("Id,Name,Address,Hotline")] Theater theater)
         {
-            theater.Id = Guid.NewGuid().ToString();
+            theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
                 // chưa đưa ra được trigger execption
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
-                if(s=="2627")       //check unique address
+
+                while (s.Contains("PRIMARY"))   // do check primary key trước
+                {
+                    theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
+                    s = Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
+                }
+                if (s.Contains("UNIQUE"))       //check unique address
                 {
                     // có error message
                     ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
                     return View(theater);
-                }    
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(theater);
@@ -95,8 +99,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var theater = Exec.ExecuteDetailTheater(id);
 
-            var theater = await _context.Theater.FindAsync(id);
+
             if (theater == null)
             {
                 return NotFound();
@@ -115,23 +120,15 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                string result = Exec.ExecuteUpdateTheater(theater);
+                if (result.Contains("UNIQUE"))       //check unique address
                 {
-                    _context.Update(theater);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TheaterExists(theater.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // có error message
+                    ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
+                    return View(theater);
                 }
                 return RedirectToAction(nameof(Index));
+                
             }
             return View(theater);
         }
@@ -143,9 +140,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-        private bool TheaterExists(string id)
-        {
-            return _context.Theater.Any(e => e.Id == id);
-        }
+
     }
 }
