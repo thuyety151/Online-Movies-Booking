@@ -34,34 +34,42 @@
     <!-- ==========Speaker-Single========== -->
     <section class="speaker-single" style="margin-top:13rem;margin-bottom:10rem">
         <div class="container">
-            <h4>Lịch sự</h4>
+            <h4>Lịch sử</h4>
             <br />
             <form class="contact-form " id="areaFQA">
                 @{
-                    foreach (var item in Model)
+                    if (Model != null)
                     {
-                        string heading = "heading" + item.Id;
-                        string collapse = "collapse" + item.Id;
-                        <div class="card-header bg-six shadow" id="@heading">
-                            <h5 class="mb-0">
-                                <a class="btn btn-link" data-toggle="collapse"
-                                   data-target="#@collapse"
-                                   aria-expanded="false" aria-controls="@collapse">
-                                    @item.Id
-                                </a>
-                            </h5>
-                        </div>
-
-                        <div id="@collapse" class="collapse"
-                             aria-labelledby="@heading" data-parent="#areaFQA">
-                            <div class="card-body">
-                               Mã lịch chiếu: @item.IdShow <br />
-                               Mã ghế: @item.IdSeat <br />
-                               Ngày thanh toán: @item.Date
+                        foreach (var item in Model)
+                        {
+                            string heading = "heading" + item.Id;
+                            string collapse = "collapse" + item.Id;
+                            <div class="card-header bg-six shadow" id="@heading">
+                                <h5 class="mb-0">
+                                    <a class="btn btn-link" data-toggle="collapse"
+                                       data-target="#@collapse"
+                                       aria-expanded="false" aria-controls="@collapse">
+                                        @item.Id
+                                    </a>
+                                </h5>
                             </div>
-                        </div>
-                        <br />
+
+                            <div id="@collapse" class="collapse"
+                                 aria-labelledby="@heading" data-parent="#areaFQA">
+                                <div class="card-body">
+                                    Mã lịch chiếu: @item.IdShow <br />
+                                    Mã ghế: @item.IdSeat <br />
+                                    Ngày thanh toán: @item.Date
+                                </div>
+                            </div>
+                            <br />
+                        }
                     }
+                    else
+                    {
+                        <h3>Không có giao dịch</h3>
+                    }
+
                 }
 
             </form>

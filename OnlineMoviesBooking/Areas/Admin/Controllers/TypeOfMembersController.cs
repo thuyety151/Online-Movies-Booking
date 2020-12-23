@@ -160,7 +160,8 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string commandText = $"EXEC dbo.USP_InsertMemberType @id = '{typeOfMember.IdTypeMember}',  @Name = '{typeOfMember.TypeOfMemberName}', @content = N'{typeOfMember.Content}',@money={typeOfMember.Money}, @point = {typeOfMember.Point}";
+                    string commandText = $"EXEC dbo.USP_InsertMemberType @id = '{typeOfMember.IdTypeMember}',  @Name = '{typeOfMember.TypeOfMemberName}',"
+                        +$" @content = N'{typeOfMember.Content}',@money={typeOfMember.Money}, @point = {typeOfMember.Point}";
 
                     var command = new SqlCommand(commandText, connection);
                     try
@@ -276,7 +277,9 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string commandText = $"EXEC dbo.USP_UpdateMemberType @id = '{typeOfMember.IdTypeMember}',  @Name = '{typeOfMember.TypeOfMemberName}', @content = '{typeOfMember.Content}',@money = {typeOfMember.Money}, @point = {typeOfMember.Point}";
+                    string commandText = $"EXEC dbo.USP_UpdateMemberType @id = '{typeOfMember.IdTypeMember}',"
+                        +$"@Name = '{typeOfMember.TypeOfMemberName}', @content = '{typeOfMember.Content}',"
+                        +$"@money = {typeOfMember.Money}, @point = {typeOfMember.Point}";
 
                     var command = new SqlCommand(commandText, connection);
                     try

@@ -77,8 +77,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 {
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
-                    {
+                    
                         while (reader.Read())
                         {
                             Qa qa = new Qa();
@@ -90,12 +89,6 @@ namespace OnlineMoviesBooking.Areas.Controllers
                             listqa.Add(qa);
                         }
 
-                    }
-                    else
-                    {
-                        TempData["msg"] = "error";
-                        return RedirectToAction("HomeAdmin", "HomeAdmin");
-                    }
                 }
                 catch (SqlException e)
                 {

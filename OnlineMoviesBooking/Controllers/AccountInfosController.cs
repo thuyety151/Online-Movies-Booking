@@ -116,7 +116,8 @@ namespace OnlineMoviesBooking.Controllers
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string commandText = $"EXEC dbo.USP_ChangePassword @username = '{username}',@OldPw = '{changePassword.OldPasswword}',@NewPw = '{changePassword.NewPassword}',@ConfirmNewPw = '{changePassword.ComfirmNewPassword}'";
+                string commandText = $"EXEC dbo.USP_ChangePassword @username = '{username}',@OldPw = '{changePassword.OldPasswword}',"
+                    + $"@NewPw = '{changePassword.NewPassword}',@ConfirmNewPw = '{changePassword.ComfirmNewPassword}'";
 
                 var command = new SqlCommand(commandText, connection);
                 try
@@ -247,7 +248,7 @@ namespace OnlineMoviesBooking.Controllers
                     using (var connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
-                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate.ToShortDateString()}',"
                         + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
                         + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
                         + $"@image = '{img}',@action = 'Update'";
