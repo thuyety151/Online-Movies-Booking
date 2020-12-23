@@ -293,16 +293,16 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 string s=Exec.ExecuteInsertShow(showVM);
                 if(s.Contains("Ngày giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Ngày giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart", s);
                 }
                 else if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", s);
                 }
                 else if(s.Contains("Giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart", s);
                 } 
                 
                 // có lỗi catch từ trigger
@@ -386,11 +386,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", s);
                 }
-                else if (s.Contains("Giờ không hợp lệ á"))
+                else if (s.Contains("Giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart",s);
                 }
 
                 // có lỗi catch từ trigger

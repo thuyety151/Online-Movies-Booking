@@ -207,7 +207,9 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
+            // chưa gọi transaction
             Exec.ExecDeleteTicketStatus0("1");
+
 
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
@@ -354,7 +356,7 @@ namespace OnlineMoviesBooking.Controllers
             if (s != "")
             {
                 // co loi xay ra
-                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+                return Content(s);
             }
             return View("Index");
         }
@@ -503,7 +505,7 @@ namespace OnlineMoviesBooking.Controllers
             if (s != "")
             {
                 // co loi xay ra
-                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+                return Content(s);
             }
             return Content("Thanh toán không thành công");
         }
