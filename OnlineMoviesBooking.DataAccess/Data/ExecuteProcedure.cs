@@ -31,7 +31,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
         //-------------------------------MOVIE
         
-        public int GetCountMovieNow()
+        public int GetCountMovieNow()   // checked
         {
             // to paging
             int pos = 0;
@@ -49,7 +49,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return pos;
         }
-        public int GetCountMovieComing()
+        public int GetCountMovieComing()    // checked
         {
             // to paging
             int pos = 0;
@@ -68,7 +68,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return pos;
         }
-        public List<Movie> ExecuteMovieGetAll()
+        public List<Movie> ExecuteMovieGetAll() // checked
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -101,7 +101,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return lst;
 
         }
-        public Movie ExecuteMovieDetail(string id)
+        public Movie ExecuteMovieDetail(string id)  // checked
         {
             var movie = new Movie();
             using SqlConnection con = new SqlConnection(cs);
@@ -132,7 +132,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return movie;
         }
-        public string ExecuteInsertMovie(Movie movie)
+        public string ExecuteInsertMovie(Movie movie)       // checked
         {
             string error = "";
             try
@@ -162,7 +162,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return error;
            
         }
-        public void ExecuteDeleteMovie(string id)
+        public void ExecuteDeleteMovie(string id)   // checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -173,7 +173,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             com.ExecuteNonQuery();
         }
-        public void ExecuteUpdateMovie(Movie movie)
+        public void ExecuteUpdateMovie(Movie movie) // checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -193,7 +193,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Poster", movie.Poster);
             com.ExecuteNonQuery();
         }
-        public string ExecuteGetImageMovie(string id)
+        public string ExecuteGetImageMovie(string id)   
         {
             string pos = "";
             using SqlConnection con = new SqlConnection(cs);
@@ -210,8 +210,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return pos;
-        }
-        public List<Movie> ExecuteGetMovieNow(int skip, int take)
+        }   // checked
+        public List<Movie> ExecuteGetMovieNow(int skip, int take)   //checked
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -244,7 +244,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return lst;
 
         }
-        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)
+        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)    // checked
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -299,7 +299,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return lst;
-        }
+        }       // checked
         public Theater ExecuteDetailTheater(string id)
         {
             var theater = new Theater();
@@ -322,8 +322,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return theater;
-        }
-        public string ExecuteInsertTheater(string id, string name, string address, string hotline)
+        }   //checked
+        public string ExecuteInsertTheater(string id, string name, string address, string hotline)  // cheked
         {
             string mess = "";
             try 
@@ -370,8 +370,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 mess = s.Message.ToString();
             }
             return mess;
-        }
-        public void ExecuteDeleteTheater(string id)
+        }       // checked
+        public void ExecuteDeleteTheater(string id)     // checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -405,7 +405,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lst;
 
-        }
+        }       // checked
         public string ExecuteInsertScreen(Screen screen)      // EDIT HERE AFTER USE TRANSACTION
         {
             string mess = "";
@@ -442,8 +442,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = (rdr["Result"]).ToString();
             }
             return result;  // 3609 : trigger
-        }
-        public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)
+        }   // checked
+        public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)    // checked
         {
             /// Id, Name, Name Theater
             ScreenViewModel lst = new ScreenViewModel();
@@ -467,7 +467,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lst;
         }
-        public void ExecuteUpdateScreen(Screen screen)
+        public void ExecuteUpdateScreen(Screen screen)      // checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -495,8 +495,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = (rdr["ErrorNumber"]).ToString();
             }
             return result;  // 3609 : trigger
-        }
-        public List<Screen_Theater> SearchScreenwithTheater(string id)
+        }   // checked
+        public List<Screen_Theater> SearchScreenwithTheater(string id)  // checked
         {
             List<Screen_Theater> lst = new List<Screen_Theater>();
             using SqlConnection con = new SqlConnection(cs);
@@ -550,7 +550,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 });
             }
             return lst;
-        }
+        }       // checked
         public void ExecuteUpdateTypesOfSeat(TypesOfSeat s)
         {
             using SqlConnection con = new SqlConnection(cs);
@@ -562,8 +562,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Name", s.Name);
             com.Parameters.AddWithValue("@Cost", s.Cost);
             com.ExecuteNonQuery();
-        }
-        public TypesOfSeat ExecGetDetailTypeOfSeat(string id)
+        }   // checked
+        public TypesOfSeat ExecGetDetailTypeOfSeat(string id)   //checked
         {
             var type = new TypesOfSeat();
             using SqlConnection con = new SqlConnection(cs);
@@ -586,7 +586,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return type;
         }
-        public int CheckToSeatName(string id, string name)
+        public int CheckToSeatName(string id, string name)  // checked
         {
             var count = 0;
             using SqlConnection con = new SqlConnection(cs);
@@ -604,7 +604,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return count;
         }
         //------------------SHOW
-        public List<ShowViewModel> ExecuteGetAllShow()
+        public List<ShowViewModel> ExecuteGetAllShow()  // checked
         {
             List<ShowViewModel> lstShow = new List<ShowViewModel>();
             using SqlConnection con = new SqlConnection(cs);
@@ -631,7 +631,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lstShow;
         }
-        public List<ShowViewModel> ExecuteGetAllShowTheater(string id)
+        public List<ShowViewModel> ExecuteGetAllShowTheater(string id)  // checked
         {
             List<ShowViewModel> lstShow = new List<ShowViewModel>();
             using SqlConnection con = new SqlConnection(cs);
@@ -659,62 +659,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lstShow;
         }
-        public List<ShowViewModel> ExecuteGetAllShowMovie(string id)
-        {
-            List<ShowViewModel> lstShow = new List<ShowViewModel>();
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetAllShowMovie", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@IdMovie", id);
-            SqlDataReader rdr = com.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                lstShow.Add(new ShowViewModel
-                {
-                    Id = rdr["Id"].ToString(),
-                    Languages = rdr["Languages"].ToString(),
-                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
-                    TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
-                    MovieName = rdr["MovieName"].ToString(),
-                    Poster = rdr["Poster"].ToString(),
-                    ScreenName = rdr["ScreenName"].ToString(),
-                    TheaterName = rdr["TheaterName"].ToString()
-                });
-
-            }
-            return lstShow;
-        }
-        public List<ShowViewModel> ExecuteGetAllShowDate(DateTime date)
-        {
-            List<ShowViewModel> lstShow = new List<ShowViewModel>();
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetAllShowDate", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@DateStart", date);
-            SqlDataReader rdr = com.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                lstShow.Add(new ShowViewModel
-                {
-                    Id = rdr["Id"].ToString(),
-                    Languages = rdr["Languages"].ToString(),
-                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
-                    TimeEnd = DateTime.Parse(rdr["TimeEnd"].ToString()),
-                    MovieName = rdr["MovieName"].ToString(),
-                    Poster = rdr["Poster"].ToString(),
-                    ScreenName = rdr["ScreenName"].ToString(),
-                    TheaterName = rdr["TheaterName"].ToString()
-                });
-
-            }
-            return lstShow;
-        }
+       
 
         public List<ShowViewModel> ExecuteGetAllShowisUsed()
         {
@@ -791,8 +736,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message.ToString();
             }
             return result;
-        }
-        public ShowViewModel ExecuteGetDetailShow(string id)
+        }   //checked
+        public ShowViewModel ExecuteGetDetailShow(string id)    // checked
         {
             ShowViewModel show = new ShowViewModel();
             using SqlConnection con = new SqlConnection(cs);
@@ -820,7 +765,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return show;
-        }
+        }   // checked
         public ShowViewModel ExecuteGetDetailShowEdit(string id)
         {
             ShowViewModel show = new ShowViewModel();
@@ -873,10 +818,10 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }
+        }   //checked
         public void ExecuteDeleteShow(string id)
         {
-            using SqlConnection con = new SqlConnection(cs);
+            using SqlConnection con = new SqlConnection(cs);    // checked
             con.Open();
             // TêN STORE
             SqlCommand com = new SqlCommand("USP_DeleteShow", con);
@@ -885,7 +830,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             com.ExecuteNonQuery();
         }
-        public object ExecuteFindTheaterShow(string idmovie, string date)
+        public object ExecuteFindTheaterShow(string idmovie, string date)   //checked
         {
             List<object> theater= new List<object>();
 
@@ -943,39 +888,12 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 string ss = e.Message;
             }
             return times;
-        }
-
-        //-------- front end
-        public List<ShowViewModel> ExecuteGetShowByDate(string idMovie, string date)
-        {
-            List<ShowViewModel> lstShow = new List<ShowViewModel>();
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetShowByDate", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@IdMovie", idMovie);
-            com.Parameters.AddWithValue("@Date", date);
-            SqlDataReader rdr = com.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                lstShow.Add(new ShowViewModel
-                {
-                    Id = rdr["Id"].ToString(),
-                    Languages = rdr["Languages"].ToString(),
-                    TimeStart = DateTime.Parse((rdr["TimeStart"]).ToString()),
-                    TimeEnd = DateTime.Parse((rdr["TimeEnd"]).ToString()),
-                    IdMovie = rdr["Id_Movie"].ToString(),
-                    IdScreen = rdr["Id_Screen"].ToString(),
-
-                });
-
-            }
-            return lstShow;
-        }
+        }   //checked
+            
+       
+        
         //------------------DISCOUNT
-        public List<Discount> ExecuteGetAllDiscount()
+        public List<Discount> ExecuteGetAllDiscount()   // checked
         {
             List<Discount> lstDiscount = new List<Discount>();
 
@@ -1036,7 +954,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return d;
-        }
+        }   //checked
         public string ExecuteInsertDiscount(Discount discount)
         {
             string result = "";
@@ -1066,7 +984,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }
+        }   //checked
         public string ExecuteGetImageDiscount(string id)
         {
             string pos = "";
@@ -1084,7 +1002,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return pos;
-        }
+        }   //checked
         public string ExecuteUpdateDiscount(Discount discount)
         {
             string result = "";
@@ -1113,8 +1031,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }
-        public void ExecuteDeleteDiscount(string id)
+        }   //checked
+        public void ExecuteDeleteDiscount(string id)    // checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -1150,31 +1068,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return lstSeat;
-        }
-        public List<object> ExecGetChoosedSeat(string idShow, string idScreen)
-        {
-            List<object> lstSeat = new List<object>();
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetSeatChoosed", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@IdScreen", idScreen);
-            com.Parameters.AddWithValue("@IdShow", idShow);
-            SqlDataReader rdr = com.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                lstSeat.Add(new Seat
-                {
-                    Id = rdr["Id_Seat"].ToString()
-                });
-
-            }
-            return lstSeat;
-
-        }
-        public Seat ExecCheckIdSeat(string idseat, string idshow)
+        }   //checked
+        public Seat ExecCheckIdSeat(string idseat, string idshow)   //checked
         {
             // lấy seat và kiểm tra seat chưa đặt
             var obj = new Seat();
@@ -1240,9 +1135,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return null;
-        }
+        }   //checked
 
-        //==================BILL
+        //==================BILL        checked
         public string ExecInsertTickets(List<string> seatVM, string idAccount, string idShow, string iddiscount)
         {
             string result = "";
@@ -1273,7 +1168,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }
-        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow)
+        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow) //checked
         {
             var bill = new TicketViewModel();
             using SqlConnection con = new SqlConnection(cs);
@@ -1308,18 +1203,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return bill;
         }
 
-        public void ExecDeleteTicket(string idaccount, string idshow)   // không dùng
-        {
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_DeleteTicket", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id_Account", idaccount);
-            com.Parameters.AddWithValue("@Id_Show", idshow);
-            com.ExecuteNonQuery();
-        }
-        public string ExecDeleteTicketStatus0(string idaccount)
+        public string ExecDeleteTicketStatus0(string idaccount) //checked
         {
             string s = "";
             try
@@ -1338,7 +1222,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return s;
         }
-        public void ExecUpdateTicketStatus(string idaccount,int point)
+        public void ExecUpdateTicketStatus(string idaccount,int point)  //checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -1349,7 +1233,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Point", point);       // point = 0 nếu không dùng
             com.ExecuteNonQuery();
         }
-        public object ExecUseDiscount(string idaccount, string code)
+        public object ExecUseDiscount(string idaccount, string code)    //checked
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1377,7 +1261,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return null;
         }
-        public void ExecAddDiscount(string idaccount, string code)
+        public void ExecAddDiscount(string idaccount, string code)  //checked
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -1388,7 +1272,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Code", code);
             com.ExecuteNonQuery();
         }
-        public string ExecCheckPoint(string idaccount, int point)
+        public string ExecCheckPoint(string idaccount, int point)   //checked
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1407,7 +1291,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return "";
         }
-        public string ExecAddPoint(string idaccount, string point)
+        public string ExecAddPoint(string idaccount, string point)  //checked
         {
             using (SqlConnection con = new SqlConnection(cs))
             {

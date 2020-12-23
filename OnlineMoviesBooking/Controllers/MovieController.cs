@@ -229,16 +229,7 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-       
-        public IActionResult ShowsDate(DateTime date)
-        {
-            if (date == null)
-            {
-                return NotFound();
-            }
-            var show = Exec.ExecuteGetAllShowDate(date);
-            return Json(new { data = show });
-        }
+
 
 
         [HttpGet]
@@ -337,8 +328,6 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
-            
-
             // get bill
                 var bill = Exec.ExecGetTicketDetail("1", idshow);
             ViewBag.Show = idshow;
