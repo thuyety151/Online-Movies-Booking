@@ -169,7 +169,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 // check lỗi do nhập
                 if (checkname != "") 
                 {
-                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    ModelState.AddModelError("Name", checkname);
                 }
                 else
                 {
@@ -183,9 +183,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     }
 
                     // transaction
-                    if (s == "2627")
+                    if (s!="")
                     {
-                        ModelState.AddModelError("Name", "Có lỗi xảy ra");
+                        ModelState.AddModelError("Name", s);
                     }
                     else
                     {

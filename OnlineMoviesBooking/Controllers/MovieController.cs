@@ -208,7 +208,8 @@ namespace OnlineMoviesBooking.Controllers
             }
 
             // chưa gọi transaction
-            Exec.ExecDeleteTicketStatus0("1");
+            //Exec.ExecDeleteTicketStatus0("1");
+            Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
 
 
             ViewBag.IdShow = id;
@@ -242,8 +243,7 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
             //DateTime d = DateTime.Parse(date);
-            DateTime d = DateTime.ParseExact(date, "dd-MM-yyyy hh:mm:ss:tt",
-                                           CultureInfo.InvariantCulture);
+            DateTime d = DateTime.Parse(date.ToString());
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện
@@ -319,7 +319,8 @@ namespace OnlineMoviesBooking.Controllers
                 }
             }
             // insert seat vào ticket
-            string result = Exec.ExecInsertTickets(seats, "1", idshow, null);
+            string result = Exec.ExecInsertTickets(seats, HttpContext.Session.GetString("idLogin").ToString()
+                                        , idshow, null);
             //  xử lí transaction
             if (result == "Ghế đã được chọn")
             {
@@ -331,15 +332,14 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
             // get bill
-                var bill = Exec.ExecGetTicketDetail("1", idshow);
+                var bill = Exec.ExecGetTicketDetail(HttpContext.Session.GetString("idLogin").ToString(), idshow);
             ViewBag.Show = idshow;
             return View(bill);
         }
         [HttpGet]
         public IActionResult UseDiscount( string code)
         {
-            
-            var obj = Exec.ExecUseDiscount("1", code);
+            var obj = Exec.ExecUseDiscount(HttpContext.Session.GetString("idLogin").ToString(), code);
 
             return Json(obj);
         }
@@ -347,12 +347,12 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult UsePoint(string point)
         {
             // kiểm tra điểm hợp lệ
-            var obj = Exec.ExecCheckPoint("1", int.Parse(point));
+            var obj = Exec.ExecCheckPoint(HttpContext.Session.GetString("idLogin").ToString(), int.Parse(point));
             return Json(obj);
         }
         public IActionResult TimeOut(string idshow)
         {
-            string s=Exec.ExecDeleteTicketStatus0("1");
+            string s=Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
             if (s != "")
             {
                 // co loi xay ra
@@ -366,14 +366,14 @@ namespace OnlineMoviesBooking.Controllers
             if (code != null)
             {
                 // áp dụng khuyến mãi
-                Exec.ExecAddDiscount("1", code);
+                Exec.ExecAddDiscount(HttpContext.Session.GetString("idLogin").ToString(), code);
             }
             
             if (pointuse != null)
             {
                 // add point vào bill và trừ ở account
                 // sẽ tran khi thanh toán ko thành công
-                string execPoint = Exec.ExecAddPoint("1", pointuse);
+                string execPoint = Exec.ExecAddPoint(HttpContext.Session.GetString("idLogin").ToString(), pointuse);
                 if(execPoint== "Không dùng được point")
                 {
                     // lỗi điểm âm sau khi trừ
@@ -388,7 +388,7 @@ namespace OnlineMoviesBooking.Controllers
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
-            var checkout = Exec.TestCheckout("1",pointuse);
+            var checkout = Exec.TestCheckout(HttpContext.Session.GetString("idLogin").ToString(),pointuse);
             // GET POINT
             int point;
             if (checkout.PointCost == null)
@@ -501,7 +501,7 @@ namespace OnlineMoviesBooking.Controllers
         {
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            string s = Exec.ExecDeleteTicketStatus0("1");
+            string s = Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
             if (s != "")
             {
                 // co loi xay ra
@@ -515,7 +515,7 @@ namespace OnlineMoviesBooking.Controllers
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
             
-            Exec.ExecUpdateTicketStatus("1",point);
+            Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
             return Content("Thanh toán thành công");
         }
     }

@@ -31,11 +31,11 @@ namespace OnlineMoviesBooking.Controllers
                 TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
                 TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
                 TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");//à
+                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             }
             else
             {
-                HttpContext.Session.SetString("connectString", "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+                HttpContext.Session.SetString("connectString", "Server=localhost;Database=C;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
             List<Discount> listdis = new List<Discount>();
             string connectionString = HttpContext.Session.GetString("connectString");
@@ -50,35 +50,26 @@ namespace OnlineMoviesBooking.Controllers
                 {
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            Discount dis = new Discount();
-                            dis.Id = Convert.ToString(reader[0]);
-                            dis.Name = Convert.ToString(reader[1]);
-                            dis.Description = Convert.ToString(reader[2]);
-                            dis.PercentDiscount = Convert.ToInt32(reader[3]);
-                            dis.MaxCost = Convert.ToInt32(reader[4]);
-                            dis.DateStart = Convert.ToDateTime(reader[5]);
-                            dis.DateEnd = Convert.ToDateTime(reader[6]);
-                            dis.ImageDiscount = Convert.ToString(reader[7]);
-                           // dis.NoTicket = Convert.ToInt32(reader[8]);      // fix nè // ê biết r, t xóa cái noticke t 
-                            dis.Point = Convert.ToInt32(reader[9]);
-                            dis.Used = Convert.ToInt32(reader[10]);
-                            listdis.Add(dis);
-                        }
-
-                    }
-                    else
-                    {
-                        TempData["msg"] = "error";
-                        return RedirectToAction("index","home");
+                        Discount dis = new Discount();
+                        dis.Id = Convert.ToString(reader[0]);
+                        dis.Name = Convert.ToString(reader[1]);
+                        dis.Description = Convert.ToString(reader[2]);
+                        dis.PercentDiscount = Convert.ToInt32(reader[3]);
+                        dis.MaxCost = Convert.ToInt32(reader[4]);
+                        dis.DateStart = Convert.ToDateTime(reader[5]);
+                        dis.DateEnd = Convert.ToDateTime(reader[6]);
+                        dis.ImageDiscount = Convert.ToString(reader[7]);
+                        // dis.NoTicket = Convert.ToInt32(reader[8]);      
+                        dis.Point = Convert.ToInt32(reader[9]);
+                        dis.Used = Convert.ToInt32(reader[10]);
+                        listdis.Add(dis);
                     }
                 }
                 catch (SqlException e)
                 {
-                    connection.Close();
+                    ModelState.AddModelError("", e.ToString());
                     return RedirectToAction("index", "home");
                 }
                 connection.Close();
@@ -87,7 +78,6 @@ namespace OnlineMoviesBooking.Controllers
             ViewData["listDiscount"] = listdis;
             return View();
         }
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

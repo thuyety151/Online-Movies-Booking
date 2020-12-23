@@ -34,12 +34,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public int GetCountMovieNow()   // checked
         {
             // to paging
-
+            int count = 0;
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
             // TêN STORE
             SqlCommand com = new SqlCommand("SELECT dbo.UF_GetNumOfMovieNow()", con);
-            return int.Parse(com.ExecuteScalar().ToString());
+            count= int.Parse(com.ExecuteScalar().ToString());
+            return count;
         }
         public int GetCountMovieComing()    // checked
         {
