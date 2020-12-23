@@ -34,39 +34,22 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public int GetCountMovieNow()   // checked
         {
             // to paging
-            int pos = 0;
+
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
             // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetNumOfMovieNow", con)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-            SqlDataReader rdr = com.ExecuteReader();
-            while (rdr.Read())
-            {
-                pos = int.Parse((rdr["Num"]).ToString());
-            }
-            return pos;
+            SqlCommand com = new SqlCommand("SELECT dbo.UF_GetNumOfMovieNow()", con);
+            return int.Parse(com.ExecuteScalar().ToString());
         }
         public int GetCountMovieComing()    // checked
         {
             // to paging
-            int pos = 0;
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
             // TêN STORE
-            SqlCommand com = new SqlCommand("USP_GetNumOfMovieComing", con)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-            SqlDataReader rdr = com.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                pos = int.Parse((rdr["Num"]).ToString());
-            }
-            return pos;
+            SqlCommand com = new SqlCommand("SELECT dbo.UF_GetNumOfMovieComing()", con);
+            return int.Parse(com.ExecuteScalar().ToString());
+            
         }
         public List<Movie> ExecuteMovieGetAll() // checked
         {
