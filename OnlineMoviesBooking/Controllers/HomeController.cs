@@ -57,7 +57,8 @@ namespace OnlineMoviesBooking.Controllers
                         dis.Name = Convert.ToString(reader[1]);
                         dis.Description = Convert.ToString(reader[2]);
                         dis.PercentDiscount = Convert.ToInt32(reader[3]);
-                        dis.MaxCost = Convert.ToInt32(reader[4]);
+                        //dis.MaxCost = Convert.ToInt32(reader[4]);
+                        dis.MaxCost = reader[4].ToString() == "" ? 0 : int.Parse(reader[4].ToString());
                         dis.DateStart = Convert.ToDateTime(reader[5]);
                         dis.DateEnd = Convert.ToDateTime(reader[6]);
                         dis.ImageDiscount = Convert.ToString(reader[7]);

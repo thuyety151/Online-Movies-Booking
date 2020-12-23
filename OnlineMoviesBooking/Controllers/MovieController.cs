@@ -339,6 +339,11 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult UseDiscount( string code)
         {
+            string s = Exec.ExecCheckDiscount(code);
+            if(s== "False")
+            {
+                return Json(false);
+            }
             var obj = Exec.ExecUseDiscount(HttpContext.Session.GetString("idLogin").ToString(), code);
 
             return Json(obj);

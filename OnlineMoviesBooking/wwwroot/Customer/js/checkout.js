@@ -27,22 +27,30 @@
                     console.log($('#code-discount').val())
                     console.log(data);
                     if (data.iddiscount == null) {
-                      
-                    }
-                    console.log(data)
-                    $('#discount-name').text(data.nameDiscount)
-                    console.log($('#discount-name').text())
-                    if (data.maxCost == "") {
-                        $('#discount-price').text(data.percentDiscount + ' %')
-                        console.log('percent')
-                    }
-                    else {
-                        $('#discount-price').text((data.no * data.maxCost).toLocaleString('it-IT', { style: 'currency', currency: 'VND' }))
 
                     }
-                    $('#price-hidden').val(data.price)
-                    $('#total-price').text(data.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
-                    $('#point').text(data.point)
+                    if (data === false) {
+                        console.log(false);
+                        $('#validation').text("*Không hợp lệ")
+                    }
+                    else {
+                        console.log(data)
+                        $('#discount-name').text(data.nameDiscount)
+                        console.log($('#discount-name').text())
+                        if (data.maxCost == "") {
+                            $('#discount-price').text(data.percentDiscount + ' %')
+                            console.log('percent')
+                        }
+                        else {
+                            $('#validation').text("")
+                            $('#discount-price').text((data.no * data.maxCost).toLocaleString('it-IT', { style: 'currency', currency: 'VND' }))
+
+                        }
+                        $('#price-hidden').val(data.price)
+                        $('#total-price').text(data.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }));
+                        $('#point').text(data.point)
+                    }
+                    
                 }
 
             });

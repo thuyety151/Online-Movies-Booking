@@ -969,6 +969,17 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }   //checked
+
+        public string ExecCheckDiscount(string code)
+        {
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+            // TêN STORE
+            SqlCommand com = new SqlCommand("SELECT dbo.UF_CheckDiscount(@Code)", con);
+            com.Parameters.AddWithValue("@Code", code);
+
+            return  com.ExecuteScalar().ToString();
+        }
         public string ExecuteGetImageDiscount(string id)
         {
             string pos = "";
