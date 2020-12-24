@@ -66,10 +66,10 @@ namespace OnlineMoviesBooking.Controllers
                 {
                     string username = HttpContext.Session.GetString("idLogin");
                     string pw = HttpContext.Session.GetString("pwLogin");
-                    connectionString = $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={pw}";
+                    connectionString = $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={pw}";
                 }
                 else
-                    connectionString = "Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();

@@ -137,7 +137,7 @@ namespace OnlineMoviesBooking.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 connection.Close();
-                HttpContext.Session.SetString("connectString", $"Server=THANHTOAN\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={changePassword.NewPassword}");
+                HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={changePassword.NewPassword}");
                 HttpContext.Session.SetString("pwLogin", changePassword.NewPassword);
             }
 
