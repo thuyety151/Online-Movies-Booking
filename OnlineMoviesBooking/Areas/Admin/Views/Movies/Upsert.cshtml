@@ -99,16 +99,6 @@ else
     </div>
 </div>
 
-@{
-
-    if (TempData["msg"] != null)
-    {
-        string msg = TempData["msg"].ToString();
-        <script>
-                alert('@msg')
-        </script>
-    }
-}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

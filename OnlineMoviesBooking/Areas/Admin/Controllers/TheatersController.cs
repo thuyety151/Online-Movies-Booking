@@ -168,6 +168,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            string error = Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
+            ModelState.AddModelError("", error.ToString());
             return View(theater);
         }
 
@@ -226,6 +228,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
                 
             }
+            string error = Exec.ExecuteUpdateTheater(theater);
+            ModelState.AddModelError("", error.ToString());
             return View(theater);
         }
 

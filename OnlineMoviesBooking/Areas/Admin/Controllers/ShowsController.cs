@@ -311,8 +311,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     return RedirectToAction(nameof(Index));
                 }    
             }
-            // modelstate.valid== false 
-            // modelstate.errorcount>0
+          
             var movies = Exec.ExecuteMovieGetAll();
             ViewBag.Movies = new SelectList(movies, "Id", "Name");
 

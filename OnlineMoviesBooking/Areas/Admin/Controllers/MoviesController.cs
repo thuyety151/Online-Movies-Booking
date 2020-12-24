@@ -252,7 +252,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     }
                     if (result != "")
                     {
-                        TempData["msg"] = result.ToString();
+                        ModelState.AddModelError("", result.ToString());
                         return View(movie);
                     }
                     return RedirectToAction(nameof(Index));
@@ -263,7 +263,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     string result = Exec.ExecuteUpdateMovie(movie);
                     if (result != "")
                     {
-                        TempData["msg"] = result.ToString();
+                        ModelState.AddModelError("", result.ToString());
                         return View(movie);
                     }
                     return RedirectToAction(nameof(Index));
@@ -284,7 +284,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
                 if (result != "")
                 {
-                    TempData["msg"] = result.ToString();
+                    ModelState.AddModelError("", result.ToString());
                     return View(movie);
                 }
                 return RedirectToAction(nameof(Index));
@@ -295,7 +295,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 string result = Exec.ExecuteUpdateMovie(movie);
                 if (result != "")
                 {
-                    TempData["msg"] = result.ToString();
+                    ModelState.AddModelError("", result.ToString());
                     return View(movie);
                 }
                 return RedirectToAction(nameof(Index));

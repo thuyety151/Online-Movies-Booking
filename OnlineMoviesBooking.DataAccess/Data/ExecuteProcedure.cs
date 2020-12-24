@@ -324,9 +324,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_InsertTheater", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", id);
-                com.Parameters.AddWithValue("@Name", name);
-                com.Parameters.AddWithValue("@Address", address);
-                com.Parameters.AddWithValue("@Hotline", hotline);
+                com.Parameters.AddWithValue("@Name", name ??Convert.DBNull);
+                com.Parameters.AddWithValue("@Address", address ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Hotline", hotline ?? Convert.DBNull);
 
                 com.ExecuteScalar();
 
@@ -348,9 +348,9 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_UpdateTheater", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", theater.Id);
-                com.Parameters.AddWithValue("@Name", theater.Name);
-                com.Parameters.AddWithValue("@Address", theater.Address);
-                com.Parameters.AddWithValue("@Hotline", theater.Hotline);
+                com.Parameters.AddWithValue("@Name", theater.Name ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Address", theater.Address ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Hotline", theater.Hotline ?? Convert.DBNull);
 
                 com.ExecuteScalar();
 
