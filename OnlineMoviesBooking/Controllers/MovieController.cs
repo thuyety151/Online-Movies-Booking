@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
+using Microsoft.Data.SqlClient;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -21,12 +22,14 @@ namespace OnlineMoviesBooking.Controllers
     {
         private readonly string _clientId;
         private readonly string _secretKey;
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
+
         public MovieController(IHttpContextAccessor httpContextAccessor,IConfiguration config)
         { 
             Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString".ToString()));
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
+
         }
         public IActionResult Index()
         {
@@ -197,6 +200,61 @@ namespace OnlineMoviesBooking.Controllers
 
         public IActionResult SeatPlan(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
+
+            Account acc = new Account();
+            string connectionString = HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("idLogin")}'";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            acc.Id = Convert.ToString(reader[0]);
+                            acc.Name = Convert.ToString(reader[1]);
+                            acc.Birthdate = Convert.ToDateTime(reader[2]);
+                            acc.Gender = Convert.ToBoolean(reader[3]);
+                            acc.Address = Convert.ToString(reader[4]);
+                            acc.Sdt = Convert.ToString(reader[5]);
+                            acc.Email = Convert.ToString(reader[6]);
+                            acc.Password = Convert.ToString(reader[7]);
+                            acc.Point = Convert.ToInt32(reader[8]);
+                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                            acc.Image = Convert.ToString(reader[11]);
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                catch
+                {
+
+                    TempData["msg"] = "error";
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
+            }
             if (id == null)
             {
                 return NotFound();

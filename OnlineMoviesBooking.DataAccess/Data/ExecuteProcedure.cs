@@ -22,10 +22,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
         public  ExecuteProcedure(string _cs)
         {
-
-            //_cs = httpContextAccessor.HttpContext.Session.GetString("connectString");
             cs = _cs;
-          //  cs = "Data Source = localhost; Initial Catalog = Cinema; Integrated Security = True";
 
         }
 
