@@ -297,13 +297,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 return Redirect("/Home/Index");
             }
             string result=Exec.ExecuteDeleteScreen(id);
-            if (result == "2627")
-            {
-                return Json(new { success = false });
-            }
-            else if(result== "Phòng chiếu đang có lịch chiếu")
-            {
-                return Json(new { success = false, message= "Phòng chiếu đang có lịch chiếu" });
+             if(result!="")
+                {
+                return Json(new { success = result });
                 }
             return Json(new { success = true });
         }

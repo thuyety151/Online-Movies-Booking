@@ -253,7 +253,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
-            Exec.ExecuteDeleteTheater(id);
+            string s=Exec.ExecuteDeleteTheater(id);
+            if (s != "")
+            {
+                return Json(new { success = s });
+            }
             return Json(new { success = true });
         }
 

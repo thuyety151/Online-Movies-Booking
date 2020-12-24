@@ -399,7 +399,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 System.IO.File.Delete(imagePath);
             }
 
-            Exec.ExecuteDeleteDiscount(id);
+            string s=Exec.ExecuteDeleteDiscount(id);
+            if (s != "")
+            {
+                return Json(new { success = s });
+            }
             
             return Json(new { success = true });
         }

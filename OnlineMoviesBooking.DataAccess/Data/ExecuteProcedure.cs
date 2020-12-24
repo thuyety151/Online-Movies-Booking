@@ -361,16 +361,26 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return mess;
         }       // checked
-        public void ExecuteDeleteTheater(string id)     // checked
+        public string ExecuteDeleteTheater(string id)     // checked
         {
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_DeleteThreater", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id", id);
+            string s = "";
+            try
+            {
 
-            com.ExecuteScalar();
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteThreater", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+
+                com.ExecuteScalar();
+            }
+            catch(SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
         }
         //-----------------------Screen
         public List<Screen_Theater> ExecuteScreenGetAllwithTheater()
@@ -482,7 +492,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             SqlDataReader rdr = com.ExecuteReader();
             while (rdr.Read())
             {
-                result = (rdr["ErrorNumber"]).ToString();
+                result = (rdr["ErrorMessage"]).ToString();
             }
             return result;  // 3609 : trigger
         }   // checked
@@ -801,16 +811,25 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }   //checked
-        public void ExecuteDeleteShow(string id)
+        public string ExecuteDeleteShow(string id)
         {
-            using SqlConnection con = new SqlConnection(cs);    // checked
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_DeleteShow", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@IdShow", id);
+            string s = "";
+            try
+            {
+                using SqlConnection con = new SqlConnection(cs);    // checked
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteShow", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@IdShow", id);
 
-            com.ExecuteNonQuery();
+                com.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
         }
         public object ExecuteFindTheaterShow(string idmovie, string date)   //checked
         {
@@ -1025,15 +1044,24 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }   //checked
-        public void ExecuteDeleteDiscount(string id)    // checked
+        public string ExecuteDeleteDiscount(string id)    // checked
         {
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_DeleteDiscount", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id", id);
-            com.ExecuteNonQuery();
+            string s = "";
+            try
+            {
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteDiscount", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                com.ExecuteNonQuery();
+            }
+            catch(SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
         }
         //==========SEAT============
         public List<SeatViewModel> ExecGetAllSeat(string idShow)

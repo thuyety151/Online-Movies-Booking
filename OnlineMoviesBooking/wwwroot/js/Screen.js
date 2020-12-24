@@ -99,8 +99,7 @@ function Delete(url) {
                 type: "DELETE",
                 url: url,
                 success: function (data) {
-                    console.log(data.message);
-                    if (data.success) {
+                    if (data.success==true) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -111,7 +110,7 @@ function Delete(url) {
                     else {
                         swalWithBootstrapButtons.fire(
                             'Error',
-                            data.message,
+                            data.success,
                             'error'
                         )
                     }
