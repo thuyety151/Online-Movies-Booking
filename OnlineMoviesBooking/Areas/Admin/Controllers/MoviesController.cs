@@ -80,7 +80,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id = x.Id,
                 name = x.Name,
-                releaseDate = x.ReleaseDate.ToString("dd-MM-yyyy"),
+                releaseDate = x.ReleaseDate.GetValueOrDefault().ToString("dd-MM-yyyy"),
                 runningtime = x.RunningTime.ToString(),
                 poster = x.Poster
             });
@@ -187,6 +187,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Movie movie, IFormFile files)
         {
+            
 
             if (ModelState.IsValid)
             {
@@ -238,30 +239,67 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 {
                     movie.Rated = "";
                 }
-
                 if (movie.Id == null)
                 {
                     //Theem movie
                     movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
-                    string result= Exec.ExecuteInsertMovie(movie);
-                    while(result.Contains("PRIMARY") ) // trùng primary key do generate id
+                    string result = Exec.ExecuteInsertMovie(movie);
+                    while (result.Contains("PRIMARY")) // trùng primary key do generate id
                     {
                         movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
                         result = Exec.ExecuteInsertMovie(movie);
-                    }    
 
+                    }
+                    if (result != "")
+                    {
+                        TempData["msg"] = result.ToString();
+                        return View(movie);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     // 
-                    Exec.ExecuteUpdateMovie(movie);
-
+                    string result = Exec.ExecuteUpdateMovie(movie);
+                    if (result != "")
+                    {
+                        TempData["msg"] = result.ToString();
+                        return View(movie);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
 
+
             }
-            return View(movie);
+            if (movie.Id == null)
+            {
+                //Theem movie
+                movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                string result = Exec.ExecuteInsertMovie(movie);
+                while (result.Contains("PRIMARY")) // trùng primary key do generate id
+                {
+                    movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                    result = Exec.ExecuteInsertMovie(movie);
+
+                }
+                if (result != "")
+                {
+                    TempData["msg"] = result.ToString();
+                    return View(movie);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                // 
+                string result = Exec.ExecuteUpdateMovie(movie);
+                if (result != "")
+                {
+                    TempData["msg"] = result.ToString();
+                    return View(movie);
+                }
+                return RedirectToAction(nameof(Index));
+            }
         }
 
  

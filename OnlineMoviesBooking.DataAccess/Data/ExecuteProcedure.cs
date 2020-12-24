@@ -124,16 +124,16 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 SqlCommand com = new SqlCommand("USP_InsertMovie", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", movie.Id);
-                com.Parameters.AddWithValue("@Name", movie.Name);
-                com.Parameters.AddWithValue("@Genre", movie.Genre);
-                com.Parameters.AddWithValue("@Director", movie.Director);
-                com.Parameters.AddWithValue("@Casts", movie.Casts);
-                com.Parameters.AddWithValue("@Rated", movie.Rated);
-                com.Parameters.AddWithValue("@Description", movie.Description);
-                com.Parameters.AddWithValue("@Trailer", movie.Trailer);
-                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate);
-                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime);
-                com.Parameters.AddWithValue("@Poster", movie.Poster);
+                com.Parameters.AddWithValue("@Name", movie.Name ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Genre", movie.Genre ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Director", movie.Director ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Casts", movie.Casts ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Rated", movie.Rated ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Description", movie.Description ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Trailer", movie.Trailer ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Poster", movie.Poster ?? Convert.DBNull);
                 com.ExecuteNonQuery();
             }
             catch(SqlException s)
@@ -154,25 +154,34 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             com.ExecuteNonQuery();
         }
-        public void ExecuteUpdateMovie(Movie movie) // checked
+        public string ExecuteUpdateMovie(Movie movie) // checked
         {
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_UpdateMovie", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id", movie.Id);
-            com.Parameters.AddWithValue("@Name", movie.Name);
-            com.Parameters.AddWithValue("@Genre", movie.Genre);
-            com.Parameters.AddWithValue("@Director", movie.Director);
-            com.Parameters.AddWithValue("@Casts", movie.Casts);
-            com.Parameters.AddWithValue("@Rated", movie.Rated);
-            com.Parameters.AddWithValue("@Description", movie.Description);
-            com.Parameters.AddWithValue("@Trailer", movie.Trailer);
-            com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate);
-            com.Parameters.AddWithValue("@RunningTime", movie.RunningTime);
-            com.Parameters.AddWithValue("@Poster", movie.Poster);
-            com.ExecuteNonQuery();
+            string s = "";
+            try
+            {
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateMovie", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", movie.Id);
+                com.Parameters.AddWithValue("@Name", movie.Name ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Genre", movie.Genre ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Director", movie.Director ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Casts", movie.Casts ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Rated", movie.Rated ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Description", movie.Description ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Trailer", movie.Trailer ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@Poster", movie.Poster ?? Convert.DBNull);
+                com.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
         }
         public string ExecuteGetImageMovie(string id)   
         {
@@ -532,17 +541,26 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lst;
         }       // checked
-        public void ExecuteUpdateTypesOfSeat(TypesOfSeat s)
+        public string ExecuteUpdateTypesOfSeat(TypesOfSeat s)
         {
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_UpdateTypesOfSeat", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id", s.Id);
-            com.Parameters.AddWithValue("@Name", s.Name);
-            com.Parameters.AddWithValue("@Cost", s.Cost);
-            com.ExecuteNonQuery();
+            string result = "";
+            try
+            {
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_UpdateTypesOfSeat", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", s.Id);
+                com.Parameters.AddWithValue("@Name", s.Name);
+                com.Parameters.AddWithValue("@Cost", s.Cost);
+                com.ExecuteNonQuery();
+            }
+            catch(SqlException e)
+            {
+                result = e.Message.ToString();
+            }
+            return result;
         }   // checked
         public TypesOfSeat ExecGetDetailTypeOfSeat(string id)   //checked
         {

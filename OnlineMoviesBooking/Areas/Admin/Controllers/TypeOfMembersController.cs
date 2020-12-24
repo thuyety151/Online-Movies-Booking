@@ -262,7 +262,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, TypeOfMember typeOfMember)
+        public  ActionResult Edit(string id, TypeOfMember typeOfMember)
         {
             if (id != typeOfMember.IdTypeMember)
             {

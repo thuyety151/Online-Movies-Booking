@@ -44,7 +44,7 @@ namespace OnlineMoviesBooking.Controllers
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateContactView([Bind("Email,Content")] ContactViewModel contactView)
+        public IActionResult CreateContactView([Bind("Email,Content")] ContactViewModel contactView)
         {
             TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
