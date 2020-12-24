@@ -5,11 +5,11 @@ $(document).ready(function () {
             "url": '/Admin/theaters/getall'
         },
         "columns": [
-            { "data": "name" },
-            { "data": "address" },
-            { "data": "hotline" },
+            { "data": "name","width":"20%" },
+            { "data": "address", "width": "40%" },
+            { "data": "hotline", "width": "20%" },
             {
-                "data": "id",
+                "data": "id", "width": "20%",
                 "render": function (data) {
                     return `
                              <div class="text-center" >
@@ -84,7 +84,7 @@ function Delete(url) {
                 url: url,
                 success: function (data) {
                     console.log(data.success);
-                    if (data.success) {
+                    if (data.success==true) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -93,9 +93,10 @@ function Delete(url) {
                         $('#dataTable').DataTable().ajax.reload();
                     }
                     else {
+                        
                         swalWithBootstrapButtons.fire(
                             'Error',
-                            'Can not delete this, maybe it not exit or error from sever',
+                            data.success,
                             'error'
                         )
                     }

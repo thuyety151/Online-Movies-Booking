@@ -1,0 +1,169 @@
+﻿@model List<OnlineMoviesBooking.Models.Models.Account>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="~/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<h1>Danh sách tài khoản</h1>
+
+
+<div class="sb-nav-fixed">
+
+</div>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table" id="AccountTable">
+    <thead class="bg-secondary text-light">
+        <tr>
+            <th>
+                Avatar
+            </th>
+            <th>
+                Tên
+            </th>
+            <th>
+                Loại tài khoản
+            </th>
+            <th>
+                Loại thành viên
+            </th>
+            <th>
+                SDT
+            </th>
+            <th>
+                Email
+            <th>
+                Mật khẩu
+            </th>
+            <th>
+                Điểm
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <img src="@item.Image" style="width:5rem;border-radius:5%" />
+            </td>
+            @{
+                if (item.IdTypesOfUser == "1")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Quản trị viên
+                    </td>
+                }
+                else if (item.IdTypesOfUser == "2")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        Thành viên
+                    </td>
+                }
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTypeOfMember)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sdt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Point)
+            </td>
+            
+
+            <td style="width:15rem;text-align:right">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
+                <a href="#" data-toggle="modal" data-target="#DetailAccountModal" onclick=showModal("@item.Id") @*id="detailbtn" *@ class="btn btn-secondary" style="cursor:pointer">Details</a> |
+                <a onclick=DeleteAccount("/Admin/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+                }
+    </tbody></table>
+
+
+@*Modal của detail Account*@
+
+
+<div class="modal fade" id="DetailAccountModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabelAccount">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditModalLabelAccount" >Chi tiết tài khoản</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="return false">
+                    
+                    <div class="form-group">
+                        <img src="" class="img-thumbnail" id="image_detail_account" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <input class=" form-control" type="text" id="name_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <input class=" form-control " type="text" id="birthdate_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <input class=" form-control " type="text" id="gender_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input class=" form-control" type="text" id="address_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input class=" form-control" type="text" id="sdt_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class=" form-control" type="text" id="email_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input class=" form-control" type="text" id="password_detail_account" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Điểm</label>
+                        <input class=" form-control" type="text" id="point_detail_account" readonly />
+                    </div>
+                    <div>
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var imageUrl = $('#image_detail_account').val().toString();
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/Account.js"></script>
+}

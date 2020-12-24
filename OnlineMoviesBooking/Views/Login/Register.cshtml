@@ -1,73 +1,123 @@
-﻿
+﻿@model OnlineMoviesBooking.Models.ViewModel.RegisterViewModel
+
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register1";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
-
-
 
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/css/styles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+
+
 </head>
-<body style="background-color: black;position:relative;z-index:0;top:0px;width:100%" class="text-center">
-    <div class="row justify-content-center">
-        <img src="~/assets/Img_aventure/tải xuống (1).jfif" alt="Alternate Text" style="width:103%;position:absolute;z-index:0" />
-        <div class="shadow border-0 rounded" style="margin-top:30rem;background-color:darkblue;opacity:0.9;color:white;width:50%">
-            <div style="width:100%;font-size:3rem;padding:1rem;color:aliceblue;text-align:center">Đăng ký</div>
-            <div style="width:100%;font-size:24px" class="justify-content-center">
-                <div class="card-body">
-                    <form>
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="small mb-1" for="inputFirstName">First Name</label>
-                                    <input class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="small mb-1" for="inputLastName">Last Name</label>
-                                    <input class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" />
-                                </div>
-                            </div>
+<body style="z-index:0;top:0px;width:100%;height:100%" class="text-center">
+
+    <!-- ==========Preloader========== -->
+    <div class="preloader" style="display: none;">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ==========Preloader========== -->
+    <!-- ==========Sign-In-Section========== -->
+    <section class="account-section" style="margin-top:7rem">
+        <div class="container">
+            <div class="padding-top padding-bottom">
+                <div class="account-area">
+                    <div class="section-header-3">
+                        <span class="cate">welcome</span>
+                        <h2 class="title">to Boleto </h2>
+                    </div>
+                    <form class="account-form" asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label>Tên đăng nhập<span>*</span></label>
+                            <input type="text" asp-for="Username" placeholder="Nhập tên đăng nhập"  required>
+                            <span asp-validation-for="Username" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="small mb-1" for="inputEmailAddress">Email</label>
-                            <input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" />
+                            <label>Họ và tên<span>*</span></label>
+                            <input type="text" asp-for="FullName" placeholder="Nhập họ và tên"required>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="small mb-1" for="inputPassword">Password</label>
-                                    <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
-                                    <input class="form-control py-4" id="inputConfirmPassword" type="password" placeholder="Confirm password" />
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>Email<span>*</span></label>
+                            <input asp-for="Email" type="text" placeholder="Nhập Email"  required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                        <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div>
+                        <div class="form-group">
+                            <label>Số điện thoại<span>*</span></label>
+                            <input type="text" asp-for="SDT" placeholder="Nhập số điện thoại" required>
+                            <span asp-validation-for="SDT" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu<span>*</span></label>
+                            <input asp-for="Password" type="password" placeholder="Nhập mật khẩu" id="pass1" required>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Nhập lại mật khẩu<span>*</span></label>
+                            <input asp-for="PasswordConfirm" type="password" placeholder="Nhập lại mật khẩu" id="pass2" required>
+                            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-center">
+                            <input type="submit" value="Đăng ký">
+                        </div>
                     </form>
+                    <div class="option">
+                        Đã có tài khoản? <a href="http://pixner.net/boleto/demo/sign-in.html">Đăng nhập</a>
+                    </div>
+                    <div class="or"><span>Or</span></div>
+                    <ul class="social-icons">
+                        <li>
+                            <a href="http://pixner.net/boleto/demo/sign-up.html#0">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://pixner.net/boleto/demo/sign-up.html#0" class="active">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://pixner.net/boleto/demo/sign-up.html#0">
+                                <i class="fab fa-google"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-            <script src="js/scripts.js"></script>
-
         </div>
-
-    </div>
+    </section>
+    <!-- ==========Sign-In-Section========== -->
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
 </body>
 </html>
+

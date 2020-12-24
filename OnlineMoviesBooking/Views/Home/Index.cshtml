@@ -1,4 +1,4 @@
-﻿
+﻿@using OnlineMoviesBooking.Models.Models;
 @{
     Layout = "_LayoutLogin";
 }
@@ -7,65 +7,200 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/css/styles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
 </head>
-<body style="background-color: rgb(21,24,41);" class="text-center">
-    <div style="position:relative;z-index:0;top:0px;width:100%">
-        <img src="~/assets/Img_aventure/tải xuống.jfif" alt="Alternate Text" style="width:105%" />
-        <div style="position:absolute;z-index:0;top:25rem;width:100%">
-            <img src="~/assets/Img_aventure/tải xuống (3).jfif" alt="hihi" style="width:90%;margin-bottom:5rem" />
-        </div>
-    </div>
-    <div style="margin-top:25rem;position:relative">
-        
-        <div>
-            <div class="container-fluid text-center" style="width:80%;margin-bottom:2rem">
-                <div style="font-size:4rem;font-weight:500;color:white;text-align:left;position:relative">MOVIES</div>
-                <hr style="background-color:white;width:100%;top:0px" />
-                <div>
-                    <div class="row">
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/harly.jpg" alt="Harly qquin" class="img-fluid" />
-                            @*<div style="background-color:#4a148c;height:100%"></div>*@
-                        </div>
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/jokerr.jpg" alt="Harly qquin" class="img-fluid" />
-                        </div>
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/doctor.jpg" alt="Harly qquin" class="img-fluid" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid text-center" style="width:80%;margin-bottom:2rem">
-                <div style="font-size:4rem;font-weight:500;color:white;text-align:left;position:relative">EVENTS</div>
-                <hr style="background-color:white;width:100%;top:0px" />
-                <div>
-                    <div class="row">
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/harly.jpg" alt="Harly qquin" class="img-fluid" />
-                            @*<div style="background-color:#4a148c;height:100%"></div>*@
-                        </div>
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/jokerr.jpg" alt="Harly qquin" class="img-fluid" />
-                        </div>
-                        <div class="col col-sm-6 col-lg-4">
-                            <img src="~/assets/img/doctor.jpg" alt="Harly qquin" class="img-fluid" />
-                        </div>
-                    </div>
-                </div>
-
+<body>
+    <!-- ==========Preloader========== -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
             </div>
         </div>
     </div>
-    
-    
+    <!-- ==========Preloader========== -->
+    <!-- ==========Overlay========== -->
+    <div class="overlay"></div>
+    <a href="#0" class="scrollToTop">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- ==========Overlay========== -->
+    <!-- ==========Banner-Section========== -->
+    <section class="banner-section">
+        <div class="banner-bg bg_img bg-fixed" data-background="~/assets/Img_aventure/tải xuống.jfif"></div>
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="title  cd-headline clip">
+                    <span class="d-block">book your</span> tickets for
+                    <span class="color-theme cd-words-wrapper p-0 m-0">
+                        <b class="is-visible">Movie</b>
+                        <b>Event</b>
+                        <b>Sport</b>
+                    </span>
+                </h1>
+                <p>Safe, secure, reliable ticketing.Your ticket to live entertainment!</p>
+            </div>
+        </div>
+    </section>
+    <!-- ==========Banner-Section========== -->
 
+    <!-- ==========Movie-Section========== -->
+
+    <section class="movie-section padding-top padding-bottom">
+        <div class="container">
+            <div class="tab">
+                <div class="section-header-2">
+                    <div class="left">
+                        <h2 class="title">PHIM</h2>
+                        
+                    </div>
+                    <ul class="tab-menu">
+                        <li class="active">
+                            phim đang chiếu
+                        </li>
+                        <li>
+                            phim sắp chiếu
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-area mb-30-none">
+                    <div class="tab-item active">
+                        <div class="owl-carousel owl-theme tab-slider">
+                            @foreach (var item in ViewBag.Movie)
+                            {
+                                <div class="item">
+                                    <div class="movie-grid">
+                                        <div class="movie-thumb c-thumb">
+                                            <a href="/Movie/Detail/@item.Id">
+                                                <img src="@item.Poster" alt="movie">
+                                            </a>
+                                        </div>
+                                        <div class="movie-content bg-one">
+                                            <h5 class="title m-0">
+                                                <a href="/Movie/Detail/@item.Id">@item.Name</a>
+                                            </h5>
+                                            <ul class="movie-rating-percent">
+                                                <li>
+                                                    <div class="thumb">
+                                                        <img src="~/assets/images/movie/tomato.png" alt="movie">
+                                                    </div>
+                                                    <span class="content">@item.ReleaseDate</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==========Movie-Section========== -->
+    <!-- ==========discount-Section========== -->
+
+    <section class="movie-section padding-top padding-bottom">
+        <div class="container">
+            <div class="tab">
+                <div class="section-header-2">
+                    <div class="left">
+                        <h2 class="title">Khuyến mãi</h2>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tab-area mb-30-none">
+                    <div class="tab-item active">
+                        <div class="owl-carousel owl-theme tab-slider">
+                            @{
+                                List<Discount> listdiscount = ViewBag.listDiscount;
+                                if (listdiscount != null)
+                                {
+                                    foreach (var item in listdiscount)
+                                    {
+                                        <div class="item">
+                                            <div class="movie-grid">
+                                                <div class="movie-thumb c-thumb">
+                                                    <a href="#0">
+                                                        <img src="@item.ImageDiscount" alt="movie">
+                                                    </a>
+                                                </div>
+                                                <div class="movie-content bg-one">
+                                                    <h5 class="title m-0">
+                                                        <a href="#0">@item.Name</a>
+                                                    </h5>
+                                                    <ul class="movie-rating-percent">
+                                                        <li>
+                                                            <span class="content" style="font-size:25px">Mã: @item.Id</span>
+                                                        </li>
+                                                        <br />
+                                                        <li>
+
+                                                            <span class="content">
+                                                                Giảm @item.PercentDiscount.ToString()% Giảm tối đa @item.MaxCost.ToString() <br />
+
+                                                            </span>
+                                                        </li>
+                                                        <br />
+                                                        <li>
+                                                            <span class="content" style="font-size:12px">
+                                                                HSD: @item.DateEnd.Value.ToShortDateString()
+                                                            </span>
+
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==========discount-Section========== -->
+    @{
+
+        if (TempData["msg"] != null)
+        {
+            string msg = TempData["msg"].ToString();
+            <script>
+                alert('@msg')
+            </script>
+        }
+    }
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
 
 </body>
 </html>

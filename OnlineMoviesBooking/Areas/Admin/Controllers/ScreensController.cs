@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models.Models;
@@ -15,19 +17,78 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
     public class ScreensController : Controller
     {
         private ExecuteProcedure Exec;
+        private readonly string check;
 
-        public ScreensController(CinemaContext context)
+        public ScreensController(IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure();
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString").ToString());        // sao chỗ này lỗi v
+            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        check = Convert.ToString(reader[0]);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    check = "0";
+                }
+                connection.Close();
+            }
         }
         public IActionResult GetAll()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             var obj=Exec.ExecuteScreenGetAllwithTheater();
             return Json(new {data=obj});
         }
         // GET: Screens
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theater= new SelectList(theater, "Id", "Name");
             return View();
@@ -37,6 +98,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Details(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id == null)
             { 
                 return NotFound();
@@ -54,6 +132,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // GET: Screens/Create
         public IActionResult Create()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             var theater = Exec.ExecuteTheaterGetAll();
             ViewBag.Theater = new SelectList(theater, "Id", "Name");
           
@@ -65,7 +160,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IdTheater")] Screen screen)
+        public IActionResult Create([Bind("Id,Name,IdTheater")] Screen screen)
         {
             if (ModelState.IsValid)
             {
@@ -74,7 +169,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 // check lỗi do nhập
                 if (checkname != "") 
                 {
-                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    ModelState.AddModelError("Name", checkname);
                 }
                 else
                 {
@@ -88,9 +183,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     }
 
                     // transaction
-                    if (s == "2627")
+                    if (s!="")
                     {
-                        ModelState.AddModelError("Name", "Có lỗi xảy ra");
+                        ModelState.AddModelError("Name", s);
                     }
                     else
                     {
@@ -105,8 +200,25 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         }
 
         // GET: Screens/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -133,7 +245,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,IdTheater")] Screen screen)
+        public IActionResult Edit(string id, [Bind("Id,Name,IdTheater")] Screen screen)
         {
             if (id != screen.Id)
             {
@@ -167,20 +279,50 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(string id)
         {
-            string result=Exec.ExecuteDeleteScreen(id);
-            if (result == "2627")
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
-                return Json(new { success = false });
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
             }
-            else if(result== "Phòng chiếu đang có lịch chiếu")
+            else
             {
-                return Json(new { success = false, message= "Phòng chiếu đang có lịch chiếu" });
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
+            string result=Exec.ExecuteDeleteScreen(id);
+             if(result!="")
+                {
+                return Json(new { success = result });
                 }
             return Json(new { success = true });
         }
         public IActionResult Search(string id)
         {
-            if(id==null)
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
+            if (id==null)
             {
                 var obja = Exec.ExecuteScreenGetAllwithTheater();
                 return Json(new { data = obja });

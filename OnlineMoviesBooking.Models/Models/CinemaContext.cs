@@ -30,20 +30,15 @@ namespace OnlineMoviesBooking.Models.Models
         public virtual DbSet<TypesOfAccount> TypesOfAccount { get; set; }
         public virtual DbSet<TypesOfSeat> TypesOfSeat { get; set; }
         public virtual DbSet<UseDiscount> UseDiscount { get; set; }
-        public virtual DbSet<VBillModel> VBillModel { get; set; }
-        public virtual DbSet<VCheckout> VCheckout { get; set; }
-        public virtual DbSet<VGetShowisComing> VGetShowisComing { get; set; }
-        public virtual DbSet<VGetShowisUsed> VGetShowisUsed { get; set; }
-        public virtual DbSet<VMovieComing> VMovieComing { get; set; }
-        public virtual DbSet<VMovieNow> VMovieNow { get; set; }
-        public virtual DbSet<VPrice> VPrice { get; set; }
+       
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=localhost;Database=Cinema;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+                //optionsBuilder.UseSqlServer("Server=localhost;Database=Cinema;Trusted_Connection=True;");
             }
         }
 
@@ -52,7 +47,7 @@ namespace OnlineMoviesBooking.Models.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__Account__A9D10534644CB036")
+                    .HasName("UQ__Account__A9D105348774374D")
                     .IsUnique();
 
                 entity.Property(e => e.Id)
@@ -500,271 +495,7 @@ namespace OnlineMoviesBooking.Models.Models
                     .HasConstraintName("FK_UseDiscount_Discount");
             });
 
-            modelBuilder.Entity<VBillModel>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_BillModel");
-
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Date).HasColumnType("smalldatetime");
-
-                entity.Property(e => e.IdAccount)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdDiscount)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdShow)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Languages)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.MovieName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ScreenName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TheaterName)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.TimeEnd).HasColumnType("datetime");
-
-                entity.Property(e => e.TimeStart).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<VCheckout>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_Checkout");
-
-                entity.Property(e => e.IdMovie)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdShow)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Languages)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ScreenName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TheaterName)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.TimeStart).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<VGetShowisComing>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_GetShowisComing");
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Languages)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.MovieName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Poster)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.ScreenName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TheaterName)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.TimeEnd).HasColumnType("datetime");
-
-                entity.Property(e => e.TimeStart).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<VGetShowisUsed>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_GetShowisUsed");
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Languages)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.MovieName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Poster)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.ScreenName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TheaterName)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.TimeEnd).HasColumnType("datetime");
-
-                entity.Property(e => e.TimeStart).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<VMovieComing>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_MovieComing");
-
-                entity.Property(e => e.Casts)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Director)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Genre)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Poster)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.Rated).HasMaxLength(1000);
-
-                entity.Property(e => e.ReleaseDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Trailer)
-                    .IsRequired()
-                    .HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<VMovieNow>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_MovieNow");
-
-                entity.Property(e => e.Casts)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Director)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Genre)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.Poster)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.Rated).HasMaxLength(1000);
-
-                entity.Property(e => e.ReleaseDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Trailer)
-                    .IsRequired()
-                    .HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<VPrice>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("V_Price");
-
-                entity.Property(e => e.Date).HasColumnType("smalldatetime");
-
-                entity.Property(e => e.IdAccount)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdDiscount)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdShow)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-            });
-
+            
             OnModelCreatingPartial(modelBuilder);
         }
 

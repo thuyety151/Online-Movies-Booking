@@ -1,4 +1,4 @@
-﻿@model OnlineMoviesBooking.Models.ViewModels.BillViewModel;
+﻿@model OnlineMoviesBooking.Models.ViewModels.TicketViewModel;
 @{
     ViewData["Title"] = "SeatPlan";
     Layout = "~/Areas/Customer/Views/Shared/_Layout.cshtml";
@@ -13,7 +13,7 @@
                 <h3 class="title">@ViewBag.MovieName</h3>
                 <div class="tags">
                     <a>@ViewBag.ScreenName</a>
-                    <a>English - 2D</a>
+                    <a>@ViewBag.Language</a>
                 </div>
             </div>
         </div>

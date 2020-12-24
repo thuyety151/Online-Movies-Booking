@@ -11,6 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using Microsoft.Data.SqlClient;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -18,18 +22,20 @@ namespace OnlineMoviesBooking.Controllers
     {
         private readonly string _clientId;
         private readonly string _secretKey;
-        private ExecuteProcedure Exec;
-        public MovieController(IConfiguration config)
-        {
-            Exec = new ExecuteProcedure();
+        private readonly ExecuteProcedure Exec;
+
+        public MovieController(IHttpContextAccessor httpContextAccessor,IConfiguration config)
+        { 
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString".ToString()));
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
+
         }
         public IActionResult Index()
         {
             return View();
         }
-       
+
         public IActionResult ComingSoon(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
@@ -122,14 +128,14 @@ namespace OnlineMoviesBooking.Controllers
                 {
 
                     // lấy số lẻ
-                     lstmovie =Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount%num);
+                    lstmovie = Exec.ExecuteGetMovieNow(num * (numpage - 1), movieCount % num);
 
                 }
                 //trường hợp 1
                 else
                 {
 
-                     lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
+                    lstmovie = Exec.ExecuteGetMovieNow(num * (page.GetValueOrDefault() - 1), num);
                 }
 
 
@@ -138,13 +144,13 @@ namespace OnlineMoviesBooking.Controllers
             else
             {
                 ViewBag.page = 1;
-                 lstmovie = Exec.ExecuteGetMovieNow(0, num);
+                lstmovie = Exec.ExecuteGetMovieNow(0, num);
             }
             return View(lstmovie);
         }
         public IActionResult Detail(string id)
         {
-           
+
             if (id == null)
             {
                 return NotFound();
@@ -179,21 +185,74 @@ namespace OnlineMoviesBooking.Controllers
             DateTime now = DateTime.Now;
             int temp = 0;
             List<string> dateshow = new List<string>();
-             while(temp!=7)
+            while (temp != 7)
             {
-               
-                dateshow.Add(now.Date.ToString("dd/MM/yyyy"));
-                // now.Date.ToString("") + "/" + now.Date.ToString("MM") + "/" + now.Date.ToString("yyyy")
+                dateshow.Add(now.ToLocalTime().ToShortDateString());
                 now = now.AddDays(1);
                 temp++;
             }
             ViewBag.Date = dateshow;
-            
+
             return View(movie);
         }
-        
+
         public IActionResult SeatPlan(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
+
+            Account acc = new Account();
+            string connectionString = HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_GetDetailAccount @id = '{HttpContext.Session.GetString("idLogin")}'";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            acc.Id = Convert.ToString(reader[0]);
+                            acc.Name = Convert.ToString(reader[1]);
+                            acc.Birthdate = Convert.ToDateTime(reader[2]);
+                            acc.Gender = Convert.ToBoolean(reader[3]);
+                            acc.Address = Convert.ToString(reader[4]);
+                            acc.Sdt = Convert.ToString(reader[5]);
+                            acc.Email = Convert.ToString(reader[6]);
+                            acc.Password = Convert.ToString(reader[7]);
+                            acc.Point = Convert.ToInt32(reader[8]);
+                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                            acc.Image = Convert.ToString(reader[11]);
+                        }
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = "error";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                catch
+                {
+
+                    TempData["msg"] = "error";
+                    return RedirectToAction("Index", "Home");
+                }
+                connection.Close();
+            }
             if (id == null)
             {
                 return NotFound();
@@ -204,12 +263,16 @@ namespace OnlineMoviesBooking.Controllers
                 return NotFound();
             }
 
-            Exec.ExecDeleteTicketStatus0("1");
+            // chưa gọi transaction
+            //Exec.ExecDeleteTicketStatus0("1");
+            Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
+
 
             ViewBag.IdShow = id;
             ViewBag.MovieName = plan.MovieName;
             ViewBag.ScreenName = plan.ScreenName;
             ViewBag.TheaterName = plan.TheaterName;
+            ViewBag.Language = plan.Languages;
             ViewBag.TimeStart = plan.TimeStart.ToString("HH:mm");
             ViewBag.Date = plan.TimeStart.ToString("dd/mm/yyyy");
 
@@ -225,42 +288,31 @@ namespace OnlineMoviesBooking.Controllers
 
             return View();
         }
-       
-        public IActionResult ShowsDate(DateTime date)
-        {
-            if(date==null)
-            {
-                return NotFound();
-            }
-            var show = Exec.ExecuteGetAllShowDate(date);
-            return Json(new { data = show });
-        }
-        
+
+
 
         [HttpGet]
-        public IActionResult getshowbydate(string idMovie, string date)
+        public IActionResult Getshowbydate(string idMovie, string date)
         {
-            if(idMovie==null || date == null)
+
+            if (idMovie == null || date == null)
             {
                 return NotFound();
             }
-            DateTime d = DateTime.Parse(date);
+            //DateTime d = DateTime.Parse(date);
+            DateTime d=new DateTime(DateTime.Parse(date).Ticks, DateTimeKind.Local);
+            //DateTime d = DateTime.Parse(date.ToString());
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện
-            return Json(  theater );
+            return Json(theater);
         }
         [HttpGet]
-        public IActionResult getprice()
+        public IActionResult Getprice()
         {
             //List<TypesOfSeat> price = new List<TypesOfSeat>();
-             var price = Exec.GetAllTypesOfSeat();
+            var price = Exec.GetAllTypesOfSeat();
             return Json(price);
-        }
-        [HttpGet]
-        public IActionResult TimeOut()
-        {
-            return RedirectToAction("Index");
         }
 
         public IActionResult PayPal()
@@ -268,7 +320,7 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult getinfo(string idshow, string lstSeat)
+        public IActionResult Getinfo(string idshow, string lstSeat)
         {
             // Kiểm tra ghế và lịch hợp lệ => gán vào BillViewModel : nếu xác nhận bill sẽ add vào database
             // Kiểm tra ID show hợp lêk
@@ -320,7 +372,8 @@ namespace OnlineMoviesBooking.Controllers
                 }
             }
             // insert seat vào ticket
-            string result = Exec.ExecInsertTickets(seats, "1", idshow, null);
+            string result = Exec.ExecInsertTickets(seats, HttpContext.Session.GetString("idLogin").ToString()
+                                        , idshow, null);
             //  xử lí transaction
             if (result == "Ghế đã được chọn")
             {
@@ -331,18 +384,30 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
-            List<string> lst = lstSeat.Split(',').ToList();
-
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             // get bill
-                var bill = Exec.ExecGetTicketDetail("1", idshow);
+            var bill = Exec.ExecGetTicketDetail(HttpContext.Session.GetString("idLogin").ToString(), idshow);
             ViewBag.Show = idshow;
             return View(bill);
         }
         [HttpGet]
         public IActionResult UseDiscount( string code)
         {
-            
-            var obj = Exec.ExecUseDiscount("1", code);
+
+            string s = Exec.ExecCheckDiscount(code);
+            if(s== "False")
+            {
+                return Json(false);
+            }
+            var obj = Exec.ExecUseDiscount(HttpContext.Session.GetString("idLogin").ToString(), code);
 
             return Json(obj);
         }
@@ -350,33 +415,51 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult UsePoint(string point)
         {
             // kiểm tra điểm hợp lệ
-            var obj = Exec.ExecCheckPoint("1", int.Parse(point));
+            var obj = Exec.ExecCheckPoint(HttpContext.Session.GetString("idLogin").ToString(), int.Parse(point));
             return Json(obj);
         }
         public IActionResult TimeOut(string idshow)
         {
-            string s=Exec.ExecDeleteTicketStatus0("1");
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
+            string s=Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
             if (s != "")
             {
                 // co loi xay ra
-                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+                return Content(s);
             }
             return View("Index");
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code,string pointuse)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             double total = 0;
             if (code != null)
             {
                 // áp dụng khuyến mãi
-                Exec.ExecAddDiscount("1", code);
+                Exec.ExecAddDiscount(HttpContext.Session.GetString("idLogin").ToString(), code);
             }
             
             if (pointuse != null)
             {
                 // add point vào bill và trừ ở account
                 // sẽ tran khi thanh toán ko thành công
-                string execPoint = Exec.ExecAddPoint("1", pointuse);
+                string execPoint = Exec.ExecAddPoint(HttpContext.Session.GetString("idLogin").ToString(), pointuse);
                 if(execPoint== "Không dùng được point")
                 {
                     // lỗi điểm âm sau khi trừ
@@ -391,7 +474,7 @@ namespace OnlineMoviesBooking.Controllers
             var environment = new SandboxEnvironment(_clientId, _secretKey);
             var client = new PayPalHttpClient(environment);
 
-            var checkout = Exec.TestCheckout("1",pointuse);
+            var checkout = Exec.TestCheckout(HttpContext.Session.GetString("idLogin").ToString(),pointuse);
             // GET POINT
             int point;
             if (checkout.PointCost == null)
@@ -502,23 +585,41 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult CheckoutFail()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
-            string s = Exec.ExecDeleteTicketStatus0("1");
+            string s = Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
             if (s != "")
             {
                 // co loi xay ra
-                return Content("Đã xảy ra lỗi trong quá trình hủy bill");
+                return Content(s);
             }
             return Content("Thanh toán không thành công");
         }
 
         public IActionResult CheckoutSuccess(int point=0)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
-            
-            Exec.ExecUpdateTicketStatus("1",point);
+
+            Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
             return Content("Thanh toán thành công");
         }
     }

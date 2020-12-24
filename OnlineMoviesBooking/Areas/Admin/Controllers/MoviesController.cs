@@ -16,28 +16,71 @@ using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineMoviesBooking.Models.ViewModels;
+using Microsoft.Data.SqlClient;
 
 namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class MoviesController : Controller
     {
-        private ExecuteProcedure Exec;
+        private readonly ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public MoviesController(IWebHostEnvironment hostEnvironment)
+        private readonly string check;
+        public MoviesController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
-            Exec = new ExecuteProcedure();
+            Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
             this._hostEnvironment = hostEnvironment;
+            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        check = Convert.ToString(reader[0]);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                    check = "0";
+                }
+                connection.Close();
+            }
         }
 
         public IActionResult GetAll()
         {
-           // var obj = Exec.ExecuteMovieGetAll();        // dùng ajax chưa hiệu quả
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
+            // var obj = Exec.ExecuteMovieGetAll();        // dùng ajax chưa hiệu quả
             var movie = Exec.ExecuteMovieGetAll().Select(x => new             // tốn dữ liệu
             {
                 id = x.Id,
                 name = x.Name,
-                releaseDate = x.ReleaseDate.ToString("dd-MM-yyyy"),
+                releaseDate = x.ReleaseDate.GetValueOrDefault().ToString("dd-MM-yyyy"),
                 runningtime = x.RunningTime.ToString(),
                 poster = x.Poster
             });
@@ -46,11 +89,45 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         // GET: Movies
         public IActionResult Index()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             return View();
         }
 
         public IActionResult Details(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -71,6 +148,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Upsert(string id=null)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             if (id != null)
             {
                 // Edit
@@ -91,9 +185,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(Movie movie, IFormFile files)
+        public IActionResult Upsert(Movie movie, IFormFile files)
         {
             
+
             if (ModelState.IsValid)
             {
                 // check image
@@ -144,38 +239,92 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 {
                     movie.Rated = "";
                 }
-
                 if (movie.Id == null)
                 {
                     //Theem movie
                     movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
-                    string result= Exec.ExecuteInsertMovie(movie);
-                    while(result.Contains("PRIMARY") ) // trùng primary key do generate id
+                    string result = Exec.ExecuteInsertMovie(movie);
+                    while (result.Contains("PRIMARY")) // trùng primary key do generate id
                     {
                         movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
                         result = Exec.ExecuteInsertMovie(movie);
-                    }    
 
+                    }
+                    if (result != "")
+                    {
+                        ModelState.AddModelError("", result.ToString());
+                        return View(movie);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     // 
-                    Exec.ExecuteUpdateMovie(movie);
-
+                    string result = Exec.ExecuteUpdateMovie(movie);
+                    if (result != "")
+                    {
+                        ModelState.AddModelError("", result.ToString());
+                        return View(movie);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
 
+
             }
-            return View(movie);
+            if (movie.Id == null)
+            {
+                //Theem movie
+                movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                string result = Exec.ExecuteInsertMovie(movie);
+                while (result.Contains("PRIMARY")) // trùng primary key do generate id
+                {
+                    movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
+                    result = Exec.ExecuteInsertMovie(movie);
+
+                }
+                if (result != "")
+                {
+                    ModelState.AddModelError("", result.ToString());
+                    return View(movie);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                // 
+                string result = Exec.ExecuteUpdateMovie(movie);
+                if (result != "")
+                {
+                    ModelState.AddModelError("", result.ToString());
+                    return View(movie);
+                }
+                return RedirectToAction(nameof(Index));
+            }
         }
 
  
         // POST: Movies/Delete/5
         [HttpDelete]
       
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
+
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
             var movie = Exec.ExecuteMovieDetail(id);
             if(movie==null)
             {

@@ -6,10 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UploadFiles\**" />
+    <Content Remove="UploadFiles\**" />
+    <EmbeddedResource Remove="UploadFiles\**" />
+    <None Remove="UploadFiles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Grpc.Core" Version="2.33.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
@@ -19,6 +26,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PayPal" Version="2.0.0-rc2" />
   </ItemGroup>
 
@@ -28,6 +36,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Admin\Views\HomeAdmin\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Qas\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Qas\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Qas\Index.cshtml" />
+    <None Include="Areas\Admin\Views\TypeOfMembers\Create.cshtml" />
+    <None Include="Areas\Admin\Views\TypeOfMembers\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\TypeOfMembers\Index.cshtml" />
+    <None Include="wwwroot\css\build\toastr.js.map" />
+    <None Include="wwwroot\css\build\toastr.min.js" />
     <Folder Include="wwwroot\images\movies\" />
     <Folder Include="wwwroot\images\discounts\" />
     <Folder Include="wwwroot\jquery\" />

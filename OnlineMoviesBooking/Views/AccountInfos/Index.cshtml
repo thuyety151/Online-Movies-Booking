@@ -1,0 +1,131 @@
+﻿@model OnlineMoviesBooking.Models.Models.Account
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+
+    <title>Boleto  - Online Ticket Booking Website HTML Template</title>
+
+
+</head>
+
+<body>
+    @{
+        string id = TempData["idLogin"].ToString();
+        string img = "/image/Account/Avatar_default.png";
+
+
+        if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
+            img = "/image/Account/Avatar_default.png";
+        else
+            img = TempData["imgLogin"].ToString();
+
+
+    }
+    <!-- ==========Speaker-Single========== -->
+    <section class="speaker-single" style="margin-top:13rem;margin-bottom:10rem">
+        <div class="container-fluid" >
+            <div class="bg-six p" style="padding:2.5rem 5rem;">
+                <div style="margin-top:5rem">
+                    <div class="text-center">
+                        @{
+                            if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
+                            {
+                                <div style="width:90%; max-width:25rem;">
+                                    <img src="@img" class="shadow" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="event-about-thumb" style="width:90%; max-width:25rem;">
+                                    <img src="@img" class="shadow" />
+                                </div>
+                            }
+                        }
+                    </div>
+                   
+                    <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Thông tin tài khoản</h2>
+
+
+                    <form class="contact-form" asp-action="Edit" method="get">
+
+                        <div class="form-group ">
+                            <h6>Tên</h6><br />
+                            <input type="text" asp-for="Name" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Ngày sinh</h6><br />
+                            <input type="text" asp-for="Birthdate" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Giới tính</h6><br />
+                            @if (Model.Gender == true)
+                            {
+                                <input type="text" placeholder="Name" readonly />
+                            }
+                            else
+                            {
+                                <input type="text" placeholder="Nữ" readonly />
+                            }
+
+                        </div>
+                        <div class="form-group">
+                            <h6>Email</h6><br />
+                            <input type="text" asp-for="Email" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Địa chỉ</h6><br />
+                            <input type="text" asp-for="Address" readonly />
+                        </div>
+                        <div class="form-group">
+                            <h6>Điểm</h6><br />
+                            <input type="text" asp-for="Point" readonly />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Sửa thông tin" />
+                        </div>
+                        <a class="form-group" href="/AccountInfos/GetAllTicket">Lịch sử gia dịch</a>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <!-- ==========Speaker-Single========== -->
+    <!-- ==========Newslater-Section========== -->
+
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
+</body>
+
+</html>

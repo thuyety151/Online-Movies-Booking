@@ -22,14 +22,14 @@
                 "render": function (data) {
                     return `
                                  <div class="text-center" style="display:grid" >
-                                    <a href="/Admin/Shows/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer">
-                                        Edit
+                                    <a href="/Admin/Shows/Edit/${data}" class="btn btn-primary text-white" style="cursor:pointer">
+                                        Sửa
                                     </a>
                                      <a href="/Admin/Shows/Details/${data}"
-                                        class="btn btn-success" style="font-size:small">Details</a>
+                                        class="btn btn-success" style="font-size:small">Chi tiết</a>
                                     </a>
                                     <a onClick=Delete("/Admin/Shows/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                        Delete</a>
+                                        Xóa</a>
                                 </div>
                                 `
                 }
@@ -63,7 +63,7 @@ function Delete(url) {
                 url: url,
                 success: function (data) {
                     console.log(data);
-                    if (data.success) {
+                    if (data.success== true) {
                         swalWithBootstrapButtons.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -74,7 +74,7 @@ function Delete(url) {
                     else {
                         swalWithBootstrapButtons.fire(
                             'Error',
-                            'Can not delete this, maybe it not exit or error from sever',
+                            data.success,
                             'error'
                         )
                     }
@@ -183,13 +183,12 @@ $('#Search-Status').click(function () {
 });
 
 
+var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+triggerTabList.forEach(function (triggerEl) {
+    var tabTrigger = new bootstrap.Tab(triggerEl)
 
-//var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
-//triggerTabList.forEach(function (triggerEl) {
-//    var tabTrigger = new bootstrap.Tab(triggerEl)
-
-//    triggerEl.addEventListener('click', function (event) {
-//        event.preventDefault()
-//        tabTrigger.show()
-//    })
-//})
+    triggerEl.addEventListener('click', function (event) {
+        event.preventDefault()
+        tabTrigger.show()
+    })
+})

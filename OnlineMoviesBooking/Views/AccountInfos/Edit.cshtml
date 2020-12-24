@@ -1,0 +1,142 @@
+﻿@model OnlineMoviesBooking.Models.ViewModel.AccountViewModel;
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
+    <link href="~/Template/css/animate.css" rel="stylesheet" />
+    <link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Template/css/flaticon.css" rel="stylesheet" />
+    <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/Template/css/main.css" rel="stylesheet" />
+    <link href="~/Template/css/nice-select.css" rel="stylesheet" />
+    <link href="~/Template/css/odometer.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Template/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/css/build/toastr.css" rel="stylesheet" />
+</head>
+
+<body>
+    @{
+        string img;
+        if (TempData["idLogin"] == null && TempData["imgLogin"] == null)
+        {
+            img = "/image/Account/Avatar_default.png";
+
+        }
+        else
+        {
+            if (TempData["imgLogin"] == null || TempData["imgLogin"] == "")
+                img = "/image/Account/Avatar_default.png";
+            else
+                img = TempData["imgLogin"].ToString();
+
+        }
+    }
+    <!-- ==========Contact-Section========== -->
+    <section class="contact-section padding-top">
+        <div class="contact-container">
+
+            <div class="container">
+
+                <div class="container">
+                    <h2 class="title text-center" style="padding-top:2rem;margin-bottom:2rem">Chỉnh sửa thông tin</h2>
+                    <form class="contact-form" id="contact_form_submit" asp-action="Edit" enctype="multipart/form-data">
+                        <div style="margin-top:5rem;max-width:20rem" class="container">
+                            @{
+                                if (TempData["idLogin"] == null && TempData["imgLogin"] == null)
+                                {
+                                    <div style="width:90%; max-width:10rem;">
+                                        <img src="@img" class="shadow" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="event-about-thumb" style="width:100%; max-width:20rem;">
+                                        <img src="@img" class="shadow text-center" />
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="exampleInputFile">File input</label>
+                            <input asp-for="Image" type="file" class="form-control-file"
+                                   id="exampleInputFile" aria-describedby="fileHelp" multiple>
+                        </div>
+                        <input type="text" asp-for="Id" hidden />
+                        <input type="text" asp-for="Sdt" hidden />
+                        <input type="text" asp-for="Password" hidden />
+                        <input type="text" asp-for="IdTypesOfUser" hidden />
+                        <input type="text" asp-for="IdTypeOfMember" hidden />
+                        <div class="form-group">
+                            <label>Tên<span>*</span></label>
+                            <input type="text" asp-for="Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày sinh<span>*</span></label>
+                            <input type="text" asp-for="Birthdate" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giới tính<span>*</span></label>
+                            <select style="background-color:transparent" asp-for="Gender" required>
+                                <option value="True">Nam</option>
+                                <option value="False">Nữ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email<span>*</span></label>
+                            <input type="text" asp-for="Email" required readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ<span>*</span></label>
+                            <input type="text" asp-for="Address" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Lưu">
+                        </div>
+
+                    </form>
+                    <br />
+                    <div class="form-group container-fluid">
+                        <input type="button" value="Quay lại" />
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+    <!-- ==========Contact-Section========== -->
+    <script src="~/Template/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Template/js/modernizr-3.6.0.min.js"></script>
+    <script src="~/Template/js/plugins.js"></script>
+    <script src="~/Template/js/isotope.pkgd.min.js"></script>
+    <script src="~/Template/js/magnific-popup.min.js"></script>
+    <script src="~/Template/js/owl.carousel.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/countdown.min.js"></script>
+    <script src="~/Template/js/odometer.min.js"></script>
+    <script src="~/Template/js/viewport.jquery.js"></script>
+    <script src="~/Template/js/nice-select.js"></script>
+    <script src="~/Template/js/main.js"></script>
+
+</body>
+</html>
+
+

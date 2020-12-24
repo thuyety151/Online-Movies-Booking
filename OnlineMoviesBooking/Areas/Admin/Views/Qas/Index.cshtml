@@ -1,0 +1,65 @@
+﻿@model IEnumerable<OnlineMoviesBooking.Models.Models.Qa>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="~/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/css/build/toastr.css" rel="stylesheet" />
+<h1>Index</h1>
+
+<table class="table" id="QaTable">
+    <thead class="bg-secondary text-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                Thời gian
+            </th>
+            <th>
+                Nội dung
+            </th>
+            <th>
+                Tên tài khoản
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @item.IdAccount
+                </td>
+                <td>
+                    <a onclick=DeleteQa("/Admin/Qas/Delete/@item.Id") class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/js/Questionanswer.js"></script>
+
+}
