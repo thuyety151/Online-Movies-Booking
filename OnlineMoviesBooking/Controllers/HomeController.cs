@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using OnlineMoviesBooking.DataAccess.Data;
 using OnlineMoviesBooking.Models;
 using OnlineMoviesBooking.Models.Models;
 
@@ -17,11 +18,12 @@ namespace OnlineMoviesBooking.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private ExecuteProcedure Exec;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-
+           
         }
 
         public IActionResult Index()
@@ -77,6 +79,10 @@ namespace OnlineMoviesBooking.Controllers
 
             }
             ViewData["listDiscount"] = listdis;
+
+            // get movies
+            Exec = new ExecuteProcedure(connectionString);
+            ViewBag.Movie = Exec.ExecuteGetMovieNow(0, 4).ToList();
             return View();
         }
         public IActionResult Error()

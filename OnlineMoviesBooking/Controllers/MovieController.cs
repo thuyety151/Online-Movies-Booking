@@ -187,9 +187,7 @@ namespace OnlineMoviesBooking.Controllers
             List<string> dateshow = new List<string>();
             while (temp != 7)
             {
-
-                dateshow.Add(now.Date.ToString("dd/MM/yyyy"));
-                // now.Date.ToString("") + "/" + now.Date.ToString("MM") + "/" + now.Date.ToString("yyyy")
+                dateshow.Add(now.ToLocalTime().ToShortDateString());
                 now = now.AddDays(1);
                 temp++;
             }
@@ -296,12 +294,14 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult Getshowbydate(string idMovie, string date)
         {
+
             if (idMovie == null || date == null)
             {
                 return NotFound();
             }
             //DateTime d = DateTime.Parse(date);
-            DateTime d = DateTime.Parse(date.ToString());
+            DateTime d=new DateTime(DateTime.Parse(date).Ticks, DateTimeKind.Local);
+            //DateTime d = DateTime.Parse(date.ToString());
             // can co them ten rap
             var theater = Exec.ExecuteFindTheaterShow(idMovie, d.ToString("yyyy-MM-dd"));
             // tìm tên, id các rạp thỏa điều kiện
@@ -313,11 +313,6 @@ namespace OnlineMoviesBooking.Controllers
             //List<TypesOfSeat> price = new List<TypesOfSeat>();
             var price = Exec.GetAllTypesOfSeat();
             return Json(price);
-        }
-        [HttpGet]
-        public IActionResult TimeOut()
-        {
-            return RedirectToAction("Index");
         }
 
         public IActionResult PayPal()
@@ -389,14 +384,24 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             // get bill
-                var bill = Exec.ExecGetTicketDetail(HttpContext.Session.GetString("idLogin").ToString(), idshow);
+            var bill = Exec.ExecGetTicketDetail(HttpContext.Session.GetString("idLogin").ToString(), idshow);
             ViewBag.Show = idshow;
             return View(bill);
         }
         [HttpGet]
         public IActionResult UseDiscount( string code)
         {
+
             string s = Exec.ExecCheckDiscount(code);
             if(s== "False")
             {
@@ -415,6 +420,15 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult TimeOut(string idshow)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             string s=Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
             if (s != "")
             {
@@ -425,6 +439,15 @@ namespace OnlineMoviesBooking.Controllers
         }
         public async System.Threading.Tasks.Task<IActionResult> PaypalCheckout(string code,string pointuse)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             double total = 0;
             if (code != null)
             {
@@ -562,6 +585,15 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult CheckoutFail()
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Chưa thanh toán"
             //Xóa session
             string s = Exec.ExecDeleteTicketStatus0(HttpContext.Session.GetString("idLogin").ToString());
@@ -575,9 +607,18 @@ namespace OnlineMoviesBooking.Controllers
 
         public IActionResult CheckoutSuccess(int point=0)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             //Tạo đơn hàng trong database với trạng thái thanh toán là "Paypal" và thành công
             //Xóa session
-            
+
             Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
             return Content("Thanh toán thành công");
         }

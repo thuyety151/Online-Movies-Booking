@@ -28,28 +28,25 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
         //-------------------------------MOVIE
         
-        public int GetCountMovieNow()   // checked
+        public int GetCountMovieNow()  
         {
             // to paging
             int count = 0;
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
-            // TêN STORE
             SqlCommand com = new SqlCommand("SELECT dbo.UF_GetNumOfMovieNow()", con);
             count= int.Parse(com.ExecuteScalar().ToString());
             return count;
         }
-        public int GetCountMovieComing()    // checked
+        public int GetCountMovieComing()   
         {
             // to paging
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
-            // TêN STORE
             SqlCommand com = new SqlCommand("SELECT dbo.UF_GetNumOfMovieComing()", con);
             return int.Parse(com.ExecuteScalar().ToString());
-            
         }
-        public List<Movie> ExecuteMovieGetAll() // checked
+        public List<Movie> ExecuteMovieGetAll() 
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -82,7 +79,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return lst;
 
         }
-        public Movie ExecuteMovieDetail(string id)  // checked
+        public Movie ExecuteMovieDetail(string id)  
         {
             var movie = new Movie();
             using SqlConnection con = new SqlConnection(cs);
@@ -113,7 +110,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return movie;
         }
-        public string ExecuteInsertMovie(Movie movie)       // checked
+        public string ExecuteInsertMovie(Movie movie)       
         {
             string error = "";
             try
@@ -143,7 +140,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return error;
            
         }
-        public void ExecuteDeleteMovie(string id)   // checked
+        public void ExecuteDeleteMovie(string id)   
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -154,7 +151,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             com.ExecuteNonQuery();
         }
-        public string ExecuteUpdateMovie(Movie movie) // checked
+        public string ExecuteUpdateMovie(Movie movie) 
         {
             string s = "";
             try
@@ -200,8 +197,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return pos;
-        }   // checked
-        public List<Movie> ExecuteGetMovieNow(int skip, int take)   //checked
+        }   
+        public List<Movie> ExecuteGetMovieNow(int skip, int take)   
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -234,7 +231,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return lst;
 
         }
-        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)    // checked
+        public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)    
         {
             var lst = new List<Movie>();
             using SqlConnection con = new SqlConnection(cs);
@@ -289,7 +286,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return lst;
-        }       // checked
+        }       
         public Theater ExecuteDetailTheater(string id)
         {
             var theater = new Theater();
@@ -312,7 +309,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return theater;
-        }   //checked
+        }   
         public string ExecuteInsertTheater(string id, string name, string address, string hotline)  // cheked
         {
             string mess = "";
@@ -360,8 +357,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 mess = s.Message.ToString();
             }
             return mess;
-        }       // checked
-        public string ExecuteDeleteTheater(string id)     // checked
+        }       
+        public string ExecuteDeleteTheater(string id)     
         {
             string s = "";
             try
@@ -405,7 +402,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lst;
 
-        }       // checked
+        }       
         public string ExecuteInsertScreen(Screen screen)      // EDIT HERE AFTER USE TRANSACTION
         {
             string mess = "";
@@ -442,8 +439,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = (rdr["Result"]).ToString();
             }
             return result;  // 3609 : trigger
-        }   // checked
-        public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)    // checked
+        }   
+        public ScreenViewModel ExecuteGetDetailScreen_Theater(string id)    
         {
             /// Id, Name, Name Theater
             ScreenViewModel lst = new ScreenViewModel();
@@ -467,7 +464,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lst;
         }
-        public void ExecuteUpdateScreen(Screen screen)      // checked
+        public void ExecuteUpdateScreen(Screen screen)      
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -495,8 +492,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = (rdr["ErrorMessage"]).ToString();
             }
             return result;  // 3609 : trigger
-        }   // checked
-        public List<Screen_Theater> SearchScreenwithTheater(string id)  // checked
+        }   
+        public List<Screen_Theater> SearchScreenwithTheater(string id)  
         {
             List<Screen_Theater> lst = new List<Screen_Theater>();
             using SqlConnection con = new SqlConnection(cs);
@@ -550,7 +547,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 });
             }
             return lst;
-        }       // checked
+        }       
         public string ExecuteUpdateTypesOfSeat(TypesOfSeat s)
         {
             string result = "";
@@ -571,8 +568,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = e.Message.ToString();
             }
             return result;
-        }   // checked
-        public TypesOfSeat ExecGetDetailTypeOfSeat(string id)   //checked
+        }   
+        public TypesOfSeat ExecGetDetailTypeOfSeat(string id)   
         {
             var type = new TypesOfSeat();
             using SqlConnection con = new SqlConnection(cs);
@@ -596,7 +593,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return type;
         }
                //------------------SHOW
-        public List<ShowViewModel> ExecuteGetAllShow()  // checked
+        public List<ShowViewModel> ExecuteGetAllShow()  
         {
             List<ShowViewModel> lstShow = new List<ShowViewModel>();
             using SqlConnection con = new SqlConnection(cs);
@@ -623,7 +620,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return lstShow;
         }
-        public List<ShowViewModel> ExecuteGetAllShowTheater(string id)  // checked
+        public List<ShowViewModel> ExecuteGetAllShowTheater(string id)  
         {
             List<ShowViewModel> lstShow = new List<ShowViewModel>();
             using SqlConnection con = new SqlConnection(cs);
@@ -728,8 +725,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message.ToString();
             }
             return result;
-        }   //checked
-        public ShowViewModel ExecuteGetDetailShow(string id)    // checked
+        }   
+        public ShowViewModel ExecuteGetDetailShow(string id)    
         {
             ShowViewModel show = new ShowViewModel();
             using SqlConnection con = new SqlConnection(cs);
@@ -757,7 +754,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return show;
-        }   // checked
+        }   
         public ShowViewModel ExecuteGetDetailShowEdit(string id)
         {
             ShowViewModel show = new ShowViewModel();
@@ -810,13 +807,13 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }   //checked
+        }   
         public string ExecuteDeleteShow(string id)
         {
             string s = "";
             try
             {
-                using SqlConnection con = new SqlConnection(cs);    // checked
+                using SqlConnection con = new SqlConnection(cs);    
                 con.Open();
                 // TêN STORE
                 SqlCommand com = new SqlCommand("USP_DeleteShow", con);
@@ -831,7 +828,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return s;
         }
-        public object ExecuteFindTheaterShow(string idmovie, string date)   //checked
+        public object ExecuteFindTheaterShow(string idmovie, string date)   
         {
             List<object> theater= new List<object>();
 
@@ -889,12 +886,12 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 string ss = e.Message;
             }
             return times;
-        }   //checked
+        }   
             
        
         
         //------------------DISCOUNT
-        public List<Discount> ExecuteGetAllDiscount()   // checked
+        public List<Discount> ExecuteGetAllDiscount()   
         {
             List<Discount> lstDiscount = new List<Discount>();
 
@@ -955,7 +952,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return d;
-        }   //checked
+        }   
         public string ExecuteInsertDiscount(Discount discount)
         {
             string result = "";
@@ -985,7 +982,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }   //checked
+        }   
 
         public string ExecCheckDiscount(string code)
         {
@@ -1014,7 +1011,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return pos;
-        }   //checked
+        }   
         public string ExecuteUpdateDiscount(Discount discount)
         {
             string result = "";
@@ -1043,8 +1040,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 result = s.Message;
             }
             return result;
-        }   //checked
-        public string ExecuteDeleteDiscount(string id)    // checked
+        }   
+        public string ExecuteDeleteDiscount(string id)    
         {
             string s = "";
             try
@@ -1089,8 +1086,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
 
             }
             return lstSeat;
-        }   //checked
-        public Seat ExecCheckIdSeat(string idseat, string idshow)   //checked
+        }   
+        public Seat ExecCheckIdSeat(string idseat, string idshow)   
         {
             // lấy seat và kiểm tra seat chưa đặt
             var obj = new Seat();
@@ -1117,18 +1114,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return obj;
         }
         //=================CHECKOUT
-        public int FGetPrice(string idseat)
-        {
-            SqlConnection con = new SqlConnection(cs);
-            SqlCommand cmd = new SqlCommand("SELECT dbo.UF_Price(@IdSeat)", con);
-            // cmd.CommandType=CommandType.StoredProcedure;  
-            cmd.Parameters.AddWithValue("@IdSeat", idseat);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            int str = int.Parse(dt.Rows[0][0].ToString());
-            return str;
-        }
+
         public CheckoutViewModel TestCheckout(string idaccount,string pointuse)
         {
 
@@ -1156,7 +1142,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 };
             }
             return null;
-        }   //checked
+        }   
 
         //==================BILL        checked
         public string ExecInsertTickets(List<string> seatVM, string idAccount, string idShow, string iddiscount)
@@ -1189,7 +1175,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return result;
         }
-        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow) //checked
+        public TicketViewModel ExecGetTicketDetail(string idaccount, string idshow) 
         {
             var bill = new TicketViewModel();
             using SqlConnection con = new SqlConnection(cs);
@@ -1224,7 +1210,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             return bill;
         }
 
-        public string ExecDeleteTicketStatus0(string idaccount) //checked
+        public string ExecDeleteTicketStatus0(string idaccount) 
         {
             string s = "";
             try
@@ -1243,7 +1229,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return s;
         }
-        public void ExecUpdateTicketStatus(string idaccount,int point)  //checked
+        public void ExecUpdateTicketStatus(string idaccount,int point)  
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -1254,7 +1240,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Point", point);       // point = 0 nếu không dùng
             com.ExecuteNonQuery();
         }
-        public object ExecUseDiscount(string idaccount, string code)    //checked
+        public object ExecUseDiscount(string idaccount, string code)    
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1282,7 +1268,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return null;
         }
-        public void ExecAddDiscount(string idaccount, string code)  //checked
+        public void ExecAddDiscount(string idaccount, string code)  
         {
             using SqlConnection con = new SqlConnection(cs);
             con.Open();
@@ -1293,7 +1279,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             com.Parameters.AddWithValue("@Code", code);
             com.ExecuteNonQuery();
         }
-        public string ExecCheckPoint(string idaccount, int point)   //checked
+        public string ExecCheckPoint(string idaccount, int point)   
         {
             using (SqlConnection con = new SqlConnection(cs))
             {
@@ -1312,7 +1298,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return "";
         }
-        public string ExecAddPoint(string idaccount, string point)  //checked
+        public string ExecAddPoint(string idaccount, string point)
         {
             using (SqlConnection con = new SqlConnection(cs))
             {

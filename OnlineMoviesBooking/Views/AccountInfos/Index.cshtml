@@ -13,8 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    @*<link href="~/Template/css/bootstrap.min.css" rel="stylesheet" />*@
-    @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
     <link href="~/Template/css/animate.css" rel="stylesheet" />
     <link href="~/Template/css/flaticon.css" rel="stylesheet" />
     <link href="~/Template/css/magnific-popup.css" rel="stylesheet" />
@@ -79,7 +77,15 @@
                         </div>
                         <div class="form-group">
                             <h6>Giới tính</h6><br />
-                            <input type="text" asp-for="Gender" readonly />
+                            @if (Model.Gender == true)
+                            {
+                                <input type="text" placeholder="Name" readonly />
+                            }
+                            else
+                            {
+                                <input type="text" placeholder="Nữ" readonly />
+                            }
+
                         </div>
                         <div class="form-group">
                             <h6>Email</h6><br />
