@@ -293,16 +293,16 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 string s=Exec.ExecuteInsertShow(showVM);
                 if(s.Contains("Ngày giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Ngày giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart", s);
                 }
                 else if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", s);
                 }
                 else if(s.Contains("Giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart", s);
                 } 
                 
                 // có lỗi catch từ trigger
@@ -311,8 +311,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     return RedirectToAction(nameof(Index));
                 }    
             }
-            // modelstate.valid== false 
-            // modelstate.errorcount>0
+          
             var movies = Exec.ExecuteMovieGetAll();
             ViewBag.Movies = new SelectList(movies, "Id", "Name");
 
@@ -386,11 +385,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (s.Contains("Trùng lịch chiếu"))
                 {
                     // show trigger error
-                    ModelState.AddModelError("TimeStart", "Trùng lịch chiếu");
+                    ModelState.AddModelError("TimeStart", s);
                 }
-                else if (s.Contains("Giờ không hợp lệ á"))
+                else if (s.Contains("Giờ không hợp lệ"))
                 {
-                    ModelState.AddModelError("TimeStart", "Giờ không hợp lệ");
+                    ModelState.AddModelError("TimeStart",s);
                 }
 
                 // có lỗi catch từ trigger
@@ -432,7 +431,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
-            Exec.ExecuteDeleteShow(id);
+            string s=Exec.ExecuteDeleteShow(id);
+            if (s != "")
+            {
+                return Json(new { success = s });
+            }
             return Json(new { success = true });
         }
 

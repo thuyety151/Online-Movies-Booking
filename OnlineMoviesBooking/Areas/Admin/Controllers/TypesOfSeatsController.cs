@@ -135,12 +135,13 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
-                if (Exec.CheckToSeatName(typesOfSeat.Id, typesOfSeat.Name) > 0)
+
+                string result=Exec.ExecuteUpdateTypesOfSeat(typesOfSeat);
+                if (result != "")
                 {
-                    ModelState.AddModelError("Name", "Tên đã tồn tại");
+                    ModelState.AddModelError("Name", result);
                     return View(typesOfSeat);
                 }
-                Exec.ExecuteUpdateTypesOfSeat(typesOfSeat);
                 return RedirectToAction(nameof(Index));
             }
             return View(typesOfSeat);

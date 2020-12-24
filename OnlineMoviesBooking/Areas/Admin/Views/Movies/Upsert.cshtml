@@ -1,6 +1,6 @@
 ﻿@model OnlineMoviesBooking.Models.Models.Movie
 
-@{ 
+@{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 @if (ViewBag.Id != "")
@@ -98,7 +98,6 @@ else
         </p>
     </div>
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

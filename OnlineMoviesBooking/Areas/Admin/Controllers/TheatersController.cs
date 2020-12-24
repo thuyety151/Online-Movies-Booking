@@ -152,7 +152,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
-                // chưa đưa ra được trigger execption
+                
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
 
                 while (s.Contains("PRIMARY"))   // do check primary key trước
@@ -163,11 +163,13 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (s.Contains("UNIQUE"))       //check unique address
                 {
                     // có error message
-                    ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
+                    ModelState.AddModelError("Address", s);
                     return View(theater);
                 }
                 return RedirectToAction(nameof(Index));
             }
+            string error = Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
+            ModelState.AddModelError("", error.ToString());
             return View(theater);
         }
 
@@ -220,12 +222,14 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 if (result.Contains("UNIQUE"))       //check unique address
                 {
                     // có error message
-                    ModelState.AddModelError("Address", "Địa chỉ đã tồn tại");
+                    ModelState.AddModelError("Address", result);
                     return View(theater);
                 }
                 return RedirectToAction(nameof(Index));
                 
             }
+            string error = Exec.ExecuteUpdateTheater(theater);
+            ModelState.AddModelError("", error.ToString());
             return View(theater);
         }
 
@@ -249,7 +253,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
-            Exec.ExecuteDeleteTheater(id);
+            string s=Exec.ExecuteDeleteTheater(id);
+            if (s != "")
+            {
+                return Json(new { success = s });
+            }
             return Json(new { success = true });
         }
 

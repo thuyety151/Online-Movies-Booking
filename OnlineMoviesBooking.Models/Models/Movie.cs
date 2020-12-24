@@ -34,10 +34,10 @@ namespace OnlineMoviesBooking.Models.Models
         public string Trailer { get; set; }
         [Display(Name = "Ngày khởi chiếu")]
         [Required(ErrorMessage = "Vui lòng chọn ngày khởi chiếu")]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
         [Display(Name = "Thời lượng")]
         [Required(ErrorMessage = "Vui lòng nhập thời lượng")]
-        public int RunningTime { get; set; }
+        public int? RunningTime { get; set; }
         [Display(Name = "Poster")]
         public string Poster { get; set; }
 
