@@ -585,24 +585,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return type;
         }
-        public int CheckToSeatName(string id, string name)  // checked
-        {
-            var count = 0;
-            using SqlConnection con = new SqlConnection(cs);
-            con.Open();
-            // TêN STORE
-            SqlCommand com = new SqlCommand("USP_CheckToSeatName", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@Id", id);
-            com.Parameters.AddWithValue("@Name", name);
-            SqlDataReader rdr = com.ExecuteReader();
-            while (rdr.Read())
-            {
-                count++;
-            }
-            return count;
-        }
-        //------------------SHOW
+               //------------------SHOW
         public List<ShowViewModel> ExecuteGetAllShow()  // checked
         {
             List<ShowViewModel> lstShow = new List<ShowViewModel>();
