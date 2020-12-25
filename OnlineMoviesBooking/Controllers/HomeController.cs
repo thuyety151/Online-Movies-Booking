@@ -64,7 +64,6 @@ namespace OnlineMoviesBooking.Controllers
                         dis.DateStart = Convert.ToDateTime(reader[5]);
                         dis.DateEnd = Convert.ToDateTime(reader[6]);
                         dis.ImageDiscount = Convert.ToString(reader[7]);
-                        // dis.NoTicket = Convert.ToInt32(reader[8]);      
                         dis.Point = reader[8].ToString() == "" ? 0 : int.Parse(reader[8].ToString());
                         dis.Used = Convert.ToInt32(reader[9]);
                         dis.Code = Convert.ToString(reader[10]);

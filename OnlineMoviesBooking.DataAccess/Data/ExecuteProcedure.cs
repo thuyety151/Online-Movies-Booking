@@ -360,21 +360,19 @@ namespace OnlineMoviesBooking.DataAccess.Data
         public string ExecuteDeleteTheater(string id)     
         {
             string s = "";
-            try
-            {
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+            // TêN STORE
+            SqlCommand com = new SqlCommand("USP_DeleteThreater", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@Id", id);
 
-                using SqlConnection con = new SqlConnection(cs);
-                con.Open();
-                // TêN STORE
-                SqlCommand com = new SqlCommand("USP_DeleteThreater", con);
-                com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@Id", id);
+            SqlDataReader rdr = com.ExecuteReader();
 
-                com.ExecuteScalar();
-            }
-            catch(SqlException e)
+            while (rdr.Read())
             {
-                s = e.Message.ToString();
+                s = (rdr["ErrorMessage"]).ToString();
+
             }
             return s;
         }
