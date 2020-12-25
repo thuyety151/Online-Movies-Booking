@@ -259,7 +259,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     // check lỗi do nhập
                     if (checkname != "")
                     {
-                        ModelState.AddModelError("Name", "Tên đã tồn tại");
+                        ModelState.AddModelError("Name", checkname);
                     }
                     Exec.ExecuteUpdateScreen(screen);
                 }
