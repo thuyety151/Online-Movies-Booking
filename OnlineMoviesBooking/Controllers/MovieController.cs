@@ -499,7 +499,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             else
             {
-                total += Math.Round(double.Parse((checkout.TotalCost - int.Parse(pointuse)*1000).ToString()) / 23000, 2);
+                total = Math.Round(double.Parse((checkout.TotalCost - int.Parse(pointuse)*1000).ToString()) / 23000, 2);
             }
 
             // 0 đ không cân thanh toán paypal
