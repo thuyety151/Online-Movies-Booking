@@ -35,14 +35,11 @@ namespace OnlineMoviesBooking
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromHours(60);
             });
-            services.AddDbContext<CinemaContext>(options => 
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<CinemaContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
@@ -79,7 +76,7 @@ namespace OnlineMoviesBooking
                 endpoints.MapAreaControllerRoute(
                    name: "Admin",
                    areaName: "Admin",
-                   pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
+                   pattern: "Admin/{controller=Accounts}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -12,11 +12,10 @@ namespace OnlineMoviesBooking.Controllers
 {
     public class ContactViewController : Controller
     {
-        private readonly CinemaContext _context;
 
-        public ContactViewController(CinemaContext context)
+        public ContactViewController()
         {
-            _context = context;
+            
         }
         public IActionResult AllQuestion()
         {

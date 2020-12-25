@@ -39,7 +39,7 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult ComingSoon(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
-            int num = 2;
+            int num = 9;
             var movieCount = Exec.GetCountMovieComing();
             if (movieCount % num == 0)
             {
@@ -95,7 +95,7 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult Now(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
-            int num = 2;
+            int num = 9;
             var movieCount = Exec.GetCountMovieNow();
             if (movieCount % num == 0)
             {
@@ -274,7 +274,7 @@ namespace OnlineMoviesBooking.Controllers
             ViewBag.TheaterName = plan.TheaterName;
             ViewBag.Language = plan.Languages;
             ViewBag.TimeStart = plan.TimeStart.ToString("HH:mm");
-            ViewBag.Date = plan.TimeStart.ToString("dd/mm/yyyy");
+            ViewBag.Date = plan.TimeStart.ToLocalTime().ToShortDateString();
 
             var allseat = Exec.ExecGetAllSeat(plan.Id);
             ViewBag.RowA = allseat.Where(x => x.Row == "A").ToList();
@@ -375,7 +375,7 @@ namespace OnlineMoviesBooking.Controllers
             string result = Exec.ExecInsertTickets(seats, HttpContext.Session.GetString("idLogin").ToString()
                                         , idshow, null);
             //  xử lí transaction
-            if (result == "Ghế đã được chọn")
+            if (result !="")
             {
                 return Json(result);
             }

@@ -17,7 +17,6 @@ namespace OnlineMoviesBooking.DataAccess.Data
     public class ExecuteProcedure
     {
         private readonly string cs;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
 
         public  ExecuteProcedure(string _cs)
@@ -1152,7 +1151,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             {
                 con.Open();
                 // TêN STORE
-                SqlCommand com = new SqlCommand("USP_InsertTickets", con);
+                SqlCommand com = new SqlCommand("USP_InsertTickets", con); 
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id_Seat1", seatVM[0] ?? Convert.DBNull);
                 com.Parameters.AddWithValue("@Id_Seat2", seatVM[1] ?? Convert.DBNull);

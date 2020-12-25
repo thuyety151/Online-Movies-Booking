@@ -18,8 +18,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             @{
-                CinemaContext context = new CinemaContext();
-                var account = context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{Model.IdAccount}'").ToList();
+               // CinemaContext context = new CinemaContext();
+                //var account = context.Account.FromSqlRaw($"EXEC dbo.USP_GetDetailAccount @id = '{Model.IdAccount}'").ToList();
             }
             <div class="form-group">
                 <input asp-for="IdAccount" class="form-control" hidden />
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Tên</label>
-                <input class="form-control" value="@account[0].Name" readonly />
+                @*<input class="form-control" value="@account[0].Name" readonly />*@
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
