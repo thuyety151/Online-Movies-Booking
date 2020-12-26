@@ -187,7 +187,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Movie movie, IFormFile files)
         {
-            
 
             if (ModelState.IsValid)
             {
@@ -271,35 +270,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
 
             }
-            if (movie.Id == null)
-            {
-                //Theem movie
-                movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
-                string result = Exec.ExecuteInsertMovie(movie);
-                while (result.Contains("PRIMARY")) // trùng primary key do generate id
-                {
-                    movie.Id = Guid.NewGuid().ToString("N").Substring(0, 20);
-                    result = Exec.ExecuteInsertMovie(movie);
-
-                }
-                if (result != "")
-                {
-                    ModelState.AddModelError("", result.ToString());
-                    return View(movie);
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                // 
-                string result = Exec.ExecuteUpdateMovie(movie);
-                if (result != "")
-                {
-                    ModelState.AddModelError("", result.ToString());
-                    return View(movie);
-                }
-                return RedirectToAction(nameof(Index));
-            }
+            return View(movie);
         }
 
  

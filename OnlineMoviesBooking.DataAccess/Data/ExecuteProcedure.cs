@@ -1234,7 +1234,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             SqlCommand com = new SqlCommand("USP_ChangeTicketStatus", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@IdAccount", idaccount);
-            com.Parameters.AddWithValue("@Point", point);       // point = 0 nếu không dùng
+            com.Parameters.AddWithValue("@Point", point);       
             com.ExecuteNonQuery();
         }
         public object ExecUseDiscount(string idaccount, string code)    

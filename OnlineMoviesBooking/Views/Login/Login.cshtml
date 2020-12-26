@@ -90,16 +90,23 @@
     @{
         if (TempData["msg"] != null)
         {
-            if (TempData["msg"].ToString() == "Error")
+            if (TempData["msg"].ToString() == "Chua dang nhap")
             {
-                string msg = "truoc tien phai dang nhap!!!";
+                string msg = "Chua dang nhap";
                 <script>
                 alert('@msg')
                 </script>
             }
-            else if (TempData["msg"].ToString() == "Wrong")
+            else if (TempData["msg"].ToString() == "Khong duoc phep truy cap")
             {
-                string msg = "Tai khoan hoac mat khau khong dung!!";
+                string msg = "Khong duoc phep truy cap";
+                <script>
+                alert('@msg')
+                </script>
+            }
+            else
+            {
+                string msg = TempData["msg"].ToString();
                 <script>
                 alert('@msg')
                 </script>

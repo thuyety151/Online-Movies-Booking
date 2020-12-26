@@ -195,7 +195,7 @@ namespace OnlineMoviesBooking.Controllers
                 Account acc = new Account();
                 List<TypeOfMember> listmember = new List<TypeOfMember>();
                 List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
-                string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                string connectionString = $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={loginModelView.Username};Password={loginModelView.Password}";
 
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -235,7 +235,7 @@ namespace OnlineMoviesBooking.Controllers
                     catch (SqlException e)
                     {
 
-                        ModelState.AddModelError("", e.ToString());
+                        TempData["msg"] = e.Message.ToString();
                         return View(loginModelView);
                     }
                     connection.Close();
@@ -257,7 +257,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             catch (SqlException e)
             {
-                ModelState.AddModelError("", e.ToString());
+                TempData["msg"] = e.Message.ToString();
                 return View(loginModelView);
             }
         }

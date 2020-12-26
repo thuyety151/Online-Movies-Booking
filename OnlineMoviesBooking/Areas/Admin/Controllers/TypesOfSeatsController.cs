@@ -139,7 +139,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 string result=Exec.ExecuteUpdateTypesOfSeat(typesOfSeat);
                 if (result != "")
                 {
-                    ModelState.AddModelError("Name", result);
+                    ModelState.AddModelError("Name", "Tên loại ghế đã tồn tại");
                     return View(typesOfSeat);
                 }
                 return RedirectToAction(nameof(Index));

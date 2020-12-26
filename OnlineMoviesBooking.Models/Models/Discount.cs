@@ -39,7 +39,7 @@ namespace OnlineMoviesBooking.Models.Models
         public int? Used { get; set; }
 
         public string Code { get; set; }
-
+        [Required]
         public virtual ICollection<Ticket> Ticket { get; set; }
         public virtual ICollection<UseDiscount> UseDiscount { get; set; }
     }
