@@ -602,7 +602,7 @@ namespace OnlineMoviesBooking.Controllers
                 // co loi xay ra
                 return Content(s);
             }
-            return Content("Thanh toán không thành công");
+            return View();
         }
 
         public IActionResult CheckoutSuccess(int point=0)
@@ -620,7 +620,7 @@ namespace OnlineMoviesBooking.Controllers
             //Xóa session
 
             Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
-            return Content("Thanh toán thành công");
+            return View();
         }
     }
 }
