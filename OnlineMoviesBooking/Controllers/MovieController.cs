@@ -39,7 +39,7 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult ComingSoon(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
-            int num = 2;
+            int num = 9;
             var movieCount = Exec.GetCountMovieComing();
             if (movieCount % num == 0)
             {
@@ -95,7 +95,7 @@ namespace OnlineMoviesBooking.Controllers
         public IActionResult Now(int? page)
         {
             List<Movie> lstmovie = new List<Movie>();
-            int num = 2;
+            int num = 9;
             var movieCount = Exec.GetCountMovieNow();
             if (movieCount % num == 0)
             {

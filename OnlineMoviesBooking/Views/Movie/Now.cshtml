@@ -5,12 +5,12 @@
 }
 
 <!-- ==========Banner-Section========== -->
-<section class="banner-section">
+<section class="banner-section" style="padding: 3rem 0;">
     <div class="banner-bg bg_img bg-fixed" data-background="./assets/images/banner/banner02.jpg" style="background-image: url(&quot;./assets/images/banner/banner02.jpg&quot;);"></div>
     <div class="container">
         <div class="banner-content">
-            <h1 class="title bold">get <span class="color-theme">movie</span> tickets</h1>
-            <p>Buy movie tickets in advance, find movie times watch trailers, read movie reviews and much more</p>
+            <h1 class="title bold">đặt <span class="color-theme">vé</span> ngay</h1>
+            <p>Tìm phim và xem trailer để chọn những phim thích hợp</p>
         </div>
     </div>
 </section>
@@ -22,143 +22,145 @@
 <!-- ==========Movie-Section========== -->
 <section class="movie-section padding-top padding-bottom">
     <div class="container">
-        <div class="row flex-wrap-reverse justify-content-center">
-            <div class="col-lg-9 mb-50 mb-lg-0">
-                <div class="filter-tab tab">
-                    <div class="filter-area">
-                        <div class="filter-main">
-                            <div class="left">
+        @if (Model.Count > 0)
+        {
+            <div class="row flex-wrap-reverse justify-content-center">
+                <div class="col-lg-9 mb-50 mb-lg-0">
+                    <div class="filter-tab tab">
+                        <div class="filter-area">
+                            <div class="filter-main">
+                                <div class="left">
+                                </div>
+                                <ul class="grid-button tab-menu">
+                                    <li class="active">
+                                        <i class="fas fa-th"></i>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-bars"></i>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul class="grid-button tab-menu">
-                                <li class="active">
-                                    <i class="fas fa-th"></i>
-                                </li>
-                                <li>
-                                    <i class="fas fa-bars"></i>
-                                </li>
-                            </ul>
                         </div>
-                    </div>
-                    <div class="tab-area">
-                        <div class="tab-item active">
-                            <div class="row mb-10 ">
-                                <!-- movie -->
-                                @foreach (var item in Model)
-                                {
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
+                        <div class="tab-area">
+                            <div class="tab-item active">
+                                <div class="row mb-10 ">
+                                    <!-- movie -->
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="col-sm-6 col-lg-4">
+                                            <div class="movie-grid">
+                                                <div class="movie-thumb c-thumb">
+                                                    <a href="/Movie/Detail/@item.Id">
+                                                        <img src=@item.Poster alt="movie" style="max-height:22rem">
+                                                    </a>
+                                                </div>
+                                                <!-- movie content-->
+                                                <div class="movie-content bg-one" style="max-height:13rem">
+                                                    <h5 class="title m-0" style="font-size:large">
+                                                        <a href="/Movie/Detail/@item.Id">@item.Name</a>
+                                                    </h5>
+                                                    <ul class="movie-rating-percent">
+                                                        <li>
+                                                            <div class="thumb">
+                                                                Thể loại
+                                                            </div>
+                                                            <span class="content">@item.Genre</span>
+                                                        </li>
+                                                        <li>
+                                                            <div class="thumb">
+                                                                Thời lượng
+                                                            </div>
+                                                            <span class="content">@item.RunningTime phút</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="movie-area mb-10">
+                                    <!-- movie list-->
+                                    @foreach (var item in Model)
+                                    {
+                                        var x = @TimeSpan.FromMinutes(@item.RunningTime);
+                                        <div class="movie-list" style="text-align:justify">
                                             <div class="movie-thumb c-thumb">
-                                                <a href="/Movie/Detail/@item.Id">
-                                                    <img src=@item.Poster alt="movie">
+                                                <a href="/Movie/Detail/" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie02.jpg" style="background-image: url(&quot;./assets/images/movie/movie02.jpg&quot;);">
+                                                    <img src=@item.Poster alt="movie"  />
                                                 </a>
                                             </div>
-                                            <!-- movie content-->
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0" style="font-size:large">
-                                                    <a href="/Movie/Detail/@item.Id">@item.Name</a>
+                                            <div class="movie-content bg-one" >
+                                                <h5 class="title">
+                                                    @item.Name
                                                 </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            Thể loại
-                                                        </div>
-                                                        <span class="content">@item.Genre</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            Thời lượng
-                                                        </div>
-                                                        <span class="content">@item.RunningTime phút</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                                                <p class="duration">Thời lượng : @x</p>
+                                                <div class="movie-tags">
+                                                    Thể loại : @item.Genre
+                                                </div>
+                                                <div class="release">
 
-                            </div>
-                        </div>
-                        <div class="tab-item">
-                            <div class="movie-area mb-10">
-                                <!-- movie list-->
-                                @foreach (var item in Model)
-                                {
-                                    var x = @TimeSpan.FromMinutes(@item.RunningTime);
-                                    <div class="movie-list" style="text-align:justify">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="/Movie/Detail/" class="w-100 bg_img h-100" data-background="./assets/images/movie/movie02.jpg" style="background-image: url(&quot;./assets/images/movie/movie02.jpg&quot;);">
-                                                <img src=@item.Poster alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                @item.Name
-                                            </h5>
-                                            <p class="duration">Thời lượng : @x</p>
-                                            <div class="movie-tags">
-                                                Thể loại : @item.Genre
-                                            </div>
-                                            <div class="release">
-
-                                                <span>Ngày khởi chiếu : </span> <a href="">@item.ReleaseDate.ToShortDateString()</a>
-                                            </div>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a>
-                                                            <div class="thumb">
-                                                                <img src="~/Customer/logo/heart.png" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a>
-                                                            <div class="thumb">
-                                                                <img src="~/Customer/logo/book.png" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                        <a class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="~/Customer/logo/play-button.png" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
+                                                    <span>Ngày khởi chiếu : </span> <a href="">@item.ReleaseDate.ToShortDateString()</a>
+                                                </div>
+                                                <div class="book-area">
+                                                    <div class="book-ticket">
+                                                       
+                                                        <div class="react-item mr-auto">
+                                                            <a href="/Movie/ShowsDetail?id=@item.Id">
+                                                                <div class="thumb">
+                                                                    <img src="~/Customer/logo/book.png" alt="icons">
+                                                                </div>
+                                                                <span>Đặt vé</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="react-item">
+                                                            <a class="popup-video">
+                                                                <div class="thumb">
+                                                                    <img src="~/Customer/logo/play-button.png" alt="icons">
+                                                                </div>
+                                                                <span>watch trailer</span>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
 
-                                
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    @if (ViewBag.AllPage > 0)
-                    {
-                        <div class="pagination-area text-center">
-                            <a href="/movie/now?page=@(ViewBag.page-1)"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
-                            @for (int i = 1; i <= ViewBag.AllPage; i++)
-                            {
-                                if (i == ViewBag.page)
+                        @if (ViewBag.AllPage > 0)
+                        {
+                            <div class="pagination-area text-center">
+                                <a href="/movie/now?page=@(ViewBag.page-1)"><i class="fas fa-angle-double-left"></i></a>
+                                @for (int i = 1; i <= ViewBag.AllPage; i++)
                                 {
-                                    <a class="active">@i</a>
+                                    if (i == ViewBag.page)
+                                    {
+                                        <a class="active">@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/movie/now?page=@i">@i</a>
+                                    }
                                 }
-                                else
-                                {
-                                    <a href="/movie/now?page=@i">@i</a>
-                                }
-                            }
-                            <a href="/movie/now?page=@(ViewBag.page+1)"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
-                        </div>
-                    }
+                                <a href="/movie/now?page=@(ViewBag.page+1)"><i class="fas fa-angle-double-right"></i></a>
+                            </div>
+                        }
 
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <hr/>
+            <h4>Không có phim</h4>
+        }
     </div>
 </section>
 <!-- ==========Movie-Section========== -->
