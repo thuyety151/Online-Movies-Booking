@@ -31,7 +31,7 @@ var ctx = document.getElementById("myAreaChart");
 var myAreaChart = new Chart(ctx, {
   type: 'line',
   data: {
-      labels: [],
+    labels: [],
     datasets: [{
       label: "Sessions",
       lineTension: 0.3,
@@ -44,7 +44,7 @@ var myAreaChart = new Chart(ctx, {
       pointHoverBackgroundColor: "rgba(2,117,216,1)",
       pointHitRadius: 50,
       pointBorderWidth: 2,
-      data:[],
+      data: [],
     }],
   },
     options: {
