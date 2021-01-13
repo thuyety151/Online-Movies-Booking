@@ -20,34 +20,34 @@ namespace OnlineMoviesBooking.Areas.Controllers
         private readonly ILogger<HomeAdminController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string check;
-
-        public HomeAdminController(ILogger<HomeAdminController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
+        private readonly CinemaContext cinemaContext;
+        public HomeAdminController(ILogger<HomeAdminController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor,CinemaContext _cinemaContext)
         {
             _logger = logger;
-            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
-            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+            _cinemaContext = cinemaContext;
+            //string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            //string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+            //using (var connection = new SqlConnection(connectionString))
+            //{
+            //    connection.Open();
+            //    string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
-
-                var command = new SqlCommand(commandText, connection);
-                try
-                {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        check = Convert.ToString(reader[0]);
-                    }
-                }
-                catch (SqlException e)
-                {
-                    connection.Close();
-                    check = "0";
-                }
-                connection.Close();
-            }
+            //    var command = new SqlCommand(commandText, connection);
+            //    try
+            //    {
+            //        SqlDataReader reader = command.ExecuteReader();
+            //        while (reader.Read())
+            //        {
+            //            check = Convert.ToString(reader[0]);
+            //        }
+            //    }
+            //    catch (SqlException e)
+            //    {
+            //        connection.Close();
+            //        check = "0";
+            //    }
+            //    connection.Close();
+            //}
         }
         
         public IActionResult Error()
@@ -57,26 +57,60 @@ namespace OnlineMoviesBooking.Areas.Controllers
         }
         public IActionResult Index()
         {
-            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") != null)
-            {
-                if (check == "0")
-                {
-                    TempData["msg"] = "Khong duoc phep truy cap";
-                    return Redirect("/Home/Index");
-                }
+            //TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            //TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            //TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            //if (HttpContext.Session.GetString("idLogin") != null)
+            //{
+            //    if (check == "0")
+            //    {
+            //        TempData["msg"] = "Khong duoc phep truy cap";
+            //        return Redirect("/Home/Index");
+            //    }
 
-            }
-            else
-            {
-                TempData["msg"] = "Chua dang nhap";
-                return Redirect("/Home/Index");
-            }
+            //}
+            //else
+            //{
+            //    TempData["msg"] = "Chua dang nhap";
+            //    return Redirect("/Home/Index");
+            //}
             return View();
         }
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        
+        public IActionResult GetData(string Id)//xong qua đây  // id truyền vào null kìa// null nữa gòi
+        {
+
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            List<string> labels = new List<string>();
+            List<float> values = new List<float>();
+            //var vl = cinemaContext.B
+            for(int i = 0;i<12;i++)
+            {
+                labels.Add("Tháng" + (i + 1).ToString());
+            }
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = $"";
+
+                var command = new SqlCommand(commandText, connection);
+                try
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                }
+                catch (SqlException e)
+                {
+                    connection.Close();
+                }
+                connection.Close();
+            }
+
+            return Json(new { labels, values });
+            //var totalProduct = _db.OrderDetails.Include(x => x.Product)
+            //    .Where(x => x.Product.ShopId == Id && x.Status == OrderDetailStatus.deliveried.ToString()).Sum(x => x.Price).ToString();
+            //return NotFound();
+        }
+
     }
 }
