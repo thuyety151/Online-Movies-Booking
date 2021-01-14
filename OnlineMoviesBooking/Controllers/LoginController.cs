@@ -47,7 +47,7 @@ namespace OnlineMoviesBooking.Controllers
         public ActionResult ForgotPassword(string Email)
         {
 
-            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             //đặt lại mật khẩu
             string newpass = Guid.NewGuid().ToString().Substring(26);
@@ -134,7 +134,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                     using (var connection = new SqlConnection(connectionString))
                     {
@@ -195,7 +195,7 @@ namespace OnlineMoviesBooking.Controllers
                 Account acc = new Account();
                 List<TypeOfMember> listmember = new List<TypeOfMember>();
                 List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
-                string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -247,7 +247,7 @@ namespace OnlineMoviesBooking.Controllers
                 HttpContext.Session.SetString("imgLogin", acc.Image);
                 HttpContext.Session.SetString("pwLogin", acc.Password);
                 HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
-                HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
+                HttpContext.Session.SetString("connectString", $"Server=localhost\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
                 TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
                 TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
                 TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");

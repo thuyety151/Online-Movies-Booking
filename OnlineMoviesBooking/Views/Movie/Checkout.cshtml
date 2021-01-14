@@ -54,10 +54,17 @@
                                 <div class="info">
                                     <span>@Model.TimeStart.ToString("dd-MM-yyyy HH:mm")</span>
                                     <span>vé</span>
+                                    
+
                                 </div>
                             <li>
                                 <h6 class="subtitle mb-0"><span>giá vé</span><span>@Model.TotalPrice.ToString("#,###")</span></h6>
                             </li>
+                            <li>
+                                <h3>
+                                    @ViewBag.listseat
+                                </h3>
+                                </li>
                         </ul>
                         <ul class="side-shape">
                             <li>
@@ -69,7 +76,7 @@
                             <li>
                                 <span class="info">
                                     <span>Tổng </span>
-                                    <span id="total-price">@Model.TotalPrice.ToString("#,###")</span>
+                                    <span id="total-price" >@Model.TotalPrice.ToString("#,###")</span>
                                 </span>
                                 <span class="info">
                                     <span>Điểm </span>
