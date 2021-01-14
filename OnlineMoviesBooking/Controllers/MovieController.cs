@@ -390,6 +390,7 @@ namespace OnlineMoviesBooking.Controllers
                     seats.Add(seatVM[i]);
                 }
             }
+            
             // insert seat vào ticket
             string result = Exec.ExecInsertTickets(seats, HttpContext.Session.GetString("idLogin").ToString()
                                         , idshow, null);
@@ -460,12 +461,16 @@ namespace OnlineMoviesBooking.Controllers
             }
             ViewBag.listseat = listseat;
             string bodymail = "";
+            
+            bodymail += "Tài khoản: " + HttpContext.Session.GetString("idLogin").ToString() + "<br/>";
             bodymail += "Tên phim: " + bill.MovieName + "<br/>" ;
             bodymail += "Tên rạp: " + bill.TheaterName + "<br/>";
             bodymail += "Tên phòng chiếu: " + bill.ScreenName + "<br/>";
             bodymail += "Thời gian bắt đầu: " + bill.TimeStart + "<br/>";
             bodymail += "Thời gian kết thúc: " + bill.TimeStart + "<br/>";
-            bodymail += "Ghế: " + listseat;
+            bodymail += "Ghế: " + listseat + "<br/>";
+            bodymail += "Tổng cộng: " + bill.TotalPrice.ToString() + "<br/>";
+
             HttpContext.Session.SetString("bodymail", bodymail);
             
            
@@ -696,7 +701,7 @@ namespace OnlineMoviesBooking.Controllers
             //gửi mail khi thành công
             string bodymail = "";
             bodymail += HttpContext.Session.GetString("bodymail");
-            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "qmaster4869@gmail.com");
+            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
             mm.Subject = "Thanh toán thành công";
             mm.Body = string.Format(bodymail);
             mm.IsBodyHtml = true;
