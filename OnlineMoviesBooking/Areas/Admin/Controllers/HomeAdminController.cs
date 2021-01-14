@@ -20,40 +20,33 @@ namespace OnlineMoviesBooking.Areas.Controllers
         private readonly ILogger<HomeAdminController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string check;
-        private readonly CinemaContext cinemaContext;
-        public HomeAdminController(ILogger<HomeAdminController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor,CinemaContext _cinemaContext)
+        public HomeAdminController(ILogger<HomeAdminController> logger, IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
+            
             _logger = logger;
-            _cinemaContext = cinemaContext;
-            //string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
-            //string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
-            //using (var connection = new SqlConnection(connectionString))
-            //{
-            //    connection.Open();
-            //    string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
+            string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
+            string connectionString = httpContextAccessor.HttpContext.Session.GetString("connectString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+               connection.Open();
+               string commandText = $"EXEC dbo.USP_CheckAdmin @username = '{username}' ";
 
-            //    var command = new SqlCommand(commandText, connection);
-            //    try
-            //    {
-            //        SqlDataReader reader = command.ExecuteReader();
-            //        while (reader.Read())
-            //        {
-            //            check = Convert.ToString(reader[0]);
-            //        }
-            //    }
-            //    catch (SqlException e)
-            //    {
-            //        connection.Close();
-            //        check = "0";
-            //    }
-            //    connection.Close();
-            //}
-        }
-        
-        public IActionResult Error()
-        {
-
-            return View();
+               var command = new SqlCommand(commandText, connection);
+               try
+               {
+                   SqlDataReader reader = command.ExecuteReader();
+                   while (reader.Read())
+                   {
+                       check = Convert.ToString(reader[0]);
+                   }
+               }
+               catch (SqlException e)
+               {
+                   connection.Close();
+                   check = "0";
+               }
+               connection.Close();
+            }
         }
         public IActionResult Index()
         {
@@ -74,43 +67,73 @@ namespace OnlineMoviesBooking.Areas.Controllers
             //    TempData["msg"] = "Chua dang nhap";
             //    return Redirect("/Home/Index");
             //}
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string commandText = "";
+
+                var command = new SqlCommand(commandText, connection);
+                commandText = "EXECUTE dbo.Stastistic_account";
+                command = new SqlCommand(commandText, connection);
+                ViewBag.Account = command.ExecuteScalar().ToString();
+                
+                commandText = "EXECUTE dbo.Stastistic_Count";
+                command = new SqlCommand(commandText, connection);
+                ViewBag.Count = command.ExecuteScalar().ToString();
+
+                commandText = "EXECUTE dbo.Stastistic_ticket";
+                command = new SqlCommand(commandText, connection);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    ViewBag.Ticket = Convert.ToString(reader[0]);
+                    ViewBag.Book = Convert.ToString(reader[1]);
+                }
+                connection.Close();
+
+            }
             return View();
         }
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult GetData(string Id)//xong qua đây  // id truyền vào null kìa// null nữa gòi
+        public IActionResult GetData()//xong qua đây  // id truyền vào null kìa// null nữa gòi
         {
 
             string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
-            List<string> labels = new List<string>();
-            List<float> values = new List<float>();
+            var label = new string[12];
+            var value = new double[12];
             //var vl = cinemaContext.B
             for(int i = 0;i<12;i++)
             {
-                labels.Add("Tháng" + (i + 1).ToString());
+                label[i] = (i + 1).ToString();
+                value[i] = 0;
             }
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string commandText = $"";
+                string commandText = $"EXEC dbo.USP_Chart @year = 2020";
 
                 var command = new SqlCommand(commandText, connection);
                 try
                 {
                     SqlDataReader reader = command.ExecuteReader();
-
+                    while (reader.Read())
+                    {
+                        value[Convert.ToInt32(reader[0]) - 1] = Convert.ToDouble(reader[1]);
+                    }
                 }
-                catch (SqlException e)
+                catch
                 {
-                    connection.Close();
-                }
-                connection.Close();
-            }
 
-            return Json(new { labels, values });
+                }
+
+            }
+            
+            return Json(new { label, value });
             //var totalProduct = _db.OrderDetails.Include(x => x.Product)
             //    .Where(x => x.Product.ShopId == Id && x.Status == OrderDetailStatus.deliveried.ToString()).Sum(x => x.Price).ToString();
             //return NotFound();
         }
-
+        
     }
 }
