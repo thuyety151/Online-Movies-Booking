@@ -1,6 +1,6 @@
 ﻿// Set new default font family and font color to mimic Bootstrap's default styling
-Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#292b2c';
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
 
 function number_format(number, decimals, dec_point, thousands_sep) {
     // *     example: number_format(1234.56, 2, ',', ' ');
@@ -26,27 +26,30 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     }
     return s.join(dec);
 }
+
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
 var myAreaChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [{
-      label: "Sessions",
-      lineTension: 0.3,
-      backgroundColor: "rgba(2,117,216,0.2)",
-      borderColor: "rgba(2,117,216,1)",
-      pointRadius: 5,
-      pointBackgroundColor: "rgba(2,117,216,1)",
-      pointBorderColor: "rgba(255,255,255,0.8)",
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(2,117,216,1)",
-      pointHitRadius: 50,
-      pointBorderWidth: 2,
-      data: [],
-    }],
-  },
+
+    type: 'line',
+    data: {
+        labels: ["1","2","3","4","5","6","7","8","9","10","11","12"],
+        datasets: [{
+            label: "Earnings",
+            lineTension: 0.3,
+            backgroundColor: "rgba(78, 115, 223, 0.05)",
+            borderColor: "rgba(78, 115, 223, 1)",
+            pointRadius: 3,
+            pointBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointBorderColor: "rgba(78, 115, 223, 1)",
+            pointHoverRadius: 3,
+            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+            pointHitRadius: 10,
+            pointBorderWidth: 2,
+            data: [1000,20000,3000,3000,1000,2200,1200,100000,1000000,2000,11000,111100],
+        }],
+    },
     options: {
         maintainAspectRatio: false,
         layout: {
@@ -76,7 +79,7 @@ var myAreaChart = new Chart(ctx, {
                     padding: 10,
                     // Include a dollar sign in the ticks
                     callback: function (value, index, values) {
-                        return number_format(value) + ' VND';
+                        return '$' + number_format(value);
                     }
                 },
                 gridLines: {
@@ -108,32 +111,43 @@ var myAreaChart = new Chart(ctx, {
             callbacks: {
                 label: function (tooltipItem, chart) {
                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                    return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + ' VND';
+                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
                 }
             }
         }
     }
 });
-$(document).ready(function () {   // gọi function này ở đâu //lúc khởi chạy view á
 
-    ajax_Adminchart("/Admin/Homeadmin/GetData");
-})
+//$(document).ready(function () {   // gọi function này ở đâu //lúc khởi chạy view á
+//    //var Id = $('#shopchoosen').val();   //dô đây trước nè // id shopchossen ở đâu
 
-//$('#thongke').on('change', '.input_thongke', function () {
+//    console.log(Id);
+//    ajax_chart('/Admin/Home/Getdata', 0);//rồi dô đây
 
-//    data = 'id=' + $('#user_tk').val() + '&date=' + $('#date_tk').val()
-
-//    ajax_Adminchart("/Admin/Home/Statistical_Revenue", data)
 //})
+////function ChooseChanged(obj) {
+////    console.log(obj.value);
+////    statistic_number('/Admin/Home/Getdatanumber/' + obj.value, 0);
+////    ajax_chart('/Admin/Home/Getdata/' + obj.value, 0);//rồi dô đây
+////    //statistic_table('/Admin/Home/GetdatTable/' + obj.value);
+////    return obj.value;
+////}
+////function statistic_number(url, data) {
+////    console.log(url);//đây nè
+////    $.getJSON(url, data).done(function (response) {
+////        console.log(response);//rồi xuống đây
+////        $('#earning').val(response.earning);
+////        $('#sumproduct').val(response.sumproduct);
+////        $('#sumcustomer').val(response.sumcustomer);
+////    })
+////}
+//function ajax_chart(url, data) {
+//    console.log(url);//đây nè
+//    $.getJSON(url, data).done(function (response) {
+//        console.log(response);//rồi xuống đây
 
-
-
-
-function ajax_Adminchart(url) {
-    $.getJSON(url).done(function (response) {
-        console.log(response.label);
-        myAreaChart.data.labels = response.label;
-        myAreaChart.data.datasets[0].data = response.value;
-        myAreaChart.update();
-    })
-}
+//        myAreaChart.data.labels = response.labels;
+//        myAreaChart.data.datasets[0].data = response.values;
+//        myAreaChart.update();
+//    })
+//}

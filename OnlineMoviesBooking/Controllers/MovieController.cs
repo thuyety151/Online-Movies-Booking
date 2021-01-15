@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using Microsoft.Data.SqlClient;
+using System.Net.Mail;
+using System.Net;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -150,7 +152,15 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult Detail(string id)
         {
-
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -168,6 +178,15 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult ShowsDetail(string id)
         {
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            if (HttpContext.Session.GetString("idLogin") == null)
+            {
+                TempData["msg"] = "Dang nhap truoc";
+                return RedirectToAction("Login", "Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -371,6 +390,7 @@ namespace OnlineMoviesBooking.Controllers
                     seats.Add(seatVM[i]);
                 }
             }
+            
             // insert seat vào ticket
             string result = Exec.ExecInsertTickets(seats, HttpContext.Session.GetString("idLogin").ToString()
                                         , idshow, null);
@@ -384,6 +404,7 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult CheckOut(string idshow,string lstSeat)
         {
+            HttpContext.Session.Remove("bodymail");
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
@@ -396,6 +417,63 @@ namespace OnlineMoviesBooking.Controllers
             // get bill
             var bill = Exec.ExecGetTicketDetail(HttpContext.Session.GetString("idLogin").ToString(), idshow);
             ViewBag.Show = idshow;
+            string[] lst = lstSeat.Split(',');
+            string listseat = "";
+            //get seat
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                foreach (var item in lst)
+                {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_GetSeatTicket @idseat = '{item}'";
+
+                    var command = new SqlCommand(commandText, connection);
+                    try
+                    {
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                string ghe = Convert.ToString(reader[3]);
+                                ghe += Convert.ToString(reader[4]);
+                                listseat += ghe + " ";
+                            }
+
+                        }
+                        else
+                        {
+                            TempData["msg"] = "error";
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+
+                        TempData["msg"] = "error";
+                        return RedirectToAction("Index", "Home");
+                    }
+                    connection.Close();
+                }    
+                
+            }
+            ViewBag.listseat = listseat;
+            string bodymail = "";
+            
+            bodymail += "Tài khoản: " + HttpContext.Session.GetString("idLogin").ToString() + "<br/>";
+            bodymail += "Tên phim: " + bill.MovieName + "<br/>" ;
+            bodymail += "Tên rạp: " + bill.TheaterName + "<br/>";
+            bodymail += "Tên phòng chiếu: " + bill.ScreenName + "<br/>";
+            bodymail += "Thời gian bắt đầu: " + bill.TimeStart + "<br/>";
+            bodymail += "Thời gian kết thúc: " + bill.TimeStart + "<br/>";
+            bodymail += "Ghế: " + listseat + "<br/>";
+            bodymail += "Tổng cộng: " + bill.TotalPrice.ToString() + "<br/>";
+
+            HttpContext.Session.SetString("bodymail", bodymail);
+            
+           
             return View(bill);
         }
         [HttpGet]
@@ -620,6 +698,23 @@ namespace OnlineMoviesBooking.Controllers
             //Xóa session
 
             Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
+            //gửi mail khi thành công
+            string bodymail = "";
+            bodymail += HttpContext.Session.GetString("bodymail");
+            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
+            mm.Subject = "Thanh toán thành công";
+            mm.Body = string.Format(bodymail);
+            mm.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.EnableSsl = true;
+            NetworkCredential nc = new NetworkCredential();
+            nc.UserName = "thanhtontran115@gmail.com";
+            nc.Password = "1152000toan";
+            smtp.UseDefaultCredentials = true;
+            smtp.Credentials = nc;
+            smtp.Port = 587;
+            smtp.Send(mm);
             return View();
         }
     }

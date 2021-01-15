@@ -128,8 +128,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.Parameters.AddWithValue("@Rated", movie.Rated ?? Convert.DBNull);
                 com.Parameters.AddWithValue("@Description", movie.Description ?? Convert.DBNull);
                 com.Parameters.AddWithValue("@Trailer", movie.Trailer ?? Convert.DBNull);
-                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? Convert.DBNull);
-                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate /*?? Convert.DBNull*/);
+                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime /*?? Convert.DBNull*/);
                 com.Parameters.AddWithValue("@Poster", movie.Poster ?? Convert.DBNull);
                 com.ExecuteNonQuery();
             }
@@ -169,8 +169,8 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 com.Parameters.AddWithValue("@Rated", movie.Rated ?? Convert.DBNull);
                 com.Parameters.AddWithValue("@Description", movie.Description ?? Convert.DBNull);
                 com.Parameters.AddWithValue("@Trailer", movie.Trailer ?? Convert.DBNull);
-                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate ?? Convert.DBNull);
-                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime ?? Convert.DBNull);
+                com.Parameters.AddWithValue("@ReleaseDate", movie.ReleaseDate /*?? Convert.DBNull*/);
+                com.Parameters.AddWithValue("@RunningTime", movie.RunningTime /*?? Convert.DBNull*/);
                 com.Parameters.AddWithValue("@Poster", movie.Poster ?? Convert.DBNull);
                 com.ExecuteNonQuery();
             }
