@@ -152,15 +152,7 @@ namespace OnlineMoviesBooking.Controllers
         }
         public IActionResult Detail(string id)
         {
-            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
-            if (HttpContext.Session.GetString("idLogin") == null)
-            {
-                TempData["msg"] = "Dang nhap truoc";
-                return RedirectToAction("Login", "Login");
-            }
+            
             if (id == null)
             {
                 return NotFound();
@@ -420,7 +412,7 @@ namespace OnlineMoviesBooking.Controllers
             string[] lst = lstSeat.Split(',');
             string listseat = "";
             //get seat
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
             using (var connection = new SqlConnection(connectionString))
             {
                 foreach (var item in lst)
@@ -437,9 +429,22 @@ namespace OnlineMoviesBooking.Controllers
                         {
                             while (reader.Read())
                             {
-                                string ghe = Convert.ToString(reader[3]);
-                                ghe += Convert.ToString(reader[4]);
-                                listseat += ghe + " ";
+                                string ghe = "";
+                                if (Convert.ToString(reader[3])!="H" && Convert.ToString(reader[3]) != "G")
+                                {
+                                    ghe+= Convert.ToString(reader[3]);
+                                    ghe += Convert.ToString(reader[4]);
+                                    listseat += ghe + " ";
+                                }
+                                else
+                                {
+                                    ghe += Convert.ToString(reader[3]);
+                                    ghe += (int.Parse(reader[4].ToString()) * 2 - 1).ToString();
+                                    ghe +=" " +Convert.ToString(reader[3]);
+                                    ghe += (int.Parse(reader[4].ToString()) * 2).ToString();
+                                    listseat += ghe + " ";
+                                }
+                               
                             }
 
                         }
@@ -448,6 +453,7 @@ namespace OnlineMoviesBooking.Controllers
                             TempData["msg"] = "error";
                             return RedirectToAction("Index", "Home");
                         }
+
                     }
                     catch (SqlException e)
                     {
@@ -700,8 +706,9 @@ namespace OnlineMoviesBooking.Controllers
             Exec.ExecUpdateTicketStatus(HttpContext.Session.GetString("idLogin").ToString(),point);
             //gửi mail khi thành công
             string bodymail = "";
+            string mail = HttpContext.Session.GetString("email");
             bodymail += HttpContext.Session.GetString("bodymail");
-            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
+            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", mail);//sửa đi mm
             mm.Subject = "Thanh toán thành công";
             mm.Body = string.Format(bodymail);
             mm.IsBodyHtml = true;
@@ -714,7 +721,26 @@ namespace OnlineMoviesBooking.Controllers
             smtp.UseDefaultCredentials = true;
             smtp.Credentials = nc;
             smtp.Port = 587;
-            smtp.Send(mm);
+            try
+            {
+                smtp.Send(mm);
+            }
+            catch
+            {
+                mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");//sửa đi mm
+                mm.Subject = "Thanh toán thành công";
+                mm.Body = string.Format(bodymail);
+                mm.IsBodyHtml = true;
+                smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                nc = new NetworkCredential();
+                nc.UserName = "thanhtontran115@gmail.com";
+                nc.Password = "1152000toan";
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = nc;
+                smtp.Port = 587;
+            }
             return View();
         }
     }

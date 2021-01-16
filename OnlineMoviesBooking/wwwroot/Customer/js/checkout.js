@@ -26,8 +26,8 @@
 
                     console.log($('#code-discount').val())
                     console.log(data);
-                    if (data.iddiscount == null) {
-
+                    if (data == null) {
+                        $('#validation').text("*Hết hạn")
                     }
                     if (data === false) {
                         console.log(false);

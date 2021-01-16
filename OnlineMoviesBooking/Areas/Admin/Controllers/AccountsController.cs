@@ -499,7 +499,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 string wwwRootPath = _hostEnvironment.WebRootPath;
 
                 var image = HttpContext.Session.GetString("imgLogin");
-                if (image != null)
+                if (image != "")
                 {
                     var imageUrl = wwwRootPath + image;
                     System.IO.File.Delete(imageUrl);

@@ -37,7 +37,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             else
             {
-                HttpContext.Session.SetString("connectString", "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+                HttpContext.Session.SetString("connectString", "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
             List<Discount> listdis = new List<Discount>();
             string connectionString = HttpContext.Session.GetString("connectString");
@@ -73,6 +73,7 @@ namespace OnlineMoviesBooking.Controllers
                         dis.DateEnd = Convert.ToDateTime(reader[6]);
                         dis.ImageDiscount = Convert.ToString(reader[7]);
                         // dis.NoTicket = Convert.ToInt32(reader[8]);      
+                         dis.Code = reader[10].ToString();      
                         try
                         {
                             dis.Point = Convert.ToInt32(reader[8]);
@@ -89,7 +90,7 @@ namespace OnlineMoviesBooking.Controllers
                 catch (SqlException e)
                 {
                     ModelState.AddModelError("", e.ToString());
-                    return RedirectToAction("index", "home");
+                    return NotFound();
                 }
                 connection.Close();
 

@@ -46,7 +46,6 @@
     <None Include="wwwroot\css\build\toastr.js.map" />
     <None Include="wwwroot\css\build\toastr.min.js" />
     <Folder Include="wwwroot\images\movies\" />
-    <Folder Include="wwwroot\images\discounts\" />
     <Folder Include="wwwroot\jquery\" />
   </ItemGroup>
 

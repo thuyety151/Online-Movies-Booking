@@ -67,7 +67,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
             //    TempData["msg"] = "Chua dang nhap";
             //    return Redirect("/Home/Index");
             //}
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -99,7 +99,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
         public IActionResult GetData()//xong qua đây  // id truyền vào null kìa// null nữa gòi
         {
 
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
             var label = new string[12];
             var value = new double[12];
             //var vl = cinemaContext.B

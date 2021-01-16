@@ -6,7 +6,7 @@ namespace OnlineMoviesBooking.Models.Models
     public partial class Account
     {
         public Account()
-        {
+         {
             Qa = new HashSet<Qa>();
             Ticket = new HashSet<Ticket>();
             UseDiscount = new HashSet<UseDiscount>();

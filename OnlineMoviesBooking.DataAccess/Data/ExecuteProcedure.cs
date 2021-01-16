@@ -228,7 +228,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                 });
 
             }
-            return lst;
+           return lst;
 
         }
         public List<Movie> ExecuteGetMovieComingSoon(int skip, int take)    
@@ -1070,7 +1070,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
             SqlCommand com = new SqlCommand("USP_GetSeat", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@IdShow", idShow);
-            SqlDataReader rdr = com.ExecuteReader();
+            SqlDataReader rdr = com.ExecuteReader();//má xỉu 
 
             while (rdr.Read())
             {
