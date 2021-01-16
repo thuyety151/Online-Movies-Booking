@@ -77,24 +77,15 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 {
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            Qa qa = new Qa();
-                            qa.Id = Convert.ToString(reader[0]);
-                            qa.IdAccount = Convert.ToString(reader[1]);
-                            qa.Email = Convert.ToString(reader[2]);
-                            qa.Time = Convert.ToDateTime(reader[3]);
-                            qa.Content = Convert.ToString(reader[4]);
-                            listqa.Add(qa);
-                        }
-
-                    }
-                    else
-                    {
-                        TempData["msg"] = "error";
-                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                        Qa qa = new Qa();
+                        qa.Id = Convert.ToString(reader[0]);
+                        qa.IdAccount = Convert.ToString(reader[1]);
+                        qa.Email = Convert.ToString(reader[2]);
+                        qa.Time = Convert.ToDateTime(reader[3]);
+                        qa.Content = Convert.ToString(reader[4]);
+                        listqa.Add(qa);
                     }
                 }
                 catch (SqlException e)
