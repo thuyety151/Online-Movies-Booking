@@ -336,7 +336,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 System.IO.File.Delete(imagePath);
             }
-
             Exec.ExecuteDeleteMovie(id);
 
             return Json(new { success = true });

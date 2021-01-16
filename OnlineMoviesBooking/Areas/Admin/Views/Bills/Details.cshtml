@@ -1,0 +1,62 @@
+﻿@model OnlineMoviesBooking.Models.ViewModels.ViewBillAdminModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="row justify-content-center">
+    Chi tiết vé
+</h4>
+<div class="row justify-content-center">
+
+    <div class=" col-lg-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" class="form-control" hidden />
+        <div class="form-group">
+            <label class="control-label">tên khách hàng</label>
+            <input asp-for="AccountName" class="form-control " disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">tên phim</label>
+            <input asp-for="MovieName" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">tên phòng chiếu</label>
+            <input asp-for="ScreenName" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label  class="control-label">Tên rạp chiếu</label>
+            <input asp-for="TheaterName" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">thời gian chiếu</label>
+            <input asp-for="TimeStart" class="form-control" type="datetime-local" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">hàng ghế</label>
+            <input asp-for="Row" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">số ghế</label>
+            <input asp-for="No" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">ngày mua</label>
+            <input asp-for="Date" class="form-control" type="datetime-local" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">khuyến mãi đang dùng</label>
+            <input asp-for="DiscountName" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label class="control-label">điểm đã dùng</label>
+            <input asp-for="Point" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <a asp-action="Index">Trở lại</a>
+        </div>
+    </div>
+    </div>
+
+

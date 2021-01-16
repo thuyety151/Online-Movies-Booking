@@ -1314,5 +1314,86 @@ namespace OnlineMoviesBooking.DataAccess.Data
             }
             return "";
         }
+        public ViewBillAdminModel ExecGetBillAdminDetail(string id)
+        {
+            var billAdmin = new ViewBillAdminModel();
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+
+            //TêN STORE
+            SqlCommand com = new SqlCommand("USP_GetDetailBillAdmin", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@Id", id);
+            SqlDataReader rdr = com.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                billAdmin = new ViewBillAdminModel
+                {
+                    Id = rdr["Id"].ToString(),
+                    AccountName = rdr["AccountName"].ToString(),
+                    MovieName = rdr["MovieName"].ToString(),
+                    ScreenName = rdr["ScreenName"].ToString(),
+                    TheaterName = rdr["TheaterName"].ToString(),
+                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                    Row = rdr["Row"].ToString(),
+                    No = int.Parse(rdr["No"].ToString()),
+                    Date = DateTime.Parse(rdr["Date"].ToString()),
+                    Status = bool.Parse(rdr["Status"].ToString()),
+                    DiscountName = rdr["DiscountName"].ToString(),
+                    Point = int.Parse(rdr["Point"].ToString()),
+                };
+            }
+            return billAdmin;
+        }
+        public List<ViewBillAdminModel> ExecuteGetAllBillAdmin()
+        {
+            List<ViewBillAdminModel> lstBillAdmin = new List<ViewBillAdminModel>();
+            using SqlConnection con = new SqlConnection(cs);
+            con.Open();
+            //TêN STORE
+            SqlCommand com = new SqlCommand("USP_GetAllBillAdmin", con);
+            SqlDataReader rdr = com.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                lstBillAdmin.Add(new ViewBillAdminModel()
+                {
+                    Id = rdr["Id"].ToString(),
+                    AccountName = rdr["AccountName"].ToString(),
+                    MovieName = rdr["MovieName"].ToString(),
+                    ScreenName = rdr["ScreenName"].ToString(),
+                    TheaterName = rdr["TheaterName"].ToString(),
+                    TimeStart = DateTime.Parse(rdr["TimeStart"].ToString()),
+                    Row = rdr["Row"].ToString(),
+                    No = int.Parse(rdr["No"].ToString()),
+                    Date = DateTime.Parse(rdr["Date"].ToString()),
+                    Status = bool.Parse(rdr["Status"].ToString()),
+                    DiscountName = rdr["DiscountName"].ToString(),
+                    Point = int.Parse(rdr["Point"].ToString()),
+                });
+
+            }
+            return lstBillAdmin;
+        }
+        public string ExecuteDeleteTicket(string id)
+        {
+            string s = "";
+            try
+            {
+                using SqlConnection con = new SqlConnection(cs);
+                con.Open();
+                // TêN STORE
+                SqlCommand com = new SqlCommand("USP_DeleteBillAdmin", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Id", id);
+                com.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                s = e.Message.ToString();
+            }
+            return s;
+        }
     }
 }
