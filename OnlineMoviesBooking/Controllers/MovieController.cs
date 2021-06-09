@@ -420,7 +420,7 @@ namespace OnlineMoviesBooking.Controllers
             string[] lst = lstSeat.Split(',');
             string listseat = "";
             //get seat
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
             using (var connection = new SqlConnection(connectionString))
             {
                 foreach (var item in lst)

@@ -37,7 +37,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             else
             {
-                HttpContext.Session.SetString("connectString", "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true");
+                HttpContext.Session.SetString("connectString", "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;");
             }
             List<Discount> listdis = new List<Discount>();
             string connectionString = HttpContext.Session.GetString("connectString");
