@@ -22,6 +22,7 @@ namespace OnlineMoviesBooking
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -29,6 +30,12 @@ namespace OnlineMoviesBooking
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Policy11",
+                builder => builder.WithOrigins("https://localhost:44328"));
+            });
             services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
             services.AddMvc();
             //services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
@@ -52,6 +59,8 @@ namespace OnlineMoviesBooking
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+          
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,6 +72,7 @@ namespace OnlineMoviesBooking
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseCors("Policy11");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             
@@ -72,8 +82,6 @@ namespace OnlineMoviesBooking
             app.UseAuthorization();
 
             app.UseSession();                               // Đăng ký Middleware Session vào Pipeline
-            //app.UseMvc();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
@@ -88,8 +96,6 @@ namespace OnlineMoviesBooking
                      name: "Customer",
                      areaName: "Customer",
                      pattern: "Customer/{controller=Home}/{action=Index}/{id?}");
-
-
                 endpoints.MapRazorPages();
             });
         }

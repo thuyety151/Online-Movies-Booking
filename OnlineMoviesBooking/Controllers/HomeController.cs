@@ -45,6 +45,7 @@ namespace OnlineMoviesBooking.Controllers
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
+
                 string commandText = "EXEC dbo.USP_GetAllDiscount";
 
                 var command = new SqlCommand(commandText, connection);
