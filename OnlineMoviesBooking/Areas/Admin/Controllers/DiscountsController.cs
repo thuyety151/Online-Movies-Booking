@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -73,7 +74,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 id=x.Id,
                 name=x.Name,
-                code=x.Code,
+                code= HttpUtility.HtmlDecode(x.Code),
                 dateStart=x.DateStart.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
                 dateEnd= x.DateEnd.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
                 imageDiscount = x.ImageDiscount,
@@ -135,6 +136,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            discount.Name = HttpUtility.HtmlDecode(discount.Name);
+            discount.Code = HttpUtility.HtmlDecode(discount.Code);
+            discount.Description = HttpUtility.HtmlDecode(discount.Description);
 
             return View(discount);
         }
@@ -191,6 +195,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             }
             if (ModelState.IsValid && ModelState.ErrorCount==0)
             {
+               
+
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 //var filess = HttpContext.Request.Form.Files;
@@ -224,11 +230,16 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 // gán các giá trị null để insert vào db
                 discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 discount.Used = 0;
+                discount.Name = HttpUtility.HtmlEncode(discount.Name);
+                discount.Code = HttpUtility.HtmlEncode(discount.Code);
+                discount.Description = HttpUtility.HtmlEncode(discount.Description);
+
 
                 string result = Exec.ExecuteInsertDiscount(discount);
                 while (result.Contains("PRIMARY"))
                 {
                     discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
+                    
                     result = Exec.ExecuteInsertDiscount(discount);
                 }
                 if(result=="")
@@ -313,6 +324,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             }
             if (ModelState.IsValid && ModelState.ErrorCount==0)
             {
+                discount.Name = HttpUtility.HtmlEncode(discount.Name);
+                discount.Code = HttpUtility.HtmlEncode(discount.Code);
+                discount.Description = HttpUtility.HtmlEncode(discount.Description);
+
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 //var filess = HttpContext.Request.Form.Files;

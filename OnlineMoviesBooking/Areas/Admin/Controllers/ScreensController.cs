@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -121,6 +122,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             }
 
             var screen = Exec.ExecuteGetDetailScreen_Theater(id);
+            screen.Name = HttpUtility.HtmlDecode(screen.Name);
             if (screen == null)
             {
                 return NotFound();
@@ -164,6 +166,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                //prevent xss
+                screen.Name = HttpUtility.HtmlEncode(screen.Name);
+
                 screen.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
                 // check lỗi do nhập
@@ -233,7 +238,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             Screen obj = new Screen
             {
                 Id = screen.Id,
-                Name = screen.Name,
+                Name = HttpUtility.HtmlDecode(screen.Name),
                 IdTheater = screen.IdTheater
             };
             ViewBag.Theater = new SelectList(Exec.ExecuteTheaterGetAll(), "Id", "Name");
@@ -255,6 +260,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    screen.Name = HttpUtility.HtmlEncode(screen.Name);
                     string checkname = Exec.CheckNameScreen(screen.Name, screen.IdTheater);
                     // check lỗi do nhập
                     if (checkname != "")

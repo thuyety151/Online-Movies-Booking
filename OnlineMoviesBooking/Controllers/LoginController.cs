@@ -16,6 +16,8 @@ using System.Net.Mail;
 using System.Configuration;
 using Microsoft.AspNetCore.Session;
 using OnlineMoviesBooking.DataAccess.Data;
+using System.Web;
+
 namespace OnlineMoviesBooking.Controllers
 {
 
@@ -46,6 +48,7 @@ namespace OnlineMoviesBooking.Controllers
         [HttpPost]
         public ActionResult ForgotPassword(string Email)
         {
+            Email = HttpUtility.HtmlEncode(Email);
 
             string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
@@ -134,6 +137,11 @@ namespace OnlineMoviesBooking.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    registerViewModel.Email = HttpUtility.HtmlEncode(registerViewModel.Email);
+                    registerViewModel.FullName = HttpUtility.HtmlEncode(registerViewModel.FullName);
+                    registerViewModel.Password = HttpUtility.HtmlEncode(registerViewModel.Password);
+                    registerViewModel.Username = HttpUtility.HtmlEncode(registerViewModel.Username);
+                    
                     string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                     using (var connection = new SqlConnection(connectionString))
@@ -191,7 +199,6 @@ namespace OnlineMoviesBooking.Controllers
         {
             try
             {
-                
                 Account acc = new Account();
                 List<TypeOfMember> listmember = new List<TypeOfMember>();
                 List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
@@ -234,7 +241,6 @@ namespace OnlineMoviesBooking.Controllers
                     }
                     catch (SqlException e)
                     {
-
                         ModelState.AddModelError("", e.ToString());
                         return View(loginModelView);
                     }
@@ -242,10 +248,10 @@ namespace OnlineMoviesBooking.Controllers
 
                 }
 
-                HttpContext.Session.SetString("idLogin", acc.Id);
-                HttpContext.Session.SetString("nameLogin", acc.Name);
+                HttpContext.Session.SetString("idLogin", HttpUtility.HtmlDecode(acc.Id));
+                HttpContext.Session.SetString("nameLogin", HttpUtility.HtmlDecode(acc.Name));
                 HttpContext.Session.SetString("imgLogin", acc.Image);
-                HttpContext.Session.SetString("pwLogin", acc.Password);
+                HttpContext.Session.SetString("pwLogin", HttpUtility.HtmlDecode(acc.Password));
                 HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
                 HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
                 TempData["idLogin"] = HttpContext.Session.GetString("idLogin");

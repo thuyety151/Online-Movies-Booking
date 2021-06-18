@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -190,6 +191,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            if(show.Languages!=null)
+            {
+                show.Languages = HttpUtility.HtmlDecode(show.Languages);
+            }
 
             return View(show);
         }
@@ -282,6 +287,11 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                //prevent xss
+                if(showVM.Languages!=null)
+                {
+                    showVM.Languages = HttpUtility.HtmlEncode(showVM.Languages);
+                }
                 showVM.Id = Guid.NewGuid().ToString();
                 if(showVM.Languages==null)
                 {
@@ -353,7 +363,10 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            if (show.Languages != null)
+            {
+                show.Languages = HttpUtility.HtmlDecode(show.Languages);
+            }
             var movies = Exec.ExecuteMovieGetAll();
             ViewBag.Movies = new SelectList(movies, "Id", "Name");
 
@@ -370,6 +383,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, ShowViewModel show)
         {
+            
             if (id != show.Id)
             {
                 return NotFound();
@@ -377,7 +391,12 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                if(show.Languages==null)
+                if (show.Languages != null)
+                {
+                    show.Languages = HttpUtility.HtmlDecode(show.Languages);
+                }
+
+                if (show.Languages==null)
                 {
                     show.Languages = "";
                 }    

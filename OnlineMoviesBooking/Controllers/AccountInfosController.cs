@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -80,7 +81,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-
+            acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 
@@ -113,6 +117,10 @@ namespace OnlineMoviesBooking.Controllers
             }
             string connectionString = HttpContext.Session.GetString("connectString");
             string username = HttpContext.Session.GetString("idLogin");
+
+            changePassword.OldPasswword = HttpUtility.HtmlEncode(changePassword.OldPasswword);
+            changePassword.NewPassword = HttpUtility.HtmlEncode(changePassword.NewPassword);
+
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -204,7 +212,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-
+            acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 
@@ -221,6 +232,11 @@ namespace OnlineMoviesBooking.Controllers
             }
             
             {
+                //account.Address = HttpUtility.HtmlEncode(account.Address);
+                //account.Email = HttpUtility.HtmlEncode(account.Email);
+                //account.Name = HttpUtility.HtmlEncode(account.Name);
+                //account.Password = HttpUtility.HtmlEncode(account.Password);
+
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 string img = "";
                 if (account.Image != null)
@@ -265,7 +281,7 @@ namespace OnlineMoviesBooking.Controllers
                         }
                         connection.Close();
                     }
-                    HttpContext.Session.SetString("nameLogin", account.Name);
+                    HttpContext.Session.SetString("nameLogin", HttpUtility.HtmlEncode(account.Name));
 
                     HttpContext.Session.SetString("imgLogin", img);
                     return RedirectToAction("Index", "AccountInfos");
@@ -277,8 +293,6 @@ namespace OnlineMoviesBooking.Controllers
                     {
                         ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
                     }
-
-
                     return View(account);
                 }
 

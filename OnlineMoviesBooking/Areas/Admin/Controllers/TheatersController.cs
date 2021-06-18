@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -51,7 +52,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             var obj = Exec.ExecuteTheaterGetAll().Select(x=>new { 
                 id=x.Id,
-                name=x.Name,
+                name=HttpUtility.HtmlEncode(x.Name),
                 address=x.Address,
                 hotline=x.Hotline
             });
@@ -118,7 +119,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
+            theater.Name = HttpUtility.HtmlEncode(theater.Name);
+            theater.Address = HttpUtility.HtmlEncode(theater.Address);
             return View(theater);
         }
 
@@ -152,7 +154,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
-                
+                theater.Name = HttpUtility.HtmlEncode(theater.Name);
+                theater.Address = HttpUtility.HtmlEncode(theater.Address);
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
 
                 while (s.Contains("PRIMARY"))   // do check primary key trước
@@ -199,11 +202,12 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             }
             var theater = Exec.ExecuteDetailTheater(id);
 
-
             if (theater == null)
             {
                 return NotFound();
             }
+            theater.Name = HttpUtility.HtmlEncode(theater.Name);
+            theater.Address = HttpUtility.HtmlEncode(theater.Address);
             return View(theater);
         }
 
@@ -218,6 +222,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                theater.Name = HttpUtility.HtmlEncode(theater.Name);
+                theater.Address = HttpUtility.HtmlEncode(theater.Address);
+
                 string result = Exec.ExecuteUpdateTheater(theater);
                 if (result.Contains("UNIQUE"))       //check unique address
                 {

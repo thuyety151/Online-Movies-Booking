@@ -80,7 +80,7 @@ namespace OnlineMoviesBooking.Controllers
                     {
                         command.ExecuteNonQuery();
                     }
-                    catch
+                    catch(Exception e)
                     {
                         TempData["msg"] = "error";
                         return View(contactView);
@@ -88,9 +88,9 @@ namespace OnlineMoviesBooking.Controllers
                     connection.Close();
                 }
 
-                return RedirectToAction(nameof(Index));
+                //
             }
-            return RedirectToActionPermanent("Index", "contactView");
+            return View("Index");
         }
     }
 }

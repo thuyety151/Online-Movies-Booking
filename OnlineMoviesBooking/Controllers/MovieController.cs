@@ -492,9 +492,16 @@ namespace OnlineMoviesBooking.Controllers
         [HttpGet]
         public IActionResult UsePoint(string point)
         {
-            // kiểm tra điểm hợp lệ
-            var obj = Exec.ExecCheckPoint(HttpContext.Session.GetString("idLogin").ToString(), int.Parse(point));
-            return Json(obj);
+            try
+            {
+                // kiểm tra điểm hợp lệ
+                var obj = Exec.ExecCheckPoint(HttpContext.Session.GetString("idLogin").ToString(), int.Parse(point));
+                return Json(obj);
+            }
+            catch(Exception E)
+            {
+                return Json(null);
+            }
         }
         public IActionResult TimeOut(string idshow)
         {
@@ -537,13 +544,23 @@ namespace OnlineMoviesBooking.Controllers
             {
                 // add point vào bill và trừ ở account
                 // sẽ tran khi thanh toán ko thành công
-                string execPoint = Exec.ExecAddPoint(HttpContext.Session.GetString("idLogin").ToString(), pointuse);
-                if(execPoint== "Không dùng được point")
+                
+
+                try
                 {
-                    // lỗi điểm âm sau khi trừ
+                    string execPoint = Exec.ExecAddPoint(HttpContext.Session.GetString("idLogin").ToString(), pointuse);
+                    if (execPoint == "Không dùng được point")
+                    {
+                        // lỗi điểm âm sau khi trừ
+                        return Content("Điểm dùng không hợp lệ");
+                    }
+                    total -= int.Parse(pointuse) * 1000;
+                }
+                catch(Exception e)
+                {
                     return Content("Điểm dùng không hợp lệ");
                 }
-                total -= int.Parse(pointuse) * 1000;
+                
             }
             else
             {

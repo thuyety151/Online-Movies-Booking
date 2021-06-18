@@ -458,8 +458,7 @@ namespace OnlineMoviesBooking.DataAccess.Data
                     Id = (rdr["Id"]).ToString(),
                     Name = rdr["Name"].ToString(),
                     IdTheater = rdr["Id_Theater"].ToString(),
-                    NameTheater = rdr["Theater"].ToString(),
-                    Address = (rdr["Address"]).ToString()
+                    NameTheater = rdr["Theater"].ToString()
                 };
             }
             return lst;

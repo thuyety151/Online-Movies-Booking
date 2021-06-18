@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModel;
+using System.Web;
 
 namespace OnlineMoviesBooking.Areas.Controllers
 {
@@ -239,13 +240,15 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id", "Name", "Birthdate", "Gender", "Address", "Sdt", "Email", "Password", "Point", "IdTypesOfUser", "IdTypeOfMember", "Image")] Account account, IFormFile files)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    account.Name = HttpUtility.HtmlEncode(account.Name);
+                    account.Address = HttpUtility.HtmlEncode(account.Address);
                     // save image to wwwroot/image
                     string wwwRootPath = _hostEnvironment.WebRootPath;
 
@@ -426,11 +429,11 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 return NotFound();
             }
 
-            
                 try
                 {
-
-                    string connectionString = HttpContext.Session.GetString("connectString");
+                    account.Name = HttpUtility.HtmlEncode(account.Name);
+                    account.Address = HttpUtility.HtmlEncode(account.Address);
+                string connectionString = HttpContext.Session.GetString("connectString");
 
                     using (var connection = new SqlConnection(connectionString))
                     {

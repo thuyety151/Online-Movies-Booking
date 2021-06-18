@@ -17,6 +17,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineMoviesBooking.Models.ViewModels;
 using Microsoft.Data.SqlClient;
+using System.Text.Encodings.Web;
+using System.Text;
+using System.Web.Helpers;
 
 namespace OnlineMoviesBooking.Areas.Admin.Controllers
 {
@@ -26,7 +29,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         private readonly ExecuteProcedure Exec;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string check;
-        public MoviesController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
+
+        public MoviesController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             Exec = new ExecuteProcedure(httpContextAccessor.HttpContext.Session.GetString("connectString"));
             this._hostEnvironment = hostEnvironment;
@@ -135,6 +139,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             try
             {
                 var movie = Exec.ExecuteMovieDetail(id);
+                movie = DecodeData(movie);
                 return View(movie);
             }
             catch
@@ -187,12 +192,23 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Movie movie, IFormFile files)
         {
-            
-
             if (ModelState.IsValid)
             {
+                //encode
+                movie.Casts = HttpUtility.HtmlEncode(movie.Casts);
+                movie.Description = HttpUtility.HtmlEncode(movie.Description);
+                movie.Director = HttpUtility.HtmlEncode(movie.Director);
+                movie.Genre = HttpUtility.HtmlEncode(movie.Genre);
+                movie.Name = HttpUtility.HtmlEncode(movie.Name);
+                if (movie.Rated != null)
+                {
+                    movie.Rated = HttpUtility.HtmlEncode(movie.Rated);
+                }
+                movie.Trailer = HttpUtility.HtmlEncode(movie.Trailer);
+
+                
                 // check image
-                if(movie.Id==null && files == null)
+                if (movie.Id==null && files == null)
                 {
                     ModelState.AddModelError("Poster", "Thêm Poster");
                     
@@ -340,6 +356,20 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             Exec.ExecuteDeleteMovie(id);
 
             return Json(new { success = true });
+        }
+        private Movie DecodeData(Movie movie)
+        {
+            movie.Casts = HttpUtility.HtmlDecode(movie.Casts);
+            movie.Description = HttpUtility.HtmlDecode(movie.Description);
+            movie.Director = HttpUtility.HtmlDecode(movie.Director);
+            movie.Genre = HttpUtility.HtmlDecode(movie.Genre);
+            movie.Name = HttpUtility.HtmlDecode(movie.Name);
+            if (movie.Rated != null)
+            {
+                movie.Rated = HttpUtility.HtmlDecode(movie.Rated);
+            }
+            movie.Trailer = HttpUtility.HtmlDecode(movie.Trailer);
+            return movie;
         }
 
     }
