@@ -52,7 +52,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             var obj = Exec.ExecuteTheaterGetAll().Select(x=>new { 
                 id=x.Id,
-                name=HttpUtility.HtmlEncode(x.Name),
+                //name=HttpUtility.HtmlEncode(x.Name),
+                name= x.Name,
                 address=x.Address,
                 hotline=x.Hotline
             });
@@ -119,8 +120,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            theater.Name = HttpUtility.HtmlEncode(theater.Name);
-            theater.Address = HttpUtility.HtmlEncode(theater.Address);
+            //theater.Name = HttpUtility.HtmlEncode(theater.Name);
+            //theater.Address = HttpUtility.HtmlEncode(theater.Address);
             return View(theater);
         }
 
@@ -154,8 +155,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
-                theater.Name = HttpUtility.HtmlEncode(theater.Name);
-                theater.Address = HttpUtility.HtmlEncode(theater.Address);
+                //theater.Name = HttpUtility.HtmlEncode(theater.Name);
+                //theater.Address = HttpUtility.HtmlEncode(theater.Address);
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
 
                 while (s.Contains("PRIMARY"))   // do check primary key trước

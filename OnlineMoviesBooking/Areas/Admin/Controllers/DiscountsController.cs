@@ -136,9 +136,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            discount.Name = HttpUtility.HtmlDecode(discount.Name);
-            discount.Code = HttpUtility.HtmlDecode(discount.Code);
-            discount.Description = HttpUtility.HtmlDecode(discount.Description);
+            //discount.Name = HttpUtility.HtmlDecode(discount.Name);
+            //discount.Code = HttpUtility.HtmlDecode(discount.Code);
+            //discount.Description = HttpUtility.HtmlDecode(discount.Description);
 
             return View(discount);
         }
@@ -230,9 +230,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 // gán các giá trị null để insert vào db
                 discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 discount.Used = 0;
-                discount.Name = HttpUtility.HtmlEncode(discount.Name);
-                discount.Code = HttpUtility.HtmlEncode(discount.Code);
-                discount.Description = HttpUtility.HtmlEncode(discount.Description);
+                //discount.Name = HttpUtility.HtmlEncode(discount.Name);
+                //discount.Code = HttpUtility.HtmlEncode(discount.Code);
+                //discount.Description = HttpUtility.HtmlEncode(discount.Description);
 
 
                 string result = Exec.ExecuteInsertDiscount(discount);

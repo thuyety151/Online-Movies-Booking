@@ -81,10 +81,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-            acc.Name = HttpUtility.HtmlDecode(acc.Name);
-            acc.Address = HttpUtility.HtmlDecode(acc.Address);
-            acc.Email = HttpUtility.HtmlDecode(acc.Email);
-            acc.Password = HttpUtility.HtmlDecode(acc.Password);
+            //acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            //acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            //acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            //acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 
@@ -118,8 +118,8 @@ namespace OnlineMoviesBooking.Controllers
             string connectionString = HttpContext.Session.GetString("connectString");
             string username = HttpContext.Session.GetString("idLogin");
 
-            changePassword.OldPasswword = HttpUtility.HtmlEncode(changePassword.OldPasswword);
-            changePassword.NewPassword = HttpUtility.HtmlEncode(changePassword.NewPassword);
+            //changePassword.OldPasswword = HttpUtility.HtmlEncode(changePassword.OldPasswword);
+            //changePassword.NewPassword = HttpUtility.HtmlEncode(changePassword.NewPassword);
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -212,10 +212,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-            acc.Name = HttpUtility.HtmlDecode(acc.Name);
-            acc.Address = HttpUtility.HtmlDecode(acc.Address);
-            acc.Email = HttpUtility.HtmlDecode(acc.Email);
-            acc.Password = HttpUtility.HtmlDecode(acc.Password);
+            //acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            //acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            //acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            //acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 
@@ -263,7 +263,7 @@ namespace OnlineMoviesBooking.Controllers
                     using (var connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
-                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',"
                         + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
                         + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
                         + $"@image = '{img}',@action = 'Update'";

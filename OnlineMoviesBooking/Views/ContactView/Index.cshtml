@@ -9,7 +9,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @*<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />*@
 
     @*<link href="~/Template/css/all.min.css" rel="stylesheet" />*@
     <link href="~/Template/css/animate.css" rel="stylesheet" />
@@ -27,7 +29,7 @@
 <body>
 
     <!-- ==========Banner-Section========== -->
-    <section class="main-page-header speaker-banner bg_img">
+    <!--<section class="main-page-header speaker-banner bg_img">
         <div class="container">
             <div class="speaker-banner-content">
                 <h2 class="title">contact us</h2>
@@ -40,7 +42,7 @@
                 </ul>
             </div>
         </div>
-    </section>
+    </section>-->
     <!-- ==========Banner-Section========== -->
     <!-- ==========Contact-Section========== -->
     <section class="contact-section padding-top">
@@ -57,11 +59,11 @@
                         <form class="contact-form" id="contact_form_submit" asp-action="CreateContactView">
                             <div class="form-group">
                                 <label for="email">Email<span>*</span></label>
-                                <input type="text" asp-for="Email" placeholder="Nhập Email" name="email" id="email" required>
+                                <input type="email" asp-for="Email" placeholder="Nhập Email" name="email" id="email" required>
                             </div>
                             <div class="form-group">
                                 <label for="message">Nội dung<span>*</span></label>
-                                <textarea asp-for="Content" class="form-control" placeholder="Nhập nội dung"></textarea>
+                                <input asp-for="Content" class="form-control" placeholder="Nhập nội dung" required/>
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Gửi">
@@ -84,10 +86,10 @@
                                     <div class="info-thumb">
                                         @*<img src="#" alt="contact">*@
                                     </div>
-                                    <div class="info-content">
+                                    @*<div class="info-content">
                                         <h6 class="title">Email</h6>
                                         <a href="Mailto:info@gmail.com">info@Boleto .com</a>
-                                    </div>
+                                    </div>*@
                                 </div>
                             </div>
                         </div>
@@ -104,7 +106,7 @@
 @section Scripts{
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    @*<script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>*@
+    <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
     <script src="~/js/Questionanswer.js"></script>
 

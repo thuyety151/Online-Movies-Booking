@@ -43,15 +43,17 @@ namespace OnlineMoviesBooking.Controllers
             return View();
         }
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult CreateContactView([Bind("Email,Content")] ContactViewModel contactView)
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateContactView( ContactViewModel contactView)
         {
-            TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
-            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            
             if (ModelState.IsValid)
             {
+                //TempData["idlogin"] = HttpContext.Session.GetString("idLogin");
+                //TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                //TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                //TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+
                 Qa qa = new Qa()
                 {
                     Email = contactView.Email,
@@ -73,7 +75,7 @@ namespace OnlineMoviesBooking.Controllers
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @time = '{qa.Time}', @content = N'{qa.Content}' ";
+                    string commandText = $"EXEC dbo.USP_InsertQa @id = '{qa.Id}',@email = '{qa.Email}', @content = N'{qa.Content}' ";
 
                     var command = new SqlCommand(commandText, connection);
                     try
@@ -83,7 +85,6 @@ namespace OnlineMoviesBooking.Controllers
                     catch(Exception e)
                     {
                         TempData["msg"] = "error";
-                        return View(contactView);
                     }
                     connection.Close();
                 }
