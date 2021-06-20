@@ -33,10 +33,10 @@ namespace OnlineMoviesBooking.Controllers
         }
         public ActionResult ForgotPassword()
         {
-            //TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            //TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            //TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            //TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
             return View();
         }
         public ActionResult Logout()
@@ -142,11 +142,11 @@ namespace OnlineMoviesBooking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //registerViewModel.Email = HttpUtility.HtmlEncode(registerViewModel.Email);
-                    //registerViewModel.FullName = HttpUtility.HtmlEncode(registerViewModel.FullName);
-                    //registerViewModel.Password = HttpUtility.HtmlEncode(registerViewModel.Password);
-                    //registerViewModel.Username = HttpUtility.HtmlEncode(registerViewModel.Username);
-                    
+                    registerViewModel.Email = HttpUtility.HtmlEncode(registerViewModel.Email);
+                    registerViewModel.FullName = HttpUtility.HtmlEncode(registerViewModel.FullName);
+                    registerViewModel.Password = HttpUtility.HtmlEncode(registerViewModel.Password);
+                    registerViewModel.Username = HttpUtility.HtmlEncode(registerViewModel.Username);
+
                     string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                     using (var connection = new SqlConnection(connectionString))
@@ -253,10 +253,8 @@ namespace OnlineMoviesBooking.Controllers
 
                 }
 
-                //HttpContext.Session.SetString("idLogin", HttpUtility.HtmlDecode(acc.Id));
-                HttpContext.Session.SetString("idLogin", acc.Id);
-                //HttpContext.Session.SetString("nameLogin", HttpUtility.HtmlDecode(acc.Name));
-                HttpContext.Session.SetString("nameLogin", acc.Name);
+                HttpContext.Session.SetString("idLogin", HttpUtility.HtmlDecode(acc.Id));
+                HttpContext.Session.SetString("nameLogin", HttpUtility.HtmlDecode(acc.Name));
                 HttpContext.Session.SetString("imgLogin", acc.Image);
                 HttpContext.Session.SetString("pwLogin", HttpUtility.HtmlDecode(acc.Password));
                 HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);

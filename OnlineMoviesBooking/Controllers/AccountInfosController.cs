@@ -81,10 +81,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-            //acc.Name = HttpUtility.HtmlDecode(acc.Name);
-            //acc.Address = HttpUtility.HtmlDecode(acc.Address);
-            //acc.Email = HttpUtility.HtmlDecode(acc.Email);
-            //acc.Password = HttpUtility.HtmlDecode(acc.Password);
+            acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 
@@ -118,8 +118,8 @@ namespace OnlineMoviesBooking.Controllers
             string connectionString = HttpContext.Session.GetString("connectString");
             string username = HttpContext.Session.GetString("idLogin");
 
-            //changePassword.OldPasswword = HttpUtility.HtmlEncode(changePassword.OldPasswword);
-            //changePassword.NewPassword = HttpUtility.HtmlEncode(changePassword.NewPassword);
+            changePassword.OldPasswword = HttpUtility.HtmlEncode(changePassword.OldPasswword);
+            changePassword.NewPassword = HttpUtility.HtmlEncode(changePassword.NewPassword);
 
             using (var connection = new SqlConnection(connectionString))
             {
@@ -212,10 +212,10 @@ namespace OnlineMoviesBooking.Controllers
                 }
                 connection.Close();
             }
-            //acc.Name = HttpUtility.HtmlDecode(acc.Name);
-            //acc.Address = HttpUtility.HtmlDecode(acc.Address);
-            //acc.Email = HttpUtility.HtmlDecode(acc.Email);
-            //acc.Password = HttpUtility.HtmlDecode(acc.Password);
+            acc.Name = HttpUtility.HtmlDecode(acc.Name);
+            acc.Address = HttpUtility.HtmlDecode(acc.Address);
+            acc.Email = HttpUtility.HtmlDecode(acc.Email);
+            acc.Password = HttpUtility.HtmlDecode(acc.Password);
             return View(acc);
         }
 

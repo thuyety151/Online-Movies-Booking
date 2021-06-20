@@ -73,6 +73,12 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 return Redirect("/Home/Index");
             }    
 
+            //return View(listacc);
+            return View();
+        }
+
+        public IActionResult getall()
+        {
             List<Account> listacc = new List<Account>();
             string connectionString = HttpContext.Session.GetString("connectString");
 
@@ -86,46 +92,34 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 {
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            Account acc = new Account();
-                            acc.Id = Convert.ToString(reader[0]);
-                            acc.Name = Convert.ToString(reader[1]);
-                            acc.Birthdate = Convert.ToDateTime(reader[2]);
-                            acc.Gender = Convert.ToBoolean(reader[3]);
-                            acc.Address = Convert.ToString(reader[4]);
-                            acc.Sdt = Convert.ToString(reader[5]);
-                            acc.Email = Convert.ToString(reader[6]);
-                            acc.Password = Convert.ToString(reader[7]);
-                            acc.Point = Convert.ToInt32(reader[8]);
-                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
-                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
-                            acc.Image = Convert.ToString(reader[11]);
-                            listacc.Add(acc);
-                        }
-
-                    }
-                    else
-                    {
-                        TempData["msg"] = "error";
-                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                        Account acc = new Account();
+                        acc.Id = Convert.ToString(reader[0]);
+                        acc.Name = Convert.ToString(reader[1]);
+                        acc.Birthdate = Convert.ToDateTime(reader[2]);
+                        acc.Gender = Convert.ToBoolean(reader[3]);
+                        acc.Address = Convert.ToString(reader[4]);
+                        acc.Sdt = Convert.ToString(reader[5]);
+                        acc.Email = Convert.ToString(reader[6]);
+                        acc.Password = Convert.ToString(reader[7]);
+                        acc.Point = Convert.ToInt32(reader[8]);
+                        acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                        acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                        acc.Image = Convert.ToString(reader[11]);
+                        listacc.Add(acc);
                     }
                 }
                 catch (SqlException e)
                 {
                     connection.Close();
-                    return RedirectToAction("HomeAdmin", "HomeAdmin");
+                    return Json(new { data = e.Message });
                 }
                 connection.Close();
 
             }
-
-            return View(listacc);
+            return Json(new { data = listacc });
         }
-
-
         public IActionResult Get(string id)
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
@@ -166,13 +160,13 @@ namespace OnlineMoviesBooking.Areas.Controllers
                             while (reader.Read())
                             {
                                 acc.Id = Convert.ToString(reader[0]);
-                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Name = HttpUtility.HtmlDecode(Convert.ToString(reader[1]));
                                 acc.Birthdate = Convert.ToDateTime(reader[2]);
                                 acc.Gender = Convert.ToBoolean(reader[3]);
                                 acc.Address = Convert.ToString(reader[4]);
                                 acc.Sdt = Convert.ToString(reader[5]);
                                 acc.Email = Convert.ToString(reader[6]);
-                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Password = HttpUtility.HtmlDecode(Convert.ToString(reader[7]));
                                 acc.Point = Convert.ToInt32(reader[8]);
                                 acc.IdTypesOfUser = Convert.ToString(reader[9]);
                                 acc.IdTypeOfMember = Convert.ToString(reader[10]);
@@ -203,8 +197,6 @@ namespace OnlineMoviesBooking.Areas.Controllers
             {
 
                 return Json(new { data = e.Message });
-
-
             }
         }
         // GET: Accounts/Create

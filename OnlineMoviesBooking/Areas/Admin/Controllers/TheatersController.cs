@@ -120,8 +120,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            //theater.Name = HttpUtility.HtmlEncode(theater.Name);
-            //theater.Address = HttpUtility.HtmlEncode(theater.Address);
+            theater.Name = HttpUtility.HtmlDecode(theater.Name);
             return View(theater);
         }
 
@@ -155,8 +154,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             theater.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
             if (ModelState.IsValid)
             {
-                //theater.Name = HttpUtility.HtmlEncode(theater.Name);
-                //theater.Address = HttpUtility.HtmlEncode(theater.Address);
+                theater.Name = HttpUtility.HtmlEncode(theater.Name);
+                theater.Address = HttpUtility.HtmlEncode(theater.Address);
                 string s= Exec.ExecuteInsertTheater(theater.Id, theater.Name, theater.Address, theater.Hotline);
 
                 while (s.Contains("PRIMARY"))   // do check primary key trước
@@ -207,8 +206,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            theater.Name = HttpUtility.HtmlEncode(theater.Name);
-            theater.Address = HttpUtility.HtmlEncode(theater.Address);
+            theater.Name = HttpUtility.HtmlDecode(theater.Name);
+            theater.Address = HttpUtility.HtmlDecode(theater.Address);
             return View(theater);
         }
 
