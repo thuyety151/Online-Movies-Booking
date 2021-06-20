@@ -22,7 +22,8 @@ namespace OnlineMoviesBooking.Controllers
         {
             this._hostEnvironment = hostEnvironment;
         }
-        // GET: AccountInfos    
+       
+        
         public IActionResult Index()
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
@@ -137,7 +138,7 @@ namespace OnlineMoviesBooking.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 connection.Close();
-                HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={changePassword.NewPassword}");
+                HttpContext.Session.SetString("connectString", $"Server=localhost\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={changePassword.NewPassword}");
                 HttpContext.Session.SetString("pwLogin", changePassword.NewPassword);
             }
 
@@ -146,6 +147,7 @@ namespace OnlineMoviesBooking.Controllers
 
         // GET: AccountInfos/Edit/5
         [HttpGet]
+       // [ValidateAntiForgeryToken]
         public IActionResult Edit()
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
@@ -208,9 +210,7 @@ namespace OnlineMoviesBooking.Controllers
             return View(acc);
         }
 
-        // POST: AccountInfos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, [Bind("Id,Name,Birthdate,Gender,Address,Sdt,Email,Password,Point,IdTypesOfUser,IdTypeOfMember,Image")] AccountViewModel account)
