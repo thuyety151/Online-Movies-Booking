@@ -73,8 +73,8 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             var obj = Exec.ExecuteGetAllDiscount().Select(x => new
             {
                 id=x.Id,
-                name=x.Name,
-                code= HttpUtility.HtmlDecode(x.Code),
+                name= x.Name,
+                code= x.Code,
                 dateStart=x.DateStart.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
                 dateEnd= x.DateEnd.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm"),
                 imageDiscount = x.ImageDiscount,
@@ -136,9 +136,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            //discount.Name = HttpUtility.HtmlDecode(discount.Name);
-            //discount.Code = HttpUtility.HtmlDecode(discount.Code);
-            //discount.Description = HttpUtility.HtmlDecode(discount.Description);
+            discount.Name = HttpUtility.HtmlDecode(discount.Name);
+            discount.Code = HttpUtility.HtmlDecode(discount.Code);
+            discount.Description = HttpUtility.HtmlDecode(discount.Description);
 
             return View(discount);
         }
@@ -224,15 +224,13 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     discount.ImageDiscount = @"\images\discounts\" + fileName + extension;
 
                 }
-               
-                
 
                 // gán các giá trị null để insert vào db
                 discount.Id = Guid.NewGuid().ToString("N").Substring(0, 10);
                 discount.Used = 0;
-                //discount.Name = HttpUtility.HtmlEncode(discount.Name);
-                //discount.Code = HttpUtility.HtmlEncode(discount.Code);
-                //discount.Description = HttpUtility.HtmlEncode(discount.Description);
+                discount.Name = HttpUtility.HtmlEncode(discount.Name);
+                discount.Code = HttpUtility.HtmlEncode(discount.Code);
+                discount.Description = HttpUtility.HtmlEncode(discount.Description);
 
 
                 string result = Exec.ExecuteInsertDiscount(discount);

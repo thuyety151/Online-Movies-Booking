@@ -99,10 +99,10 @@ namespace OnlineMoviesBooking.Areas.Controllers
                         acc.Name = Convert.ToString(reader[1]);
                         acc.Birthdate = Convert.ToDateTime(reader[2]);
                         acc.Gender = Convert.ToBoolean(reader[3]);
-                        acc.Address = Convert.ToString(reader[4]);
+                        acc.Address = HttpUtility.HtmlDecode(Convert.ToString(reader[4]));
                         acc.Sdt = Convert.ToString(reader[5]);
                         acc.Email = Convert.ToString(reader[6]);
-                        acc.Password = Convert.ToString(reader[7]);
+                        acc.Password = HttpUtility.HtmlDecode(Convert.ToString(reader[7]));
                         acc.Point = Convert.ToInt32(reader[8]);
                         acc.IdTypesOfUser = Convert.ToString(reader[9]);
                         acc.IdTypeOfMember = Convert.ToString(reader[10]);
@@ -120,7 +120,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
             }
             return Json(new { data = listacc });
         }
-        public IActionResult Get(string id)
+        public IActionResult Details(string id)
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
@@ -163,7 +163,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
                                 acc.Name = HttpUtility.HtmlDecode(Convert.ToString(reader[1]));
                                 acc.Birthdate = Convert.ToDateTime(reader[2]);
                                 acc.Gender = Convert.ToBoolean(reader[3]);
-                                acc.Address = Convert.ToString(reader[4]);
+                                acc.Address = HttpUtility.HtmlDecode(Convert.ToString(reader[4]));
                                 acc.Sdt = Convert.ToString(reader[5]);
                                 acc.Email = Convert.ToString(reader[6]);
                                 acc.Password = HttpUtility.HtmlDecode(Convert.ToString(reader[7]));
@@ -172,31 +172,25 @@ namespace OnlineMoviesBooking.Areas.Controllers
                                 acc.IdTypeOfMember = Convert.ToString(reader[10]);
                                 acc.Image = Convert.ToString(reader[11]);
                             }
-
                         }
                         else
                         {
                             TempData["msg"] = "error";
-                            return Json(new { success = false, message = "Lỗi!" });
+                            return RedirectToAction(nameof(Index));
                         }
                     }
                     catch (SqlException e)
                     {
                         connection.Close();
-                        return Json(new { success = false, message = e.Message });
+                        return RedirectToAction(nameof(Index));
                     }
                     connection.Close();
-                }
-                //if(acc.Image == "" || acc.Image == null)
-                //{
-                //    acc.Image = "/image/Account/Avatar_default.png";
-                //}    
-                return Json(new { data = acc });
+                }   
+                return View(acc);
             }
             catch (Exception e)
             {
-
-                return Json(new { data = e.Message });
+                return RedirectToAction(nameof(Index));
             }
         }
         // GET: Accounts/Create
@@ -221,10 +215,6 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 return Redirect("/Home/Index");
             }
 
-            //List<TypeOfMember> listmember = DataforView.listMember();
-            //List<TypesOfAccount> listaccount = DataforView.listAccount();
-            //ViewData["IdTypeOfMember"] = 
-            //ViewData["IdTypesOfUser"] = listaccount;
             return View();
         }
 
@@ -239,7 +229,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    account.Name = HttpUtility.HtmlEncode(account.Name);
+                    account.Name =HttpUtility.HtmlEncode(account.Name);
                     account.Address = HttpUtility.HtmlEncode(account.Address);
                     // save image to wwwroot/image
                     string wwwRootPath = _hostEnvironment.WebRootPath;
@@ -367,14 +357,14 @@ namespace OnlineMoviesBooking.Areas.Controllers
                         {
                             while (reader.Read())
                             {
-                                acc.Id = Convert.ToString(reader[0]);
-                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Id = HttpUtility.HtmlDecode(Convert.ToString(reader[0]));
+                                acc.Name = HttpUtility.HtmlDecode(Convert.ToString(reader[1]));
                                 acc.Birthdate = Convert.ToDateTime(reader[2]);
                                 acc.Gender = Convert.ToBoolean(reader[3]);
-                                acc.Address = Convert.ToString(reader[4]);
+                                acc.Address = HttpUtility.HtmlDecode(Convert.ToString(reader[4]));
                                 acc.Sdt = Convert.ToString(reader[5]);
                                 acc.Email = Convert.ToString(reader[6]);
-                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Password = HttpUtility.HtmlDecode(Convert.ToString(reader[7]));
                                 acc.Point = Convert.ToInt32(reader[8]);
                                 acc.IdTypesOfUser = Convert.ToString(reader[9]);
                                 acc.IdTypeOfMember = Convert.ToString(reader[10]);
@@ -464,9 +454,6 @@ namespace OnlineMoviesBooking.Areas.Controllers
                     return View(account);
                 }
 
-            //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            
-
         }
         [HttpDelete]
         // GET: Accounts/Delete/5
@@ -494,7 +481,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 string wwwRootPath = _hostEnvironment.WebRootPath;
 
                 var image = HttpContext.Session.GetString("imgLogin");
-                if (image != null)
+                if (image != "")
                 {
                     var imageUrl = wwwRootPath + image;
                     System.IO.File.Delete(imageUrl);
@@ -529,11 +516,8 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 {
                     ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
                 }
-
-
                 return Json(new { success = false, message = "Tài khoản không tồn tại! Vui lòng tải lại trang" });
             }
-
         }
     }
 }

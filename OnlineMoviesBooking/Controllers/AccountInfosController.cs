@@ -232,10 +232,10 @@ namespace OnlineMoviesBooking.Controllers
             }
             
             {
-                //account.Address = HttpUtility.HtmlEncode(account.Address);
-                //account.Email = HttpUtility.HtmlEncode(account.Email);
-                //account.Name = HttpUtility.HtmlEncode(account.Name);
-                //account.Password = HttpUtility.HtmlEncode(account.Password);
+                account.Address = HttpUtility.HtmlEncode(account.Address);
+                account.Email = HttpUtility.HtmlEncode(account.Email);
+                account.Name = HttpUtility.HtmlEncode(account.Name);
+                account.Password = HttpUtility.HtmlEncode(account.Password);
 
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 string img = "";

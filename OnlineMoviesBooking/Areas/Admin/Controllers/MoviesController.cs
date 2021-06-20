@@ -79,8 +79,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
             }
-            // var obj = Exec.ExecuteMovieGetAll();        // dùng ajax chưa hiệu quả
-            var movie = Exec.ExecuteMovieGetAll().Select(x => new             // tốn dữ liệu
+            var movie = Exec.ExecuteMovieGetAll().Select(x => new            
             {
                 id = x.Id,
                 name = x.Name,
@@ -103,7 +102,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     TempData["msg"] = "Khong duoc phep truy cap";
                     return Redirect("/Home/Index");
                 }
-
             }
             else
             {
@@ -146,7 +144,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
         }
 
         // GET: Movies/Create
@@ -216,7 +213,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 }
                 // save image to wwwroot/image
                 string wwwRootPath = _hostEnvironment.WebRootPath;
-                //var filess = HttpContext.Request.Form.Files;
 
                 if(files!=null)
                 {
@@ -317,7 +313,6 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
  
         // POST: Movies/Delete/5
         [HttpDelete]

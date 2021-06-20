@@ -52,8 +52,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
 
             var obj = Exec.ExecuteTheaterGetAll().Select(x=>new { 
                 id=x.Id,
-                //name=HttpUtility.HtmlEncode(x.Name),
-                name= x.Name,
+                name = HttpUtility.HtmlEncode(x.Name),
                 address=x.Address,
                 hotline=x.Hotline
             });
