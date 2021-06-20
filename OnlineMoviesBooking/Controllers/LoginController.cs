@@ -16,6 +16,8 @@ using System.Net.Mail;
 using System.Configuration;
 using Microsoft.AspNetCore.Session;
 using OnlineMoviesBooking.DataAccess.Data;
+using System.Text.RegularExpressions;
+
 namespace OnlineMoviesBooking.Controllers
 {
 
@@ -47,72 +49,72 @@ namespace OnlineMoviesBooking.Controllers
         public ActionResult ForgotPassword(string Email)
         {
 
-            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
             //đặt lại mật khẩu
             string newpass = Guid.NewGuid().ToString().Substring(26);
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string commandText = $"EXEC dbo.USP_ResetPassword @email = '{Email}',@pw = '{newpass}'";
-                string conmandText2 = $"EXEC dbo.USP_GetAccountForEmail @Email = '{Email}'";
-                string loginname = "";
+            //using (var connection = new SqlConnection(connectionString))
+            //{
+            //    connection.Open();
+            //    string commandText = $"EXEC dbo.USP_ResetPassword @email = '{Email}',@pw = '{newpass}'";
+            //    string conmandText2 = $"EXEC dbo.USP_GetAccountForEmail @Email = '{Email}'";
+            //    string loginname = "";
 
-                var command = new SqlCommand(commandText, connection);
-                try
-                {
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        //Gửi mật khẩu qua mail
-                        MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
-                        mm.Subject = "new password";
-                        mm.Body = string.Format("Hello : <h1>{0}<h1> is your password", newpass);
-                        mm.IsBodyHtml = true;
-                        SmtpClient smtp = new SmtpClient();
-                        smtp.Host = "smtp.gmail.com";
-                        smtp.EnableSsl = true;
-                        NetworkCredential nc = new NetworkCredential();
-                        nc.UserName = "thanhtontran115@gmail.com";
-                        nc.Password = "1152000toan";
-                        smtp.UseDefaultCredentials = true;
-                        smtp.Credentials = nc;
-                        smtp.Port = 587;
-                        smtp.Send(mm);
-                    }
-                }
-                catch (SqlException e)
-                {
-                    TempData["msg"] = "error";
-                    return View();
-                }
-                command = new SqlCommand(conmandText2, connection);
-                try
-                {
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        loginname = Convert.ToString(reader[0]);
-                    }
-                }
-                catch (SqlException e)
-                {
-                    TempData["msg"] = "error";
-                    return View();
-                }
-                string conmandText3 = $"ALTER LOGIN {loginname} WITH PASSWORD = '{newpass}'";
-                command = new SqlCommand(conmandText3, connection);
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (SqlException e)
-                {
-                    TempData["msg"] = "error";
-                    return View();
-                }
-                connection.Close();
-            }
+            //    var command = new SqlCommand(commandText, connection);
+            //    try
+            //    {
+            //        if (command.ExecuteNonQuery() > 0)
+            //        {
+            //            //Gửi mật khẩu qua mail
+            //            MailMessage mm = new MailMessage("thanhtontran115@gmail.com", "silentloveinheart@gmail.com");
+            //            mm.Subject = "new password";
+            //            mm.Body = string.Format("Hello : <h1>{0}<h1> is your password", newpass);
+            //            mm.IsBodyHtml = true;
+            //            SmtpClient smtp = new SmtpClient();
+            //            smtp.Host = "smtp.gmail.com";
+            //            smtp.EnableSsl = true;
+            //            NetworkCredential nc = new NetworkCredential();
+            //            nc.UserName = "thanhtontran115@gmail.com";
+            //            nc.Password = "1152000toan";
+            //            smtp.UseDefaultCredentials = true;
+            //            smtp.Credentials = nc;
+            //            smtp.Port = 587;
+            //            smtp.Send(mm);
+            //        }
+            //    }
+            //    catch (SqlException e)
+            //    {
+            //        TempData["msg"] = "error";
+            //        return View();
+            //    }
+            //    command = new SqlCommand(conmandText2, connection);
+            //    try
+            //    {
+            //        SqlDataReader reader = command.ExecuteReader();
+            //        while (reader.Read())
+            //        {
+            //            loginname = Convert.ToString(reader[0]);
+            //        }
+            //    }
+            //    catch (SqlException e)
+            //    {
+            //        TempData["msg"] = "error";
+            //        return View();
+            //    }
+            //    string conmandText3 = $"ALTER LOGIN {loginname} WITH PASSWORD = '{newpass}'";
+            //    command = new SqlCommand(conmandText3, connection);
+            //    try
+            //    {
+            //        command.ExecuteNonQuery();
+            //    }
+            //    catch (SqlException e)
+            //    {
+            //        TempData["msg"] = "error";
+            //        return View();
+            //    }
+            //    connection.Close();
+            //}
 
 
             return RedirectToAction("Login");
@@ -134,7 +136,7 @@ namespace OnlineMoviesBooking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                     using (var connection = new SqlConnection(connectionString))
                     {
@@ -187,77 +189,81 @@ namespace OnlineMoviesBooking.Controllers
             }
         }
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult Login([Bind("Username", "Password")] LoginModelView loginModelView)
         {
             try
             {
-                
-                Account acc = new Account();
-                List<TypeOfMember> listmember = new List<TypeOfMember>();
-                List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
-                string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-                using (var connection = new SqlConnection(connectionString))
+                if(ModelState.IsValid)
                 {
-                    connection.Open();
-                    string commandText = $"EXEC dbo.USP_CheckForLogin @username = '{loginModelView.Username}' , @password = '{loginModelView.Password}'";
+                    Account acc = new Account();
+                    List<TypeOfMember> listmember = new List<TypeOfMember>();
+                    List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
+                    string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-                    var command = new SqlCommand(commandText, connection);
-                    try
+                    using (var connection = new SqlConnection(connectionString))
                     {
-                        SqlDataReader reader = command.ExecuteReader();
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_CheckForLogin @username = '{loginModelView.Username}' , @password = '{loginModelView.Password}'";
 
-                        if (reader.HasRows)
+                        var command = new SqlCommand(commandText, connection);
+                        try
                         {
-                            while (reader.Read())
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            if (reader.HasRows)
                             {
-                                acc.Id = Convert.ToString(reader[0]);
-                                acc.Name = Convert.ToString(reader[1]);
-                                acc.Birthdate = Convert.ToDateTime(reader[2]);
-                                acc.Gender = Convert.ToBoolean(reader[3]);
-                                acc.Address = Convert.ToString(reader[4]);
-                                acc.Sdt = Convert.ToString(reader[5]);
-                                acc.Email = Convert.ToString(reader[6]);
-                                acc.Password = Convert.ToString(reader[7]);
-                                acc.Point = Convert.ToInt32(reader[8]);
-                                acc.IdTypesOfUser = Convert.ToString(reader[9]);
-                                acc.IdTypeOfMember = Convert.ToString(reader[10]);
-                                acc.Image = Convert.ToString(reader[11]);
-                            }
+                                while (reader.Read())
+                                {
+                                    acc.Id = Convert.ToString(reader[0]);
+                                    acc.Name = Convert.ToString(reader[1]);
+                                    acc.Birthdate = Convert.ToDateTime(reader[2]);
+                                    acc.Gender = Convert.ToBoolean(reader[3]);
+                                    acc.Address = Convert.ToString(reader[4]);
+                                    acc.Sdt = Convert.ToString(reader[5]);
+                                    acc.Email = Convert.ToString(reader[6]);
+                                    acc.Password = Convert.ToString(reader[7]);
+                                    acc.Point = Convert.ToInt32(reader[8]);
+                                    acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                                    acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                                    acc.Image = Convert.ToString(reader[11]);
+                                }
 
+                            }
+                            else
+                            {
+                                TempData["msg"] = "wrong";
+                                return View(loginModelView);
+                            }
                         }
-                        else
+                        catch (SqlException e)
                         {
-                            TempData["msg"] = "wrong";
+
+                            ModelState.AddModelError("Wrong Username or Password", e.ToString());
                             return View(loginModelView);
                         }
-                    }
-                    catch (SqlException e)
-                    {
+                        connection.Close();
 
-                        ModelState.AddModelError("", e.ToString());
-                        return View(loginModelView);
                     }
-                    connection.Close();
 
+                    HttpContext.Session.SetString("idLogin", acc.Id);
+                    HttpContext.Session.SetString("nameLogin", acc.Name);
+                    HttpContext.Session.SetString("imgLogin", acc.Image);
+                    HttpContext.Session.SetString("pwLogin", acc.Password);
+                    HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
+                    HttpContext.Session.SetString("connectString", $"Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
+                    TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+                    TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                    TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                    TempData["pwLogin"] = HttpContext.Session.GetString("pwLogin");
+                    TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+                    return RedirectToAction("Index", "Home");
                 }
-
-                HttpContext.Session.SetString("idLogin", acc.Id);
-                HttpContext.Session.SetString("nameLogin", acc.Name);
-                HttpContext.Session.SetString("imgLogin", acc.Image);
-                HttpContext.Session.SetString("pwLogin", acc.Password);
-                HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
-                HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
-                TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-                TempData["pwLogin"] = HttpContext.Session.GetString("pwLogin");
-                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
-                return RedirectToAction("Index", "Home");
+                return View(loginModelView);
             }
             catch (SqlException e)
             {
-                ModelState.AddModelError("", e.ToString());
+                ModelState.AddModelError("Wrong username or password", e.ToString());
                 return View(loginModelView);
             }
         }

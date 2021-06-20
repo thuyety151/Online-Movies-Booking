@@ -40,6 +40,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
                     connection.Close();
                     check = "0";
                 }
+                check = "1";
                 connection.Close();
             }
         }

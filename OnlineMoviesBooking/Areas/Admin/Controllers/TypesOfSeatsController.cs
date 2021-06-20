@@ -43,6 +43,7 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
                     connection.Close();
                     check = "0";
                 }
+                check = "1";
                 connection.Close();
             }
         }
@@ -122,11 +123,9 @@ namespace OnlineMoviesBooking.Areas.Admin.Controllers
             return View(typesOfSeat);
         }
 
-        // POST: TypesOfSeats/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, [Bind("Id,Name,Cost")] TypesOfSeat typesOfSeat)
         {
             if (id != typesOfSeat.Id)

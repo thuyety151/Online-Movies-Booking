@@ -10,6 +10,7 @@ using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModel;
 namespace OnlineMoviesBooking.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class ContactViewController : Controller
     {
         private readonly CinemaContext _context;
@@ -18,6 +19,8 @@ namespace OnlineMoviesBooking.Controllers
         {
             _context = context;
         }
+
+     
         public IActionResult AllQuestion()
         {
             if (HttpContext.Session.GetString("idLogin") != null)
@@ -66,10 +69,10 @@ namespace OnlineMoviesBooking.Controllers
                 {
                     string username = HttpContext.Session.GetString("idLogin");
                     string pw = HttpContext.Session.GetString("pwLogin");
-                    connectionString = $"Server=localhost;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={pw}";
+                    connectionString = $"Server=localhost\\SQLEXPRESS;Database=Cinema;MultipleActiveResultSets=true;User Id={username};Password={pw}";
                 }
                 else
-                    connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;";
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
