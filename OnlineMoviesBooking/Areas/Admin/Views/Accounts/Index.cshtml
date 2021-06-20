@@ -1,5 +1,4 @@
-﻿@model List<OnlineMoviesBooking.Models.Models.Account>
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -14,7 +13,7 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table" id="AccountTable">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
     <thead class="bg-secondary text-light">
         <tr>
             <th>
@@ -44,57 +43,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                <img src="@item.Image" style="width:5rem;border-radius:5%" />
-            </td>
-            @{
-                if (item.IdTypesOfUser == "1")
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        Quản trị viên
-                    </td>
-                }
-                else if (item.IdTypesOfUser == "2")
-                {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        Thành viên
-                    </td>
-                }
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.IdTypeOfMember)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Point)
-            </td>
-            
-
-            <td style="width:15rem;text-align:right">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
-                <a href="#" data-toggle="modal" data-target="#DetailAccountModal" onclick=showModal("@item.Id") @*id="detailbtn" *@ class="btn btn-secondary" style="cursor:pointer">Details</a> |
-                <a onclick=DeleteAccount("/Admin/Accounts/Delete/@item.Id") class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-                }
-    </tbody></table>
+    </tbody>
+</table>
 
 
 @*Modal của detail Account*@
@@ -104,14 +54,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditModalLabelAccount" >Chi tiết tài khoản</h5>
+                <h5 class="modal-title" id="EditModalLabelAccount">Chi tiết tài khoản</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form onsubmit="return false">
-                    
+
                     <div class="form-group">
                         <img src="" class="img-thumbnail" id="image_detail_account" />
                     </div>
@@ -155,15 +105,18 @@
         </div>
     </div>
 </div>
-
+@section Header{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+}
 @section Scripts{
     <script>
         var imageUrl = $('#image_detail_account').val().toString();
 
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
-    
     <script src="~/DataTables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>console.log("hi")</script>
     <script src="~/js/Account.js"></script>
 }

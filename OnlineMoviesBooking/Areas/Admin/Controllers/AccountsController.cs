@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using OnlineMoviesBooking.Models.Models;
 using OnlineMoviesBooking.Models.ViewModel;
+using System.Web;
 
 namespace OnlineMoviesBooking.Areas.Controllers
 {
@@ -21,7 +22,7 @@ namespace OnlineMoviesBooking.Areas.Controllers
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly string check;
-        public AccountsController(IWebHostEnvironment hostEnvironment,IHttpContextAccessor httpContextAccessor)
+        public AccountsController(IWebHostEnvironment hostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             this._hostEnvironment = hostEnvironment;
             string username = httpContextAccessor.HttpContext.Session.GetString("idLogin");
@@ -36,10 +37,10 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 try
                 {
                     SqlDataReader reader = command.ExecuteReader();
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         check = Convert.ToString(reader[0]);
-                    }    
+                    }
                 }
                 catch (SqlException e)
                 {
@@ -57,21 +58,27 @@ namespace OnlineMoviesBooking.Areas.Controllers
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
             TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            if (HttpContext.Session.GetString("idLogin") != null )
+            if (HttpContext.Session.GetString("idLogin") != null)
             {
-                if(check == "0")
+                if (check == "0")
                 {
                     TempData["msg"] = "Khong duoc phep truy cap";
                     return Redirect("/Home/Index");
-                }    
-               
+                }
+
             }
             else
             {
                 TempData["msg"] = "Chua dang nhap";
                 return Redirect("/Home/Index");
-            }    
+            }
 
+            //return View(listacc);
+            return View();
+        }
+
+        public IActionResult getall()
+        {
             List<Account> listacc = new List<Account>();
             string connectionString = HttpContext.Session.GetString("connectString");
 
@@ -85,47 +92,35 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 {
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.HasRows)
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            Account acc = new Account();
-                            acc.Id = Convert.ToString(reader[0]);
-                            acc.Name = Convert.ToString(reader[1]);
-                            acc.Birthdate = Convert.ToDateTime(reader[2]);
-                            acc.Gender = Convert.ToBoolean(reader[3]);
-                            acc.Address = Convert.ToString(reader[4]);
-                            acc.Sdt = Convert.ToString(reader[5]);
-                            acc.Email = Convert.ToString(reader[6]);
-                            acc.Password = Convert.ToString(reader[7]);
-                            acc.Point = Convert.ToInt32(reader[8]);
-                            acc.IdTypesOfUser = Convert.ToString(reader[9]);
-                            acc.IdTypeOfMember = Convert.ToString(reader[10]);
-                            acc.Image = Convert.ToString(reader[11]);
-                            listacc.Add(acc);
-                        }
-
-                    }
-                    else
-                    {
-                        TempData["msg"] = "error";
-                        return RedirectToAction("HomeAdmin", "HomeAdmin");
+                        Account acc = new Account();
+                        acc.Id = Convert.ToString(reader[0]);
+                        acc.Name = Convert.ToString(reader[1]);
+                        acc.Birthdate = Convert.ToDateTime(reader[2]);
+                        acc.Gender = Convert.ToBoolean(reader[3]);
+                        acc.Address = Convert.ToString(reader[4]);
+                        acc.Sdt = Convert.ToString(reader[5]);
+                        acc.Email = Convert.ToString(reader[6]);
+                        acc.Password = Convert.ToString(reader[7]);
+                        acc.Point = Convert.ToInt32(reader[8]);
+                        acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                        acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                        acc.Image = Convert.ToString(reader[11]);
+                        listacc.Add(acc);
                     }
                 }
                 catch (SqlException e)
                 {
                     connection.Close();
-                    return RedirectToAction("HomeAdmin", "HomeAdmin");
+                    return Json(new { data = e.Message });
                 }
                 connection.Close();
 
             }
-
-            return View(listacc);
+            return Json(new { data = listacc });
         }
-
-
-        public IActionResult Get(string id)
+        public IActionResult Details(string id)
         {
             TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
             TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
@@ -165,13 +160,13 @@ namespace OnlineMoviesBooking.Areas.Controllers
                             while (reader.Read())
                             {
                                 acc.Id = Convert.ToString(reader[0]);
-                                acc.Name = Convert.ToString(reader[1]);
+                                acc.Name = HttpUtility.HtmlDecode(Convert.ToString(reader[1]));
                                 acc.Birthdate = Convert.ToDateTime(reader[2]);
                                 acc.Gender = Convert.ToBoolean(reader[3]);
                                 acc.Address = Convert.ToString(reader[4]);
                                 acc.Sdt = Convert.ToString(reader[5]);
                                 acc.Email = Convert.ToString(reader[6]);
-                                acc.Password = Convert.ToString(reader[7]);
+                                acc.Password = HttpUtility.HtmlDecode(Convert.ToString(reader[7]));
                                 acc.Point = Convert.ToInt32(reader[8]);
                                 acc.IdTypesOfUser = Convert.ToString(reader[9]);
                                 acc.IdTypeOfMember = Convert.ToString(reader[10]);
@@ -182,28 +177,21 @@ namespace OnlineMoviesBooking.Areas.Controllers
                         else
                         {
                             TempData["msg"] = "error";
-                            return Json(new { success = false, message = "Lỗi!" });
+                            return RedirectToAction(nameof(Index));
                         }
                     }
                     catch (SqlException e)
                     {
                         connection.Close();
-                        return Json(new { success = false, message = e.Message });
+                        return RedirectToAction(nameof(Index));
                     }
                     connection.Close();
-                }
-                //if(acc.Image == "" || acc.Image == null)
-                //{
-                //    acc.Image = "/image/Account/Avatar_default.png";
-                //}    
-                return Json(new { data = acc });
+                } 
+                return View(acc);
             }
             catch (Exception e)
             {
-
-                return Json(new { data = e.Message });
-
-
+                return RedirectToAction(nameof(Index));
             }
         }
         // GET: Accounts/Create
@@ -239,13 +227,15 @@ namespace OnlineMoviesBooking.Areas.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id", "Name", "Birthdate", "Gender", "Address", "Sdt", "Email", "Password", "Point", "IdTypesOfUser", "IdTypeOfMember", "Image")] Account account, IFormFile files)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    account.Name = HttpUtility.HtmlEncode(account.Name);
+                    account.Address = HttpUtility.HtmlEncode(account.Address);
                     // save image to wwwroot/image
                     string wwwRootPath = _hostEnvironment.WebRootPath;
 
@@ -426,51 +416,51 @@ namespace OnlineMoviesBooking.Areas.Controllers
                 return NotFound();
             }
 
-            
-                try
+            try
+            {
+                account.Name = HttpUtility.HtmlEncode(account.Name);
+                account.Address = HttpUtility.HtmlEncode(account.Address);
+                string connectionString = HttpContext.Session.GetString("connectString");
+
+                using (var connection = new SqlConnection(connectionString))
                 {
+                    connection.Open();
+                    string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
+                    + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
+                    + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
+                    + $"@image = '{account.Image}',@action = 'Update'";
 
-                    string connectionString = HttpContext.Session.GetString("connectString");
-
-                    using (var connection = new SqlConnection(connectionString))
+                    var command = new SqlCommand(commandText, connection);
+                    try
                     {
-                        connection.Open();
-                        string commandText = $"EXEC dbo.USP_InsertUpdateAccount @id = '{account.Id}',@name = N'{account.Name}',@birthdate = '{account.Birthdate}',"
-                        + $"@gender = {account.Gender},@address = '{account.Address}',@SDT = '{account.Sdt}',@Email = '{account.Email}',"
-                        + $"@password = '{account.Password}',@point = {account.Point},@usertypeid = '{account.IdTypesOfUser}',@membertypeid = 'mobile',"
-                        + $"@image = '{account.Image}',@action = 'Update'";
-
-                        var command = new SqlCommand(commandText, connection);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (SqlException e)
-                        {
-                            connection.Close();
-                            if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
-                                ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
-                            return View(account);
-                        }
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException e)
+                    {
                         connection.Close();
+                        if (e.ToString().Contains("User") || e.ToString().Contains("Email"))
+                            ModelState.AddModelError("", @"User hoặc Email đã tồn tại!!");
+                        return View(account);
                     }
-
-                    return RedirectToAction(nameof(Index));
-
+                    connection.Close();
                 }
-                catch (SqlException e)
+
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch (SqlException e)
+            {
+                if (e.ToString().Contains("User"))
                 {
-                    if (e.ToString().Contains("User"))
-                    {
-                        ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
-                    }
-
-
-                    return View(account);
+                    ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại");
                 }
+
+
+                return View(account);
+            }
 
             //ViewData["IdTypesOfUser"] = new SelectList(_context.TypesOfAccount, "Id", "Id", account.IdTypesOfUser);
-            
+
 
         }
         [HttpDelete]
