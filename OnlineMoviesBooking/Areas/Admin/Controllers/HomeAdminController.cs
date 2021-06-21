@@ -50,24 +50,24 @@ namespace OnlineMoviesBooking.Areas.Controllers
         }
         public IActionResult Index()
         {
-            //TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-            //TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-            //TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-            //if (HttpContext.Session.GetString("idLogin") != null)
-            //{
-            //    if (check == "0")
-            //    {
-            //        TempData["msg"] = "Khong duoc phep truy cap";
-            //        return Redirect("/Home/Index");
-            //    }
+            TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+            TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+            TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+            if (HttpContext.Session.GetString("idLogin") != null)
+            {
+                if (check == "0")
+                {
+                    TempData["msg"] = "Khong duoc phep truy cap";
+                    return Redirect("/Home/Index");
+                }
 
-            //}
-            //else
-            //{
-            //    TempData["msg"] = "Chua dang nhap";
-            //    return Redirect("/Home/Index");
-            //}
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+            }
+            else
+            {
+                TempData["msg"] = "Chua dang nhap";
+                return Redirect("/Home/Index");
+            }
+            string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();

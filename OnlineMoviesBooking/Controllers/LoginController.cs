@@ -211,7 +211,7 @@ namespace OnlineMoviesBooking.Controllers
                     Account acc = new Account();
                     List<TypeOfMember> listmember = new List<TypeOfMember>();
                     List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
-                    string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
+                    string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
                     using (var connection = new SqlConnection(connectionString))
                     {
@@ -263,7 +263,7 @@ namespace OnlineMoviesBooking.Controllers
                     HttpContext.Session.SetString("imgLogin", acc.Image);
                     HttpContext.Session.SetString("pwLogin", acc.Password);
                     HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
-                    HttpContext.Session.SetString("connectString", $"Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
+                    HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
                     TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
                     TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
                     TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
@@ -271,28 +271,13 @@ namespace OnlineMoviesBooking.Controllers
                     TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
                     return RedirectToAction("Index", "Home");
                 }
-
-                HttpContext.Session.SetString("idLogin", HttpUtility.HtmlDecode(acc.Id));
-                HttpContext.Session.SetString("nameLogin", HttpUtility.HtmlDecode(acc.Name));
-                HttpContext.Session.SetString("imgLogin", acc.Image);
-                HttpContext.Session.SetString("pwLogin", HttpUtility.HtmlDecode(acc.Password));
-                HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
-                HttpContext.Session.SetString("connectString", $"Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
-                TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
-                TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
-                TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
-                TempData["pwLogin"] = HttpContext.Session.GetString("pwLogin");
-                TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
-
-                ViewBag.Name = "<script>alert(1)</script>";
-
-                return RedirectToAction("Index", "Home");
             }
             catch (SqlException e)
             {
                 ModelState.AddModelError("Wrong username or password", e.ToString());
                 return View(loginModelView);
             }
+            return RedirectToAction("Index", "Home");
         }
 
 
