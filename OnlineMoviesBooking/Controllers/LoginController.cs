@@ -17,6 +17,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Session;
 using OnlineMoviesBooking.DataAccess.Data;
 using System.Web;
+using System.Text.RegularExpressions;
 
 namespace OnlineMoviesBooking.Controllers
 {
@@ -200,57 +201,75 @@ namespace OnlineMoviesBooking.Controllers
             }
         }
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult Login([Bind("Username", "Password")] LoginModelView loginModelView)
         {
             try
             {
-                Account acc = new Account();
-                List<TypeOfMember> listmember = new List<TypeOfMember>();
-                List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
-                string connectionString = "Server=localhost;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-                using (var connection = new SqlConnection(connectionString))
+                if(ModelState.IsValid)
                 {
-                    connection.Open();
-                    string commandText = $"EXEC dbo.USP_CheckForLogin @username = '{loginModelView.Username}' , @password = '{loginModelView.Password}'";
+                    Account acc = new Account();
+                    List<TypeOfMember> listmember = new List<TypeOfMember>();
+                    List<TypesOfAccount> listaccount = new List<TypesOfAccount>();
+                    string connectionString = "Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-                    var command = new SqlCommand(commandText, connection);
-                    try
+                    using (var connection = new SqlConnection(connectionString))
                     {
-                        SqlDataReader reader = command.ExecuteReader();
+                        connection.Open();
+                        string commandText = $"EXEC dbo.USP_CheckForLogin @username = '{loginModelView.Username}' , @password = '{loginModelView.Password}'";
 
-                        if (reader.HasRows)
+                        var command = new SqlCommand(commandText, connection);
+                        try
                         {
-                            while (reader.Read())
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            if (reader.HasRows)
                             {
-                                acc.Id = Convert.ToString(reader[0]);
-                                acc.Name = Convert.ToString(reader[1]);
-                                acc.Birthdate = Convert.ToDateTime(reader[2]);
-                                acc.Gender = Convert.ToBoolean(reader[3]);
-                                acc.Address = Convert.ToString(reader[4]);
-                                acc.Sdt = Convert.ToString(reader[5]);
-                                acc.Email = Convert.ToString(reader[6]);
-                                acc.Password = Convert.ToString(reader[7]);
-                                acc.Point = Convert.ToInt32(reader[8]);
-                                acc.IdTypesOfUser = Convert.ToString(reader[9]);
-                                acc.IdTypeOfMember = Convert.ToString(reader[10]);
-                                acc.Image = Convert.ToString(reader[11]);
-                            }
+                                while (reader.Read())
+                                {
+                                    acc.Id = Convert.ToString(reader[0]);
+                                    acc.Name = Convert.ToString(reader[1]);
+                                    acc.Birthdate = Convert.ToDateTime(reader[2]);
+                                    acc.Gender = Convert.ToBoolean(reader[3]);
+                                    acc.Address = Convert.ToString(reader[4]);
+                                    acc.Sdt = Convert.ToString(reader[5]);
+                                    acc.Email = Convert.ToString(reader[6]);
+                                    acc.Password = Convert.ToString(reader[7]);
+                                    acc.Point = Convert.ToInt32(reader[8]);
+                                    acc.IdTypesOfUser = Convert.ToString(reader[9]);
+                                    acc.IdTypeOfMember = Convert.ToString(reader[10]);
+                                    acc.Image = Convert.ToString(reader[11]);
+                                }
 
+                            }
+                            else
+                            {
+                                TempData["msg"] = "wrong";
+                                return View(loginModelView);
+                            }
                         }
-                        else
+                        catch (SqlException e)
                         {
-                            TempData["msg"] = "wrong";
+
+                            ModelState.AddModelError("Wrong Username or Password", e.ToString());
                             return View(loginModelView);
                         }
-                    }
-                    catch (SqlException e)
-                    {
-                        ModelState.AddModelError("", e.ToString());
-                        return View(loginModelView);
-                    }
-                    connection.Close();
+                        connection.Close();
 
+                    }
+
+                    HttpContext.Session.SetString("idLogin", acc.Id);
+                    HttpContext.Session.SetString("nameLogin", acc.Name);
+                    HttpContext.Session.SetString("imgLogin", acc.Image);
+                    HttpContext.Session.SetString("pwLogin", acc.Password);
+                    HttpContext.Session.SetString("roleLogin", acc.IdTypesOfUser);
+                    HttpContext.Session.SetString("connectString", $"Server=localhost\\SQLEXPRESS;Database=Cinema;Trusted_Connection=True;MultipleActiveResultSets=true;User Id={acc.Id};Password={acc.Password}");
+                    TempData["idLogin"] = HttpContext.Session.GetString("idLogin");
+                    TempData["nameLogin"] = HttpContext.Session.GetString("nameLogin");
+                    TempData["imgLogin"] = HttpContext.Session.GetString("imgLogin");
+                    TempData["pwLogin"] = HttpContext.Session.GetString("pwLogin");
+                    TempData["roleLogin"] = HttpContext.Session.GetString("roleLogin");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 HttpContext.Session.SetString("idLogin", HttpUtility.HtmlDecode(acc.Id));
@@ -271,7 +290,7 @@ namespace OnlineMoviesBooking.Controllers
             }
             catch (SqlException e)
             {
-                ModelState.AddModelError("", e.ToString());
+                ModelState.AddModelError("Wrong username or password", e.ToString());
                 return View(loginModelView);
             }
         }

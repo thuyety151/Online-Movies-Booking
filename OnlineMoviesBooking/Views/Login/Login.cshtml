@@ -42,14 +42,16 @@
                         <span class="cate">hello</span>
                         <h2 class="title">welcome back</h2>
                     </div>
-                    <form class="account-form" asp-action="Login" method="post">
+                    <form class="account-form" action="Login" method="post">
                         <div class="form-group">
                             <label>Tên đăng nhập<span>*</span></label>
                             <input type="text" asp-for="Username" placeholder="Tên đăng nhập" required>
+                            @Html.ValidationMessageFor(x => x.Username)
                         </div>
                         <div class="form-group">
                             <label>Mật khẩu<span>*</span></label>
                             <input type="password" asp-for="Password" placeholder="Mật khẩu" required>
+                            @Html.ValidationMessageFor(x => x.Password)
                         </div>
                         <div class="form-group checkgroup">
                             <input type="checkbox" id="bal2" required checked>
